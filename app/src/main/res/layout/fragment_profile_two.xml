@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@color/background"
+                tools:context=".fragments.ProfileTwoFragment">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/input_text_shape"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="32dp"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/sfpro_display_regular"
+                                android:text="@string/address"
+                                android:textColor="@color/darkBlue"
+                                android:textSize="14sp" />
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/address1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:inputType="text"
+                                android:fontFamily="@font/sfpro_display_regular"
+                                android:layout_marginLeft="32dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/input_text_shape"
+                                android:maxLines="1"
+                                android:padding="4dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/input_text_shape"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="32dp"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/sfpro_display_regular"
+                                android:text="@string/address2"
+                                android:textColor="@color/darkBlue"
+                                android:textSize="14sp" />
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/address2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:inputType="text"
+                                android:fontFamily="@font/sfpro_display_regular"
+                                android:layout_marginLeft="32dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/input_text_shape"
+                                android:maxLines="1"
+                                android:padding="4dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@color/white"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/input_text_shape"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="32dp"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/sfpro_display_regular"
+                                android:text="@string/zip"
+                                android:textColor="@color/darkBlue"
+                                android:textSize="14sp" />
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/zip_code"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:inputType="text"
+                                android:fontFamily="@font/sfpro_display_regular"
+                                android:layout_marginLeft="32dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/input_text_shape"
+                                android:maxLines="1"
+                                android:padding="4dp" />
+
+                        </LinearLayout>
+
+<!--                        <LinearLayout-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="16dp"-->
+<!--                            android:backgroundTint="@color/white"-->
+<!--                            android:background="@drawable/input_text_shape"-->
+<!--                            android:orientation="vertical">-->
+
+<!--                            <TextView-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:layout_marginLeft="32dp"-->
+<!--                                android:layout_marginTop="8dp"-->
+<!--                                android:fontFamily="@font/sfpro_display_regular"-->
+<!--                                android:text="@string/country"-->
+<!--                                android:textColor="@color/colorPrimary"-->
+<!--                                android:textSize="14sp" />-->
+
+<!--                            <com.google.android.material.textfield.TextInputEditText-->
+<!--                                android:id="@+id/country"-->
+<!--                                android:layout_width="match_parent"-->
+<!--                                android:layout_height="wrap_content"-->
+<!--                                android:enabled="false"-->
+<!--                                android:inputType="text"-->
+<!--                                android:fontFamily="@font/sfpro_display_regular"-->
+<!--                                android:layout_marginLeft="32dp"-->
+<!--                                android:layout_marginBottom="8dp"-->
+<!--                                android:background="@drawable/input_text_shape"-->
+<!--                                android:maxLines="1"-->
+<!--                                android:padding="4dp" />-->
+
+<!--                        </LinearLayout>-->
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:backgroundTint="@color/white"
+                            android:background="@drawable/input_text_shape"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="32dp"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/sfpro_display_regular"
+                                android:text="@string/country"
+                                android:textColor="@color/darkBlue"
+                                android:textSize="14sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="32dp"
+                                 android:layout_marginBottom="8dp"
+                                android:background="@drawable/input_text_shape">
+
+                                <Spinner
+                                    android:id="@+id/country"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:backgroundTint="@color/white"
+                            android:background="@drawable/input_text_shape"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/province_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="32dp"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/sfpro_display_regular"
+                                android:text="@string/province"
+                                android:textColor="@color/darkBlue"
+                                android:textSize="14sp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="32dp"
+                                 android:layout_marginBottom="8dp"
+                                android:background="@drawable/input_text_shape">
+
+                                <Spinner
+                                    android:id="@+id/province"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:backgroundTint="@color/white"
+                            android:background="@drawable/input_text_shape"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="32dp"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/sfpro_display_regular"
+                                android:text="@string/city"
+                                android:textColor="@color/darkBlue"
+                                android:textSize="14sp" />
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/city"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:inputType="text"
+                                android:fontFamily="@font/sfpro_display_regular"
+                                android:layout_marginLeft="32dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/input_text_shape"
+                                android:maxLines="1"
+                                android:padding="4dp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginBottom="8dp"
+                            android:backgroundTint="@color/white"
+                            android:background="@drawable/input_text_shape"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="32dp"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/sfpro_display_regular"
+                                android:text="@string/phone"
+                                android:textColor="@color/darkBlue"
+                                android:textSize="14sp" />
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/phone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:enabled="false"
+                                android:inputType="phone"
+                                android:fontFamily="@font/sfpro_display_regular"
+                                android:layout_marginLeft="32dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/input_text_shape"
+                                android:maxLines="1"
+                                android:padding="4dp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </ScrollView>
+
+            </LinearLayout>
+        </layout>

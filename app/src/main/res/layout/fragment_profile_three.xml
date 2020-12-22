@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background"
+        android:orientation="vertical"
+        tools:context=".fragments.ProfileThreeFragment">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/white"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:text="@string/height"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/height"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="32dp"
+                            android:layout_marginRight="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/input_text_shape"
+                            android:enabled="false"
+                            android:gravity="center_vertical"
+                            android:hint="@string/height"
+                            android:inputType="numberDecimal"
+                            android:padding="6dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="32dp"
+                            android:layout_marginRight="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/input_text_shape">
+
+                            <Spinner
+                                android:id="@+id/height_unit"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:entries="@array/height_unit"
+                                android:gravity="center_vertical"
+                                android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@color/white"
+                    android:backgroundTint="@color/white"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:text="@string/weight"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/weight"
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginLeft="32dp"
+                            android:layout_marginRight="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/input_text_shape"
+                            android:enabled="false"
+                            android:gravity="center_vertical"
+                            android:hint="@string/weight"
+                            android:inputType="numberDecimal"
+                            android:padding="6dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="32dp"
+                            android:layout_marginRight="24dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/input_text_shape">
+
+                            <Spinner
+                                android:id="@+id/weight_unit"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:entries="@array/weight_unit"
+                                android:gravity="center_vertical"
+                                android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/input_text_shape"
+                    android:backgroundTint="@color/white"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:text="@string/health_care_number"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/health_card_no"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/input_text_shape"
+                        android:enabled="false"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:padding="4dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/input_text_shape"
+                    android:backgroundTint="@color/white"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:text="@string/insurance_name"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/insurance_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/input_text_shape"
+                        android:enabled="false"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:padding="4dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/input_text_shape"
+                    android:backgroundTint="@color/white"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:text="@string/insurance_number"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="14sp" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/insurance_number"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/input_text_shape"
+                        android:enabled="false"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:padding="4dp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </LinearLayout>
+</layout>
