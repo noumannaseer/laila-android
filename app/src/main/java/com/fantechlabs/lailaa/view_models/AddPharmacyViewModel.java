@@ -40,14 +40,12 @@ public class AddPharmacyViewModel
     //***********************************************************
     {
         val service = ServiceGenerator.createService(MedicationService.class, true,
-                                                     Constants.BASE_URL);
-        if (service == null)
-        {
+                Constants.BASE_URL);
+        if (service == null) {
             mAddPharmacyListener.onPharmacyFailedToAdded(
                     AndroidUtil.getString(R.string.internet_not_vailable));
             return;
         }
-
         HashMap<String, Object> pharmacylist = new HashMap<String, Object>();
         pharmacylist.put("user_private_code", addPharmacyRequest.getUser_private_code());
         if (addPharmacyRequest.getId() != 0)
@@ -72,23 +70,20 @@ public class AddPharmacyViewModel
 
         val medicationService = service.addPharmacy(main);
 
-        medicationService.enqueue(new Callback<PharmacyResponse>()
-        {
+        medicationService.enqueue(new Callback<PharmacyResponse>() {
             //***********************************************************
             @Override
             public void onResponse(Call<PharmacyResponse> call, Response<PharmacyResponse> response)
             //***********************************************************
             {
-                if (response.isSuccessful())
-                {
-                    if (response.body().getError() != null)
-                    {
+                if (response.isSuccessful()) {
+                    if (response.body().getError() != null) {
                         mAddPharmacyListener.onPharmacyFailedToAdded((TextUtils.isEmpty(response.body().getError()) ?
                                 AndroidUtil.getString(R.string.server_error) :
                                 response.body().getError()));
                         return;
                     }
-                        mAddPharmacyListener.onPharmacySuccessfullyAdded(response.body());
+                    mAddPharmacyListener.onPharmacySuccessfullyAdded(response.body());
                     return;
                 }
                 mAddPharmacyListener.onPharmacyFailedToAdded(AndroidUtil.getString(R.string.server_error));
@@ -107,7 +102,7 @@ public class AddPharmacyViewModel
 
     //***********************************************************
     public interface AddPharmacyListener
-    //***********************************************************
+            //***********************************************************
     {
         void onPharmacySuccessfullyAdded(@Nullable PharmacyResponse Response);
 

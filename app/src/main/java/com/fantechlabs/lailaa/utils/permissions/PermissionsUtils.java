@@ -1,4 +1,4 @@
-package com.fantechlabs.lailaa.utils;
+package com.fantechlabs.lailaa.utils.permissions;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.fantechlabs.lailaa.R;
+import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.annotation.Retention;

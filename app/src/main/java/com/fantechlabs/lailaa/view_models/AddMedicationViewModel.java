@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 
-import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
+import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.models.response_models.MedicationResponse;
 import com.fantechlabs.lailaa.network.ServiceGenerator;
 import com.fantechlabs.lailaa.network.services.MedicationService;
@@ -60,6 +60,7 @@ public class AddMedicationViewModel
         medicationList.put(Constants.MEDSCAPE_ID, "");
         medicationList.put(Constants.FREQUENCY1, "");
         medicationList.put(Constants.WHEN_NEEDED, "n");
+        medicationList.put(Constants.PRESCRIBED, addMedicationRequest.getPrescribed());
         medicationList.put(Constants.FREQUENCY2, addMedicationRequest.getFrequency());
         medicationList.put(Constants.MEDECINE_FORM, addMedicationRequest.getFrom());
         medicationList.put(Constants.NUM_REFILLS, addMedicationRequest.getNoOfRefills());
@@ -78,7 +79,7 @@ public class AddMedicationViewModel
 
         //***********************************************************
         medicationService.enqueue(new Callback<MedicationResponse>()
-                //***********************************************************
+        //***********************************************************
         {
 
             //***********************************************************
@@ -86,18 +87,18 @@ public class AddMedicationViewModel
             public void onResponse(Call<MedicationResponse> call, Response<MedicationResponse> response)
             //***********************************************************
             {
-                if (response.isSuccessful()) {
+                if (response.isSuccessful())
+                {
                     Log.d("SessionToken", "onResponse: " + response.toString());
-                    if (response.body().getError() != null) {
+                    if (response.body().getError() != null)
+                    {
                         mAddMedicationListener.onFailed(response.body().getError());
                         return;
                     }
                     Log.d("SessionToken", "onResponse: responseBody -> " + response.body().toString());
                     mAddMedicationListener.onSuccessfully(response.body());
-                    return;
                 }
-                mAddMedicationListener.onFailed("Internal server error");
-             }
+            }
 
             //***********************************************************
             @Override
@@ -112,7 +113,7 @@ public class AddMedicationViewModel
 
     //***********************************************************
     public interface AddMedicationListener
-            //***********************************************************
+    //***********************************************************
     {
         void onSuccessfully(@Nullable MedicationResponse medicationResponse);
 

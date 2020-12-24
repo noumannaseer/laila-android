@@ -15,8 +15,8 @@ import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.models.response_models.UserResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
-import com.fantechlabs.lailaa.utils.Permission;
 import com.fantechlabs.lailaa.utils.SharedPreferencesUtils;
+import com.fantechlabs.lailaa.utils.permissions.Permission;
 
 import lombok.val;
 
@@ -43,7 +43,6 @@ public class SplashActivity extends AppCompatActivity
                 AndroidUtil.getString(R.string.Network_not_available),
                 AndroidUtil.getString(R.string.Network_error),
                 this);
-
     }
 
     //******************************************************************

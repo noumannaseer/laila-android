@@ -37,7 +37,7 @@ public class ProfileOneFragment extends BaseFragment
     private View mRootView;
     private Date mSelectedDate;
     private Profile mUser;
-    private ArrayList<String> mLocalLanguages=new ArrayList<String>();
+    private ArrayList<String> mLocalLanguages = new ArrayList<String>();
 
     //***********************************************************
     public ProfileOneFragment()
@@ -52,8 +52,7 @@ public class ProfileOneFragment extends BaseFragment
     public View onCreateViewBaseFragment(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
     //*******************************************************************************************************
     {
-        if (mRootView == null)
-        {
+        if (mRootView == null) {
             mBinding = FragmentProfileOneBinding.inflate(inflater, parent, false);
             mRootView = mBinding.getRoot();
         }
@@ -84,17 +83,14 @@ public class ProfileOneFragment extends BaseFragment
         mUser.setIsNotifications(1);
         mUser.setIsAudio(1);
 
-        mBinding.gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        mBinding.gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mUser.setGender(parent.getSelectedItem().toString());
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
+            public void onNothingSelected(AdapterView<?> parent) {
             }
         });
 
@@ -170,34 +166,24 @@ public class ProfileOneFragment extends BaseFragment
             }
         });
 
-        mBinding.organYes.setOnClickListener(v-> organYes());
-        mBinding.organNo.setOnClickListener(v->  organNo());
-    }
+        mBinding.organDonarGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                switch (i) {
+                    case 0:
+                        mUser.setOrganDonor("Y");
+                        break;
+                    case 1:
+                        mUser.setOrganDonor("N");
+                        break;
+                }
+            }
 
-    //******************************************************
-    private void organYes()
-    //******************************************************
-    {
-        mBinding.organNo.setBackgroundTintList(
-                ContextCompat.getColorStateList(getActivity(), R.color.darkBlue));
-        mBinding.organYes.setBackgroundTintList(
-                ContextCompat.getColorStateList(getActivity(), R.color.green));
-        mBinding.organYes.setTextColor(AndroidUtil.getColor(R.color.green));
-        mBinding.organNo.setTextColor(AndroidUtil.getColor(R.color.darkBlue));
-        mUser.setOrganDonor("Y");
-    }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-    //******************************************************
-    private void organNo()
-    //******************************************************
-    {
-        mBinding.organYes.setBackgroundTintList(
-                ContextCompat.getColorStateList(getActivity(), R.color.darkBlue));
-        mBinding.organNo.setBackgroundTintList(
-                ContextCompat.getColorStateList(getActivity(), R.color.green));
-        mBinding.organYes.setTextColor(AndroidUtil.getColor(R.color.darkBlue));
-        mBinding.organNo.setTextColor(AndroidUtil.getColor(R.color.green));
-        mUser.setOrganDonor("N");
+            }
+        });
     }
 
     //******************************************************
@@ -208,8 +194,8 @@ public class ProfileOneFragment extends BaseFragment
         mBinding.firstName.setEnabled(true);
         mBinding.lastName.setEnabled(true);
         mBinding.language.setEnabled(true);
-        mBinding.organYes.setEnabled(true);
-        mBinding.organNo.setEnabled(true);
+        mBinding.organDonarGroup.setEnabled(true);
+        mBinding.email.setEnabled(true);
         mBinding.dob.setEnabled(true);
         mBinding.bloodGroup.setEnabled(true);
         mBinding.gender.setEnabled(true);
@@ -222,14 +208,18 @@ public class ProfileOneFragment extends BaseFragment
     //*******************************************************************
     {
         super.onResume();
-        mLocalLanguages =  AndroidUtil.getLanguagesList();
+        mLocalLanguages = AndroidUtil.getLanguagesList();
         setLanguages(mBinding.language, mLocalLanguages);
         if (Laila.instance().getMProfileRequest() == null || Laila.instance().getMProfileRequest().getProfile() == null)
             return;
         val userDetail = Laila.instance().getMProfileRequest().getProfile();
         val check = Laila.instance().Edit_Profile;
-        if (!check)
-        {
+        if (!check) {
+            mBinding.firstName.setEnabled(false);
+            mBinding.lastName.setEnabled(false);
+            mBinding.email.setEnabled(false);
+            mBinding.dob.setEnabled(false);
+            mBinding.organDonarGroup.setEnabled(false);
             mBinding.bloodGroup.setEnabled(false);
             mBinding.gender.setEnabled(false);
             mBinding.language.setEnabled(false);
@@ -244,12 +234,11 @@ public class ProfileOneFragment extends BaseFragment
 
         val checkOrgan = TextUtils.equals(userDetail.getOrganDonor(), "Y");
 
-        if (checkOrgan)
-        {
-            organYes();
+        if (checkOrgan) {
+            mUser.setOrganDonor("Y");
             return;
         }
-            organNo();
+        mUser.setOrganDonor("N");
 
     }
 
@@ -295,8 +284,7 @@ public class ProfileOneFragment extends BaseFragment
         if (type == null || type.length() == 0)
             return;
 
-        if (type != null)
-        {
+        if (type != null) {
             int spinnerPosition = strengthUnitAdapter.getPosition(type);
             spinner.setSelection(spinnerPosition);
         }

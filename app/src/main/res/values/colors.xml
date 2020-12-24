@@ -20,8 +20,10 @@
     <color name="gray_text">#979797</color>
     <color name="background">#E9E9E9</color>
     <color name="text_blue">#26225e</color>
-    <color name="tab_background">#FAFAFA</color>
+    <color name="profile_background">#FAFAFA</color>
     <color name="button_background">#ED4C3C</color>
+    <color name="remove_allergies_color">#afaaaa</color>
+
 
 
 </resources>

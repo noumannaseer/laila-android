@@ -86,7 +86,7 @@ public class MedicationActivity extends BaseActivity
     private void addMedications()
     //**********************************************************
     {
-        mBinding.addMedication.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), AddMedicationsActivity.class)));
+        mBinding.addMedication.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), AddMedicationActivity.class)));
     }
 
     //**********************************************************
@@ -193,7 +193,6 @@ public class MedicationActivity extends BaseActivity
                         });
             }
 
-
             //******************************************************************
             @Override
             public void onUpdate(int position)
@@ -201,7 +200,7 @@ public class MedicationActivity extends BaseActivity
             {
                 Laila.instance().setMMedicationPosition(position);
                 Laila.instance().on_update_medicine = true;
-                startActivity(new Intent(MedicationActivity.this, AddMedicationsActivity.class));
+                startActivity(new Intent(MedicationActivity.this, AddMedicationActivity.class));
             }
 
         }, this);

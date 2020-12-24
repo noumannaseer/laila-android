@@ -31,7 +31,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="stateHidden">
-        <activity android:name=".activities.AddPharmacyActivity"></activity>
+        <activity android:name=".activities.DocumentDetailsActivity"></activity>
+        <activity android:name=".activities.AddPharmacyActivity" />
+        <activity android:name=".activities.AddMedicationActivity" />
         <activity android:name=".activities.ForgotActivity" />
         <activity android:name=".activities.BodyReadingActivity" />
         <activity android:name=".activities.MedicationFollowUpTwo" />
@@ -40,6 +42,7 @@
         <activity android:name=".activities.TelehealthActivity" />
         <activity android:name=".activities.CalenderActivity" />
         <activity android:name=".activities.MedicalRecordsActivity" />
+        <activity android:name=".activities.BrowserActivity" />
         <activity android:name=".activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,12 +50,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.AddMedicationsActivity" />
         <activity android:name=".activities.SignUpActivity" />
         <activity android:name=".activities.HomeActivity" />
         <activity android:name=".activities.SignInActivity" />
         <activity android:name=".activities.SettingActivity" />
         <activity android:name=".activities.MedicationActivity" />
+
+        <service
+            android:name=".network.firebaseNotification.GetDeviceTokenService"
+            android:enabled="false"
+            android:exported="false" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -69,7 +76,6 @@
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="ocr" />
-
     </application>
 
 </manifest>

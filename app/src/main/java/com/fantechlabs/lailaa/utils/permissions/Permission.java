@@ -1,4 +1,4 @@
-package com.fantechlabs.lailaa.utils;
+package com.fantechlabs.lailaa.utils.permissions;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.fantechlabs.lailaa.utils.AndroidUtil;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,7 +26,7 @@ import java.util.List;
 public class Permission
 //******************************************************************
 {
-    public static final String TAG = com.fantechlabs.lailaa.utils.Permission.class.getCanonicalName();
+    public static final String TAG = Permission.class.getCanonicalName();
     private static final HashMap<String, ArrayList<OnDenied>> sOnDenied = new HashMap<>();
     private final String[] mPermissionStrings;
     private static Fragment mFragment;
@@ -86,8 +88,8 @@ public class Permission
     public boolean equals(Object o)
     //******************************************************************
     {
-        return o instanceof com.fantechlabs.lailaa.utils.Permission
-                && Arrays.equals(mPermissionStrings, ((com.fantechlabs.lailaa.utils.Permission)o).getPermissionStrings());
+        return o instanceof Permission
+                && Arrays.equals(mPermissionStrings, ((Permission)o).getPermissionStrings());
     }
 
     //******************************************************************
@@ -117,10 +119,10 @@ public class Permission
 
     //******************************************************************
     public static @NonNull
-    com.fantechlabs.lailaa.utils.Permission fromStrings(@NonNull String... permissions)
+    Permission fromStrings(@NonNull String... permissions)
     //******************************************************************
     {
-        return new com.fantechlabs.lailaa.utils.Permission(permissions);
+        return new Permission(permissions);
     }
 
     /**

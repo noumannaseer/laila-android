@@ -63,13 +63,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="2">
+            android:orientation="vertical">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight=".1"
                 android:fillViewport="true">
 
 
@@ -87,7 +85,7 @@
                         <androidx.cardview.widget.CardView
                             android:id="@+id/add_medication"
                             android:layout_width="0dp"
-                            android:layout_height="160dp"
+                            android:layout_height="180dp"
                             android:layout_margin="8dp"
                             android:layout_weight="1"
                             android:background="@drawable/card_background"
@@ -137,7 +135,7 @@
                         <androidx.cardview.widget.CardView
                             android:id="@+id/medical_records"
                             android:layout_width="0dp"
-                            android:layout_height="160dp"
+                            android:layout_height="180dp"
                             android:layout_margin="8dp"
                             android:layout_weight="1"
                             android:background="@drawable/card_background"
@@ -151,7 +149,6 @@
                                 android:layout_marginLeft="12dp"
                                 android:layout_marginTop="8dp"
                                 android:orientation="vertical">
-
 
                                 <ImageView
                                     android:layout_width="70dp"
@@ -178,7 +175,7 @@
                                     android:layout_marginLeft="4dp"
                                     android:layout_marginTop="4dp"
                                     android:fontFamily="@font/sfpro_display_regular"
-                                     android:text="@string/add_documents"
+                                    android:text="@string/add_documents"
                                     android:textColor="@color/black"
                                     android:textSize="14sp" />
 
@@ -195,7 +192,7 @@
                         <androidx.cardview.widget.CardView
                             android:id="@+id/calender"
                             android:layout_width="0dp"
-                            android:layout_height="160dp"
+                            android:layout_height="180dp"
                             android:layout_margin="8dp"
                             android:layout_weight="1"
                             android:background="@drawable/card_background"
@@ -245,7 +242,7 @@
                         <androidx.cardview.widget.CardView
                             android:id="@+id/telehealth"
                             android:layout_width="0dp"
-                            android:layout_height="160dp"
+                            android:layout_height="180dp"
                             android:layout_margin="8dp"
                             android:layout_weight="1"
                             android:background="@drawable/card_background"
@@ -302,7 +299,7 @@
                         <androidx.cardview.widget.CardView
                             android:id="@+id/bodyreading"
                             android:layout_width="0dp"
-                            android:layout_height="160dp"
+                            android:layout_height="180dp"
                             android:layout_margin="8dp"
                             android:layout_weight="1"
                             android:background="@drawable/card_background"
@@ -341,7 +338,7 @@
                                     android:layout_marginLeft="4dp"
                                     android:layout_marginTop="4dp"
                                     android:fontFamily="@font/sfpro_display_regular"
-                                     android:text="@string/add_view_bodyreadings"
+                                    android:text="@string/add_view_bodyreadings"
                                     android:textColor="@color/black"
                                     android:textSize="14sp" />
 
@@ -355,68 +352,10 @@
 
                     </LinearLayout>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/refill_reminders"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:backgroundTint="@color/green"
-                        android:drawableTint="@color/white"
-                        android:fontFamily="@font/sfpro_display_regular"
-                        android:gravity="center"
-                        android:padding="16dp"
-                        android:text="@string/refill_reminders"
-                        android:textAllCaps="false"
-                        android:textSize="16sp"
-                        app:cornerRadius="12dp"
-                        app:elevation="24dp"
-                        app:icon="@drawable/ic_notification_bell"
-                        app:iconGravity="textStart" />
-
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.9"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_bold"
-                        android:gravity="center"
-                        android:text="@string/aditum_health"
-                        android:textColor="@color/darkBlue"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/artboard_3x" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_regular"
-                    android:gravity="center"
-                    android:text="@string/version_no"
-                    android:textColor="@color/black"
-                    android:textSize="8sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
         </LinearLayout>
 
 

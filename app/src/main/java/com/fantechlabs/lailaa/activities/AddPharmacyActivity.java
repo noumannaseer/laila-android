@@ -28,8 +28,8 @@ import com.fantechlabs.lailaa.models.response_models.PharmacyResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.utils.LocationUtils;
-import com.fantechlabs.lailaa.utils.PermissionsUtils;
 import com.fantechlabs.lailaa.utils.SharedPreferencesUtils;
+import com.fantechlabs.lailaa.utils.permissions.PermissionsUtils;
 import com.fantechlabs.lailaa.view_models.AddPharmacyViewModel;
 import com.fantechlabs.lailaa.view_models.GoogleAddressViewModel;
 import com.fantechlabs.lailaa.view_models.PlacesViewModel;
@@ -169,10 +169,7 @@ public class AddPharmacyActivity extends BaseActivity
                     public void onLastKnownLocation(double latitude, double longitude)
                     //******************************************************************
                     {
-//                        mSourceLatitude = latitude;
-//                        mSourceLongitude = longitude;
-//                        mLocationUtils.stopListener();
-//                        searchNearByPharmacy(latitude, longitude);
+
                     }
 
                     //******************************************************************
@@ -194,6 +191,7 @@ public class AddPharmacyActivity extends BaseActivity
                     //********************************
                     {
                     }
+
                 });
         Point displaySize = new Point();
         getWindowManager().getDefaultDisplay()
@@ -395,15 +393,10 @@ public class AddPharmacyActivity extends BaseActivity
                 .toString();
         val phone = mBinding.phone.getText()
                 .toString();
-        val email = mBinding.email.getText()
+
+        val city = mBinding.pharmacyCity.getText()
                 .toString();
-        val province = mBinding.pharmacyProvince.getText()
-                .toString();
-        val country = mBinding.pharmacyCountry.getText()
-                .toString();
-        val postalCode = mBinding.pharmacyPostalCode.getText()
-                .toString();
-        val address = mBinding.pharmacyAddress.getText()
+        val address = mBinding.pharmacyAddress1.getText()
                 .toString();
         val address2 = mBinding.pharmacyAddress2.getText()
                 .toString();
@@ -414,8 +407,8 @@ public class AddPharmacyActivity extends BaseActivity
             return;
         }
         if (TextUtils.isEmpty(address)) {
-            mBinding.pharmacyAddress.setError(AndroidUtil.getString(R.string.required));
-            mBinding.pharmacyAddress.requestFocus();
+            mBinding.pharmacyAddress1.setError(AndroidUtil.getString(R.string.required));
+            mBinding.pharmacyAddress1.requestFocus();
             return;
         }
 
@@ -425,10 +418,7 @@ public class AddPharmacyActivity extends BaseActivity
 
         addPharmacyRequest.setFirst_name(name);
         addPharmacyRequest.setPhone(phone);
-        addPharmacyRequest.setEmail(email);
-        addPharmacyRequest.setAddress_province(province);
-        addPharmacyRequest.setAddress_country(country);
-        addPharmacyRequest.setAddress_pobox(postalCode);
+        addPharmacyRequest.setAddress_city(city);
         addPharmacyRequest.setAddress_line1(address);
         addPharmacyRequest.setAddress_line2(address2);
         addPharmacyRequest.setIs_preferred(mPreferredId);
@@ -511,26 +501,17 @@ public class AddPharmacyActivity extends BaseActivity
         }
 
         val city = getAddressParameters("administrative_area_level_2");
-        val province = getAddressParameters("administrative_area_level_1");
-        val country = getAddressParameters("country");
         val postalCode = getAddressParameters("postal_code");
         val name = response.getResult().getName();
         val address = response.getResult().getFormattedAddress();
         val phone = response.getResult().getFormattedPhoneNumber();
 
-        val currentCountry = AndroidUtil.getDeviceCountryCode(this);
-        if (currentCountry.equals("us"))
-            mBinding.provinceTitle.setText(R.string.state);
 
         mBinding.pharmacyName.setText(name);
-        mBinding.pharmacyAddress.setText(address);
-        mBinding.pharmacyProvince.setText(province);
-        mBinding.pharmacyCountry.setText(country);
-        mBinding.pharmacyPostalCode.setText(postalCode);
-        mBinding.phone.setText(phone);
+        mBinding.pharmacyAddress1.setText(address);
         mBinding.pharmacyCity.setText(city);
-
-
+        mBinding.pharmacyAddress2.setText(address);
+        mBinding.phone.setText(phone);
         Log.d(TAG, "" + response.getResult());
     }
 

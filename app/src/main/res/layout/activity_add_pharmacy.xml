@@ -28,7 +28,6 @@
                     android:layout_marginEnd="20sp">
 
                     <TextView
-                        android:id="@+id/textView2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -41,7 +40,7 @@
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/add_medication"
+                        app:layout_constraintEnd_toStartOf="@+id/save_btn"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,6 +58,7 @@
 
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
+
 
 
         <LinearLayout
@@ -90,278 +90,182 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
+                        android:layout_marginHorizontal="6dp"
                         android:layout_marginTop="16dp"
-                        android:background="@color/background"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="4dp"
                             android:fontFamily="@font/helveticaneueltpro_roman"
                             android:text="@string/pharmacy_name"
                             android:textColor="@color/darkBlue"
-                            android:textSize="14sp" />
+                            android:textSize="16sp" />
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/pharmacy_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:background="@color/background"
+                            android:background="@color/white"
+                            android:hint="@string/enter_pharmacy_name"
                             android:maxLines="1"
-                            android:padding="4dp"
-                            android:singleLine="true" />
+                            android:minLines="1"
+                            android:padding="2dp"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
 
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="2dp"
+                        android:background="@color/gray" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
+                        android:layout_marginHorizontal="6dp"
                         android:layout_marginTop="16dp"
-                        android:background="@color/background"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="4dp"
                             android:fontFamily="@font/helveticaneueltpro_roman"
-                            android:text="@string/phone"
+                            android:text="@string/phone_number"
                             android:textColor="@color/darkBlue"
-                            android:textSize="14sp" />
+                            android:textSize="16sp" />
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/phone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:background="@color/background"
-                            android:inputType="phone"
-                            android:maxLines="1"
-                            android:padding="4dp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@color/background"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="@font/helveticaneueltpro_roman"
-                            android:text="@string/email"
-                            android:textColor="@color/darkBlue"
-                            android:textSize="14sp" />
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/email"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:background="@color/background"
-                            android:inputType="textEmailAddress"
-                            android:maxLines="1"
-                            android:padding="4dp"
-                            android:singleLine="true" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@color/background"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="@font/helveticaneueltpro_roman"
-                            android:text="@string/address"
-                            android:textColor="@color/darkBlue"
-                            android:textSize="14sp" />
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/pharmacy_address"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:background="@color/background"
-                            android:ellipsize="end"
+                            android:background="@color/white"
+                            android:hint="@string/enter_phone_number"
                             android:maxLines="1"
                             android:minLines="1"
-                            android:padding="4dp"
-                            android:singleLine="true" />
+                            android:padding="2dp"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
 
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="2dp"
+                        android:background="@color/gray" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
+                        android:layout_marginHorizontal="6dp"
                         android:layout_marginTop="16dp"
-                        android:background="@color/background"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/helveticaneueltpro_roman"
+                            android:text="@string/address1"
+                            android:textColor="@color/darkBlue"
+                            android:textSize="16sp" />
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/pharmacy_address_1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:hint="@string/phamacy_address"
+                            android:maxLines="1"
+                            android:minLines="1"
+                            android:padding="2dp"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="2dp"
+                        android:background="@color/gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="6dp"
+                        android:layout_marginTop="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:fontFamily="@font/helveticaneueltpro_roman"
                             android:text="@string/address2"
                             android:textColor="@color/darkBlue"
-                            android:textSize="14sp" />
+                            android:textSize="16sp" />
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/pharmacy_address2"
+                            android:id="@+id/pharmacy_address_2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:background="@color/background"
+                            android:background="@color/white"
+                            android:hint="@string/phamacy_address"
                             android:maxLines="1"
-                            android:padding="4dp"
-                            android:singleLine="true" />
+                            android:minLines="1"
+                            android:padding="2dp"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
 
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="2dp"
+                        android:background="@color/gray" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
+                        android:layout_marginHorizontal="6dp"
                         android:layout_marginTop="16dp"
-                        android:background="@color/background"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="4dp"
                             android:fontFamily="@font/helveticaneueltpro_roman"
                             android:text="@string/city"
                             android:textColor="@color/darkBlue"
-                            android:textSize="14sp" />
+                            android:textSize="16sp" />
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/pharmacy_city"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:background="@color/background"
+                            android:background="@color/white"
+                            android:hint="@string/pharmacy_city"
                             android:maxLines="1"
-                            android:padding="4dp"
-                            android:singleLine="true" />
+                            android:minLines="1"
+                            android:padding="2dp"
+                            android:singleLine="true"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
 
                     </LinearLayout>
 
-                    <LinearLayout
+                    <View
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@color/background"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/province_title"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="@font/helveticaneueltpro_roman"
-                            android:text="@string/province"
-                            android:textColor="@color/darkBlue"
-                            android:textSize="14sp" />
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/pharmacy_province"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:background="@color/background"
-                            android:maxLines="1"
-                            android:padding="4dp"
-                            android:singleLine="true" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@color/background"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="@font/helveticaneueltpro_roman"
-                            android:text="@string/country"
-                            android:textColor="@color/darkBlue"
-                            android:textSize="14sp" />
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/pharmacy_country"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:background="@color/background"
-                            android:maxLines="1"
-                            android:padding="4dp"
-                            android:singleLine="true" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="6dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="32dp"
-                        android:background="@color/background"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="4dp"
-                            android:fontFamily="@font/helveticaneueltpro_roman"
-                            android:text="@string/postal_code"
-                            android:textColor="@color/darkBlue"
-                            android:textSize="14sp" />
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/pharmacy_postal_code"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:background="@color/background"
-                            android:maxLines="1"
-                            android:padding="4dp"
-                            android:singleLine="true" />
-
-                    </LinearLayout>
-
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="2dp"
+                        android:background="@color/gray" />
                 </LinearLayout>
 
             </ScrollView>

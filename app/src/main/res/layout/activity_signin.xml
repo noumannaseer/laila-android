@@ -19,8 +19,8 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:theme="@style/ToolbarTheme"
-                android:background="@color/white">
+                android:background="@color/white"
+                app:theme="@style/ToolbarTheme">
 
                 <TextView
                     android:id="@+id/tv_create_account_title"
@@ -41,13 +41,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="2">
+            android:orientation="vertical">
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight=".1"
                 android:fillViewport="true">
 
                 <LinearLayout
@@ -96,7 +94,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                         android:orientation="horizontal"
+                        android:orientation="horizontal"
                         android:weightSum="1">
 
                         <RadioButton
@@ -115,8 +113,8 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_weight=".5"
-                            android:gravity="end"
                             android:background="?attr/selectableItemBackground"
+                            android:gravity="end"
                             android:text="@string/forgot_password"
                             android:textAlignment="textEnd"
                             android:textColor="@color/gray_text"
@@ -129,7 +127,7 @@
                         android:id="@+id/signin_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                         android:backgroundTint="@color/green"
+                        android:backgroundTint="@color/green"
                         android:elevation="4dp"
                         android:fontFamily="@font/roboto_regular"
                         android:padding="16dp"
@@ -178,7 +176,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="14dp"
+                        android:layout_marginTop="16dp"
                         android:orientation="horizontal"
                         android:weightSum="1">
 
@@ -188,8 +186,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="8dp"
                             android:layout_weight=".5"
-                            android:backgroundTint="@color/red"
                             android:background="@drawable/image_button_corners"
+                            android:backgroundTint="@color/red"
                             android:elevation="5dp"
                             android:fontFamily="@font/roboto_regular"
                             android:padding="14dp"
@@ -203,8 +201,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="8dp"
                             android:layout_weight=".5"
-                            android:backgroundTint="@color/fb_blue"
                             android:background="@drawable/image_button_corners"
+                            android:backgroundTint="@color/fb_blue"
                             android:elevation="5dp"
                             android:fontFamily="@font/roboto_regular"
                             android:padding="14dp"
@@ -217,45 +215,7 @@
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1.9"
-                android:gravity="center"
-                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/roboto_bold"
-                        android:gravity="center"
-                        android:text="@string/aditum_health"
-                        android:textColor="@color/darkBlue"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/artboard_3x" />
-
-                </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto_regular"
-                    android:gravity="center"
-                    android:text="@string/version_no"
-                    android:textColor="@color/black"
-                    android:textSize="8sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
         </LinearLayout>
 
 

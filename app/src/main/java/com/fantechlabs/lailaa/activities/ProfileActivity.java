@@ -22,7 +22,6 @@ import com.esafirm.imagepicker.model.Image;
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.adapter.ProfileViewPagerAdapter;
-import com.fantechlabs.lailaa.databinding.ActivityHomeBinding;
 import com.fantechlabs.lailaa.databinding.ActivityProfileBinding;
 import com.fantechlabs.lailaa.fragments.ProfileOneFragment;
 import com.fantechlabs.lailaa.fragments.ProfileThreeFragment;
@@ -33,8 +32,8 @@ import com.fantechlabs.lailaa.models.response_models.UpdateProfileResponse;
 import com.fantechlabs.lailaa.request_models.ProfileRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
-import com.fantechlabs.lailaa.utils.Permission;
 import com.fantechlabs.lailaa.utils.SharedPreferencesUtils;
+import com.fantechlabs.lailaa.utils.permissions.Permission;
 import com.fantechlabs.lailaa.view_models.UpdateProfileViewModel;
 
 import java.io.File;
@@ -155,7 +154,7 @@ public class ProfileActivity extends BaseActivity
     //*****************************************************************
     {
         mProfileViewPagerAdapter = new ProfileViewPagerAdapter(getSupportFragmentManager());
-        mProfileViewPagerAdapter.addFragment(new ProfileOneFragment(), AndroidUtil.getString(R.string.about_me));
+        mProfileViewPagerAdapter.addFragment(new ProfileOneFragment(), AndroidUtil.getString(R.string.about));
         mProfileViewPagerAdapter.addFragment(new ProfileTwoFragment(), AndroidUtil.getString(R.string.address));
         mProfileViewPagerAdapter.addFragment(new ProfileThreeFragment(), AndroidUtil.getString(R.string.health));
         mBinding.profileViewpager.setAdapter(mProfileViewPagerAdapter);
@@ -358,6 +357,7 @@ public class ProfileActivity extends BaseActivity
     //********************************************
     {
         super.onBackPressed();
+        Laila.instance().Edit_Profile = false;
         hideLoadingDialog();
     }
 

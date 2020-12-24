@@ -19,14 +19,18 @@ import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.ActivityHomeBinding;
 import com.fantechlabs.lailaa.databinding.ActivitySigninBinding;
+import com.fantechlabs.lailaa.models.Events;
 import com.fantechlabs.lailaa.models.Profile;
 import com.fantechlabs.lailaa.models.ProfileImages;
 import com.fantechlabs.lailaa.request_models.ProfileRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
+import com.fantechlabs.lailaa.view_models.InsertFollowUpViewModel;
+import com.fantechlabs.lailaa.view_models.UpdateFollowUpViewModel;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import lombok.SneakyThrows;
@@ -43,6 +47,21 @@ public class HomeActivity extends BaseActivity
     private boolean isImageSelected = false;
     private Uri mUri;
     private ProfileRequest mUser;
+    public static final String IS_NOTIFICATION = "IS_NOTIFICATION";
+    private boolean mNotification = false;
+    public static final String MEDICINE_ID = "MEDICINE_ID";
+    public static final String MEDICINE_NAME = "MEDICINE_NAME";
+    public static final String FOLLOW_UP_ID = "FOLLOW_UP_ID";
+    private String mMedicineId, mEventName;
+    private InsertFollowUpViewModel mInsertFollowUpViewModel;
+    private UpdateFollowUpViewModel mUpdateFollowUpViewModel;
+    private int mFollowUpId;
+    private String mStatus;
+    private boolean mDismiss = false;
+    private List<Events> mTodayEvents;
+    private ArrayList<String> mSortedTimes;
+    private int mCompareTime;
+    private Date mDateOne, mDateTwo;
     //**********************************************************
     @Override
     protected void onCreation(@Nullable Bundle savedInstanceState)
