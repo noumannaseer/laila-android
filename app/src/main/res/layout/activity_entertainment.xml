@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".activities.TelehealthActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/white"
+                app:theme="@style/ToolbarTheme">
+
+                <TextView
+                    android:id="@+id/tv_create_account_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/sfpro_display_regular"
+                    android:gravity="center_horizontal"
+                    android:text="@string/entertainment"
+                    android:textAlignment="center"
+                    android:textColor="@color/darkBlue"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:fontFamily="@font/helveticaneueltpro_roman"
+                    android:text="@string/click_below_to_communicate_with_friends"
+                    android:textColor="@color/gray_text"
+                    android:textSize="14sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/write_documents"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/card_background"
+                        android:foreground="?selectableItemBackground"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/icon_exercise_2x" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/sfpro_text_bold"
+                                android:lineSpacingExtra="3sp"
+                                android:text="@string/exercises"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/take_a_picture"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/card_background"
+                        android:foreground="?selectableItemBackground"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/icon_games_2x" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/sfpro_text_bold"
+                                android:lineSpacingExtra="3sp"
+                                android:text="@string/games"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/scan_documents"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/card_background"
+                        android:foreground="?selectableItemBackground"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/icon_medications" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/sfpro_text_bold"
+                                android:lineSpacingExtra="3sp"
+                                android:text="@string/medication"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/import_media_files"
+                        android:layout_width="0dp"
+                        android:layout_height="160dp"
+                        android:layout_margin="8dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/card_background"
+                        android:foreground="?selectableItemBackground"
+                        app:cardCornerRadius="10dp"
+                        app:cardElevation="8dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="64dp"
+                                android:layout_height="64dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/icon_medical_articles_2x" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/sfpro_text_bold"
+                                android:lineSpacingExtra="3sp"
+                                android:text="@string/medical_ariticles"
+                                android:textAlignment="textStart"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+</layout>

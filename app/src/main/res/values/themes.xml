@@ -1,0 +1,97 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/darkBlue</item>
+        <item name="colorPrimaryDark">@color/green</item>
+        <item name="colorAccent">@color/darkBlue</item>
+    </style>
+
+    <style name="NavigationTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/darkBlue</item>
+        <item name="colorPrimaryDark">@color/green</item>
+        <item name="colorAccent">@color/darkBlue</item>
+    </style>
+
+    <style name="CustomTransparentDialog" parent="Theme.MaterialComponents.Dialog">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--        <item name="android:windowAnimationStyle">@style/DialogAnimation</item>-->
+    </style>
+
+    <style name="Widget.MaterialComponents.MaterialCalendar.HeaderToggleButton." parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/darkBlue</item>
+    </style>
+
+    <style name="EditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="colorAccent">@color/darkBlue</item>
+    </style>
+
+    <style name="SpinnerTheme" >
+        <item name="android:textColor">@color/black</item>
+        <!--        <item name="android:backgroundTint">@color/colorWhite</item>-->
+        <item name="android:fontFamily">@font/sfpro_display_regular</item>
+
+    </style>
+
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+        <item name="navigationIcon">@drawable/ic_arrow_back_black_24dp</item>
+    </style>
+
+    <style name="DrawerMenuTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/helveticaneueltpro_roman</item>
+
+    </style>
+
+    <style name="ToggleSwitchTheme" parent="ThemeOverlay.MaterialComponents.Light">
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppThemeSim" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/darkBlue</item>
+        <item name="colorPrimaryDark">@color/darkBlue</item>
+        <item name="colorAccent">@color/darkBlue</item>
+        <item name="colorControlHighlight">@color/darkBlue</item>
+
+    </style>
+
+    <!-- Customize color of navigation drawer icon and back arrow -->
+    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
+        <item name="colorControlNormal">@color/darkBlue</item>
+    </style>
+
+    <style name="AppThemeSim.CardTheme">
+        <item name="colorPrimary">@color/darkBlue</item>
+        <item name="colorPrimaryDark">@color/darkBlue</item>
+        <item name="android:textColorHint">@color/darkBlue</item>
+        <item name="colorAccent">@color/darkBlue</item>
+        <item name="colorControlNormal">@color/darkBlue</item>
+        <item name="colorControlActivated">@color/darkBlue</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="MyButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="shapeAppearanceOverlay">@style/MyShapeAppearance</item>
+    </style>
+    <style name="MyShapeAppearance" parent="">
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerFamilyBottomLeft">rounded</item>
+        <item name="cornerFamilyTopRight">cut</item>
+        <item name="cornerFamilyBottomRight">cut</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+
+
+    <style name="SpinnerDropDownItemStyle">
+        <item name="android:textSize">14sp</item>
+    </style>
+</resources>
