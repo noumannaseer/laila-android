@@ -356,6 +356,15 @@ public class UIUtils
         return date;
     }
 
+    //*****************************************************************
+    public static String getCurrentTime()
+    //*****************************************************************
+    {
+        Date time = Calendar.getInstance().getTime();
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        String formattedTime = timeFormat.format(time);
+        return formattedTime;
+    }
 
     //*****************************************************************
     public static String addOneDayCalendar(String inputDate, int i)

@@ -23,7 +23,7 @@
     <color name="profile_background">#FAFAFA</color>
     <color name="button_background">#ED4C3C</color>
     <color name="remove_allergies_color">#afaaaa</color>
-
-
+    <color name="secondaryTextColor">#707070</color>
+    <color name="textHintColor">#b6b6b6</color>
 
 </resources>

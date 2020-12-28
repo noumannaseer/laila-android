@@ -62,7 +62,7 @@ public class Constants
     public static final String LOCATION = "location";
     public static final String CURRENT_LOCATION = "Current location";
     public static final String CONTACT = "Caregiver";
-     public static final String HUMAN = "Human";
+    public static final String HUMAN = "Human";
     public static final String SELECT_PHARMACY = "Select Pharmacy";
     public static final String DOSAGE = "dosage";
 
@@ -76,11 +76,37 @@ public class Constants
     public static final String NO = "n";
 
     public static String[] mimeTypes =
-            { "application/msword",
+            {"application/msword",
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                     "text/plain",
                     "application/pdf",
                     "image/jpeg",
-                    "image/png" };
+                    "image/png"};
 
+    // for body readings
+    public static final int ONE = 1;
+    public static final int ZERO = 0;
+    public static final int SEVEN_DAYS = 7;
+    public static final int FOURTEEN_DAYS = 14;
+    public static final int MONTH = 30;
+    public static final int YEAR = 365;
+    public static final int CASE0 = 0;
+    public static final int CASE1 = 1;
+    public static final int CASE2 = 2;
+    public static final int CASE3 = 3;
+    public static final String APP_TYPE = "body-reading";
+
+    public static final int HOUR_OF_DAY = 6;
+    public static final int MINUTE = 59;
+    public static final int SECONDS = 60;
+    public static final String SEVEN_DAY = "7 days";
+    public static final String FOURTEEN_DAY = "14 days";
+    public static final String ONE_MONTH = "1 month";
+    public static final String ONE_YEAR = "1 year";
+    public static final String DAYS = "Days";
+    public static final String AVERAGE_DAYS = "Average Days";
+    public static final String SYSTOLIC = "Systolic";
+    public static final String DIASTOLIC = "Diastolic";
+    public static final String DEVICE_TYPE = "Android";
+    public static final String DECIMAL_FORMATTER = "#####.##";
 }

@@ -28,8 +28,7 @@ public class SocialLoginViewModel
 
     private SocialLoginViewModelListener mSocialLoginViewModelListener;
 
-    public SocialLoginViewModel(SocialLoginViewModelListener viewModelListener)
-    {
+    public SocialLoginViewModel(SocialLoginViewModelListener viewModelListener) {
         this.mSocialLoginViewModelListener = viewModelListener;
     }
 
@@ -39,10 +38,9 @@ public class SocialLoginViewModel
     {
 
         val service = ServiceGenerator.createService(OnboardingService.class,
-                                                     true,
-                                                     Constants.BASE_URL);
-        if (service == null)
-        {
+                true,
+                Constants.BASE_URL);
+        if (service == null) {
             mSocialLoginViewModelListener.onFailedSocialLogin(AndroidUtil.getString(R.string.internet_not_vailable));
             return;
         }
@@ -50,8 +48,7 @@ public class SocialLoginViewModel
         HashMap<String, String> login = new HashMap<String, String>();
         login.put("email", email);
 
-        switch (isFacebook)
-        {
+        switch (isFacebook) {
             case 1:
                 login.put("facebook", token);
                 break;
@@ -65,7 +62,7 @@ public class SocialLoginViewModel
 
         //**********************************************************
         placeServices.enqueue(new Callback<UserResponse>()
-        //**********************************************************
+                //**********************************************************
         {
 
             //**********************************************************
@@ -73,10 +70,8 @@ public class SocialLoginViewModel
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response)
             //**********************************************************
             {
-                if (response.isSuccessful())
-                {
-                    if(response.body().getError() != null)
-                    {
+                if (response.isSuccessful()) {
+                    if (response.body().getError() != null) {
                         mSocialLoginViewModelListener.onFailedSocialLogin((TextUtils.isEmpty(response.body().getError()) ?
                                 AndroidUtil.getString(R.string.server_error) :
                                 response.body().getError()));
@@ -102,7 +97,7 @@ public class SocialLoginViewModel
 
     //**********************************************************
     public interface SocialLoginViewModelListener
-    //**********************************************************
+            //**********************************************************
     {
         void onSuccessSocialLogin(@NonNull UserResponse response);
 

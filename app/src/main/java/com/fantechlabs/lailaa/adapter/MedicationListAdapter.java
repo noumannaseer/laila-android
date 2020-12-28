@@ -121,6 +121,14 @@ public class MedicationListAdapter
                     if (mListClickListener != null)
                         mListClickListener.onDelete(mPosition, item.getId());
                     break;
+                case "Info":
+                    if (mListClickListener != null)
+                        mListClickListener.onInformation(item.getDinRxNumber());
+                    break;
+                case "Check Interactions":
+                    if (mListClickListener != null)
+                        mListClickListener.viewInteractions(item.getId());
+                    break;
             }
             return true;
         });
@@ -160,6 +168,10 @@ public class MedicationListAdapter
         void onDelete(int position, int id);
 
         void onUpdate(int position);
+
+        void onInformation(String rxDinNumber);
+
+        void viewInteractions(int id);
 
     }
 

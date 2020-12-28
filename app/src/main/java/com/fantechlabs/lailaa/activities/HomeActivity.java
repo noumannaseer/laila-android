@@ -17,8 +17,8 @@ import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.model.Image;
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
+import com.fantechlabs.lailaa.bodyreading.activities.BodyReadingActivity;
 import com.fantechlabs.lailaa.databinding.ActivityHomeBinding;
-import com.fantechlabs.lailaa.databinding.ActivitySigninBinding;
 import com.fantechlabs.lailaa.models.Events;
 import com.fantechlabs.lailaa.models.Profile;
 import com.fantechlabs.lailaa.models.ProfileImages;
@@ -62,6 +62,7 @@ public class HomeActivity extends BaseActivity
     private ArrayList<String> mSortedTimes;
     private int mCompareTime;
     private Date mDateOne, mDateTwo;
+
     //**********************************************************
     @Override
     protected void onCreation(@Nullable Bundle savedInstanceState)
@@ -84,12 +85,14 @@ public class HomeActivity extends BaseActivity
     private void gotoScreens()
     //**********************************************************
     {
-        mBinding.settings.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), SettingActivity.class)));
-        mBinding.addMedication.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), MedicationActivity.class)));
-        mBinding.medicalRecords.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), MedicalRecordsActivity.class)));
-        mBinding.calender.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), CalenderActivity.class)));
-        mBinding.telehealth.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), TelehealthActivity.class)));
-        mBinding.profile.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), ProfileActivity.class)));
+        mBinding.settings.setOnClickListener(view -> startActivity(new Intent(this, SettingActivity.class)));
+        mBinding.addMedication.setOnClickListener(view -> startActivity(new Intent(this, MedicationActivity.class)));
+        mBinding.medicalRecords.setOnClickListener(view -> startActivity(new Intent(this, MedicalRecordsActivity.class)));
+        mBinding.calender.setOnClickListener(view -> startActivity(new Intent(this, CalenderActivity.class)));
+        mBinding.telehealth.setOnClickListener(view -> startActivity(new Intent(this, TelehealthActivity.class)));
+        mBinding.profile.setOnClickListener(view -> startActivity(new Intent(this, ProfileActivity.class)));
+        mBinding.bodyreading.setOnClickListener(view -> startActivity(new Intent(this, BodyReadingActivity.class)));
+
 
     }
 
@@ -117,8 +120,7 @@ public class HomeActivity extends BaseActivity
         images = new ArrayList<>();
         images.add(image);
 
-        if (mBase64Image == null)
-        {
+        if (mBase64Image == null) {
             mUser.setImages(null);
             return;
         }
@@ -160,43 +162,39 @@ public class HomeActivity extends BaseActivity
         }
         getDecodeImage(image);
     }
+
     //*******************************************************************************************
     @SneakyThrows
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     //*******************************************************************************************
     {
-        if (ImagePicker.shouldHandle(requestCode, resultCode, data))
-        {
+        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
 
             isImageSelected = true;
             Image image = ImagePicker.getFirstImageOrNull(data);
             mUri = data.getData();
 
-            if (image != null)
-            {
+            if (image != null) {
 
                 mUri = Uri.fromFile(new File(image.getPath()));
 
                 File file = new File(mUri.getPath());
                 File imageZipperFile = null;
-                try
-                {
+                try {
                     imageZipperFile = new ImageZipper(HomeActivity.this)
                             .setQuality(90)
                             .setMaxWidth(128)
                             .setMaxHeight(128)
                             .compressToFile(file);
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 file = imageZipperFile == null ? file : imageZipperFile;
 
                 mUri = Uri.fromFile(file);
                 val result = AndroidUtil.getBytes(this, mUri);
-                mBase64Image = Base64.encodeToString(result,  Base64.NO_WRAP);
+                mBase64Image = Base64.encodeToString(result, Base64.NO_WRAP);
                 getDecodeImage(mBase64Image);
                 Log.d("image", "imageUrl : " + mBase64Image);
 
@@ -204,6 +202,7 @@ public class HomeActivity extends BaseActivity
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     //**********************************************************
     @Override
     protected boolean showStatusBar()
