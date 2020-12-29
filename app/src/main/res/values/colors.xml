@@ -26,4 +26,8 @@
     <color name="secondaryTextColor">#707070</color>
     <color name="textHintColor">#b6b6b6</color>
 
+    <color name="ingredient_color_green">#7aab9d</color>
+    <color name="ingredient_color_yellow">#e5f545</color>
+    <color name="ingredient_color_orange">#fa8300</color>
+
 </resources>

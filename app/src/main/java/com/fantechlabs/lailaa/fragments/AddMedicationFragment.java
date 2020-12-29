@@ -124,7 +124,7 @@ public class AddMedicationFragment
             //*****************************************************************************
             {
                 AndroidUtil.handler.removeCallbacks(mSearchRunnable);
-                if (s.length() > 2) {
+                if (s.length() > 1) {
                     mSearchRunnable = new Runnable() {
                         @Override
                         public void run() {
@@ -133,7 +133,7 @@ public class AddMedicationFragment
                         }
                     };
 
-                    AndroidUtil.handler.postDelayed(mSearchRunnable, 200);
+                    AndroidUtil.handler.postDelayed(mSearchRunnable, 100);
                 }
             }
 

@@ -44,6 +44,7 @@ public class MedicationActivity extends BaseActivity
     private MedicationListAdapter mMedicationListAdapter;
     private DeleteMedicationViewModel mDeleteMedicationViewModel;
     private DrugCheckMedicationViewModel mDrugCheckMedicationViewModel;
+    private DeleteEventViewModel mDeleteEventViewModel;
     private int mPosition, mEventPosition;
     private String mMedicineId;
 
@@ -80,6 +81,7 @@ public class MedicationActivity extends BaseActivity
     {
         mDeleteMedicationViewModel = new DeleteMedicationViewModel(this);
         mDrugCheckMedicationViewModel = new DrugCheckMedicationViewModel(this);
+        mDeleteEventViewModel = new DeleteEventViewModel(this);
 
         addMedications();
     }
@@ -231,7 +233,23 @@ public class MedicationActivity extends BaseActivity
         mBinding.medicineRecyclerview.setAdapter(mMedicationListAdapter);
 
     }
+    //**************************************************
+    private void getMedicationEvent()
+    //**************************************************
+    {
+        if (Laila.instance().getMUser().getEvents() == null || Laila.instance().getMUser().getEvents().size() == 0)
+            return;
+        val events = Laila.instance().getMUser().getEvents();
 
+        for (int i = 0; i < events.size(); i++) {
+            if (events.get(i).getMedicationId().toString().equals(mMedicineId)) {
+                val eventId = events.get(i).getId();
+                mEventPosition = i;
+                mDeleteEventViewModel.deleteEvent(eventId);
+            }
+        }
+
+    }
 
     //******************************************************************
     @Override
@@ -262,7 +280,8 @@ public class MedicationActivity extends BaseActivity
     //*******************************************************************
     {
         if (!TextUtils.isEmpty(mMedicineId))
-            Laila.instance().getMUser().getMedication().remove(mPosition);
+            getMedicationEvent();
+        Laila.instance().getMUser().getMedication().remove(mPosition);
         SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser());
         startRecyclerView();
         hideLoadingDialog();

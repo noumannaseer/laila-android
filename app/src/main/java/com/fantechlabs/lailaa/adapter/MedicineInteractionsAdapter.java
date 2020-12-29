@@ -66,13 +66,13 @@ public class MedicineInteractionsAdapter
 
         switch (item.getSeverityId()) {
             case 1:
-                holder.MedicineInteractionLayoutBinding.severityColor.setBackgroundColor(Color.parseColor("#7aab9d"));
+                holder.MedicineInteractionLayoutBinding.severityColor.setCardBackgroundColor(AndroidUtil.getColor(R.color.ingredient_color_green));
                 break;
             case 2:
-                holder.MedicineInteractionLayoutBinding.severityColor.setBackgroundColor(Color.parseColor("#e5f545"));
+                holder.MedicineInteractionLayoutBinding.severityColor.setCardBackgroundColor(AndroidUtil.getColor(R.color.ingredient_color_yellow));
                 break;
             default:
-                holder.MedicineInteractionLayoutBinding.severityColor.setBackgroundColor(Color.parseColor("#fa8300"));
+                holder.MedicineInteractionLayoutBinding.severityColor.setCardBackgroundColor(AndroidUtil.getColor(R.color.ingredient_color_orange));
                 break;
         }
 

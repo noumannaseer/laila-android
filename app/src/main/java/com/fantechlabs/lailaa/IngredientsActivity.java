@@ -65,6 +65,7 @@ public class IngredientsActivity extends BaseActivity
             hideLoadingDialog();
             return;
         }
+        showLoadingDialog();
         mIngredientsViewModel.getIngredients(mDrugCode);
     }
 

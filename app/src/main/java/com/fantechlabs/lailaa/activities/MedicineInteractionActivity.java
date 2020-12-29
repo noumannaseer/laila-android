@@ -19,9 +19,7 @@ public class MedicineInteractionActivity extends BaseActivity
 
     private ActivityMedicineInteractionBinding mBinding;
     public static final String INTERACTION = "INTERACTION";
-    public static final String INTERACTION_MSG = "INTERACTION_MSG";
     private DrugCheckResponse mDrugCheckResponse;
-    private String mInteractionMsg;
     private MedicineInteractionsAdapter mMedicineInteractionsAdapter;
 
 
@@ -75,7 +73,6 @@ public class MedicineInteractionActivity extends BaseActivity
         if (getIntent().getExtras()
                 .containsKey(INTERACTION)) {
             mDrugCheckResponse = getIntent().getParcelableExtra(INTERACTION);
-//            mInteractionMsg = getIntent().getStringExtra(INTERACTION_MSG);
         }
     }
 }
