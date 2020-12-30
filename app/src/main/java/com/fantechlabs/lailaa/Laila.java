@@ -8,6 +8,8 @@ import com.fantechlabs.lailaa.alarms.Alarm;
 import com.fantechlabs.lailaa.alarms.AlarmReceiver;
 import com.fantechlabs.lailaa.alarms.DatabaseHelper;
 import com.fantechlabs.lailaa.alarms.LoadAlarmsService;
+import com.fantechlabs.lailaa.bodyreading.repository.storge.requestmodel.AddHealthDataRequest;
+import com.fantechlabs.lailaa.bodyreading.repository.storge.requestmodel.ReadHealthDataRequest;
 import com.fantechlabs.lailaa.models.Events;
 import com.fantechlabs.lailaa.models.Medication;
 import com.fantechlabs.lailaa.models.Profile;
@@ -56,11 +58,17 @@ public class Laila extends Application
     @Getter
     @Setter
     public Medication mUpdateMedication;
+    @Getter
+    @Setter
+    public String mSearchData;
 
     public boolean Edit_Profile = false;
     public boolean on_update_medicine = false;
     public boolean is_medicine_added = false;
     public boolean is_pharmacy_added = false;
+    public boolean text_recognizer = false;
+    public boolean Bar_code = false;
+
     public static final String CHANNEL_ID = "alarm_channel";
     @Getter
     @Setter
@@ -72,6 +80,15 @@ public class Laila extends Application
     @Setter
     private AddPharmacyRequest mAddPharmacyRequest;
 
+    // For BodyReading
+    public boolean Change_Data = true;
+    @Getter
+    @Setter
+    private ReadHealthDataRequest mReadHealthDataRequest;
+    @Getter
+    @Setter
+    private AddHealthDataRequest mAddHealthDataRequest;
+
     //****************************************************************
     @Override
     public void onCreate()
@@ -81,8 +98,6 @@ public class Laila extends Application
         mContext = getApplicationContext();
         AndroidUtil.setContext(mContext);
         mAutoCompleteLoadingBar = new AutoCompleteLoadingBar(mContext);
-
-//        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
     }
 
     //****************************************************************
@@ -102,14 +117,14 @@ public class Laila extends Application
             return null;
         return mUser.getProfile();
     }
+
     //****************************************************************
     public void addMedicineAlarm(List<Events> events, int followUPId)
     //****************************************************************
     {
         if (getMUser().getMedication() == null)
             getMUser().setMedication(new ArrayList<>());
-        for (val event: events)
-        {
+        for (val event : events) {
             String[] start = event.getStartDate().split(" ");
             String[] end = event.getEndDate().split(" ");
 
@@ -121,8 +136,7 @@ public class Laila extends Application
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(startDate.getTime());
 
-            for (int i = 0; i < daysDiff+1; i++)
-            {
+            for (int i = 0; i < daysDiff + 1; i++) {
                 LoadAlarmsService.launchLoadAlarmsService(this);
 
                 final long id = DatabaseHelper.getInstance(this)

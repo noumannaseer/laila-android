@@ -181,10 +181,9 @@ public class SignInActivity extends BaseActivity
     //****************************************************************
     {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-        mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         mBinding.google.setOnClickListener(v -> signIn());
 
@@ -345,6 +344,9 @@ public class SignInActivity extends BaseActivity
     //******************************************************************
     {
         val remember = mBinding.rememberMe.isChecked();
+        if (remember) {
+            mBinding.rememberMe.setChecked(false);
+        }
         if (userResponse != null) {
             Laila.instance().setMUser(userResponse);
 

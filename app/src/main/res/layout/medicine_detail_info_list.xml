@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/profile_background"
+            android:foreground="?selectableItemBackground">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/company_name"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/company_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        tools:text="ER6 Medical " />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/gray" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/class_name"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/class_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        tools:text="ER6" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/gray" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/brand_name"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/brand_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:visibility="visible"
+                        tools:text="ER6 Medical " />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/drug_code"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/drug_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:visibility="visible"
+                        tools:text="ER6 Medical " />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/descriptor"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/descriptor_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        tools:text="ER6 Medical " />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/no_of_ais"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/no_of_ais"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        tools:text="ER6 Medical " />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/ai_group_no"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/ai_grp_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        tools:text="ER6 Medical " />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/Drug_identification_no"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/drug_identification_no"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        tools:text="ER6 Medical " />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/gray" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/last_update_date"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/last_update_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        tools:text="ER6 Medical " />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/gray" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</layout>

@@ -43,6 +43,8 @@ public class MedicationActivity extends BaseActivity
     private ArrayList<Medication> mMedicationList = new ArrayList<>();
     private MedicationListAdapter mMedicationListAdapter;
     private DeleteMedicationViewModel mDeleteMedicationViewModel;
+    private DrugCheckMedicationViewModel mDrugCheckMedicationViewModel;
+    private DeleteEventViewModel mDeleteEventViewModel;
     private int mPosition, mEventPosition;
     private String mMedicineId;
 
@@ -78,6 +80,8 @@ public class MedicationActivity extends BaseActivity
     //**********************************************************
     {
         mDeleteMedicationViewModel = new DeleteMedicationViewModel(this);
+        mDrugCheckMedicationViewModel = new DrugCheckMedicationViewModel(this);
+        mDeleteEventViewModel = new DeleteEventViewModel(this);
 
         addMedications();
     }
@@ -86,7 +90,7 @@ public class MedicationActivity extends BaseActivity
     private void addMedications()
     //**********************************************************
     {
-        mBinding.addMedication.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), AddMedicationActivity.class)));
+        mBinding.addMedication.setOnClickListener(view -> startActivity(new Intent(getApplicationContext(), MedicationDetailsActivity.class)));
     }
 
     //**********************************************************
@@ -135,21 +139,21 @@ public class MedicationActivity extends BaseActivity
         hideLoadingDialog();
         Laila.instance().is_medicine_added = false;
 
-//        AndroidUtil.displayAlertDialog(
-//                response.getMsg(),
-//                AndroidUtil.getString(R.string.alert),
-//                this,
-//                AndroidUtil.getString(
-//                        R.string.ok),
-//                AndroidUtil.getString(
-//                        R.string.view_interactions),
-//                (dialog, which) -> {
-//                    if (which == -2) {
-//                        Intent interactionIntent = new Intent(this, MedicineInteractionActivity.class);
-//                        interactionIntent.putExtra(MedicineInteractionActivity.INTERACTION, response);
-//                        startActivity(interactionIntent);
-//                    }
-//                });
+        AndroidUtil.displayAlertDialog(
+                response.getMsg(),
+                AndroidUtil.getString(R.string.alert),
+                this,
+                AndroidUtil.getString(
+                        R.string.ok),
+                AndroidUtil.getString(
+                        R.string.view_interactions),
+                (dialog, which) -> {
+                    if (which == -2) {
+                        Intent interactionIntent = new Intent(this, MedicineInteractionActivity.class);
+                        interactionIntent.putExtra(MedicineInteractionActivity.INTERACTION, response);
+                        startActivity(interactionIntent);
+                    }
+                });
     }
 
     //*******************************************************************
@@ -167,6 +171,27 @@ public class MedicationActivity extends BaseActivity
     {
 
         mMedicationListAdapter = new MedicationListAdapter(mMedicationList, new MedicationListAdapter.ListClickListener() {
+
+            //******************************************************************
+            @Override
+            public void viewInteractions(int id)
+            //******************************************************************
+            {
+                if (id == 0)
+                    return;
+                showLoadingDialog();
+                mDrugCheckMedicationViewModel.drugCheckMedication(id);
+            }
+
+            //******************************************************************
+            @Override
+            public void onInformation(String rxDinNumber)
+            //******************************************************************
+            {
+                Intent informationIntent = new Intent(MedicationActivity.this, InformationActivity.class);
+                informationIntent.putExtra(InformationActivity.RXDINNUMBER, rxDinNumber);
+                startActivity(informationIntent);
+            }
 
             //******************************************************************
             @Override
@@ -208,20 +233,36 @@ public class MedicationActivity extends BaseActivity
         mBinding.medicineRecyclerview.setAdapter(mMedicationListAdapter);
 
     }
+    //**************************************************
+    private void getMedicationEvent()
+    //**************************************************
+    {
+        if (Laila.instance().getMUser().getEvents() == null || Laila.instance().getMUser().getEvents().size() == 0)
+            return;
+        val events = Laila.instance().getMUser().getEvents();
 
+        for (int i = 0; i < events.size(); i++) {
+            if (events.get(i).getMedicationId().toString().equals(mMedicineId)) {
+                val eventId = events.get(i).getId();
+                mEventPosition = i;
+                mDeleteEventViewModel.deleteEvent(eventId);
+            }
+        }
+
+    }
 
     //******************************************************************
     @Override
     public void onSuccessfullyDeleteEvent(@Nullable String result)
     //******************************************************************
     {
-//        val events = RXCare.instance().getMUser().getEvents();
-//        if (events == null || events.size() == 0)
-//            return;
-//        events.remove(mEventPosition);
-//        hideLoadingDialog();
-//        SharedPreferencesUtils.setValue(Constants.USER_DATA, RXCare.instance().getMUser());
-//        AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.delete_medication), AndroidUtil.getString(R.string.success), this);
+        val events = Laila.instance().getMUser().getEvents();
+        if (events == null || events.size() == 0)
+            return;
+        events.remove(mEventPosition);
+        hideLoadingDialog();
+        SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser());
+        AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.delete_medication), AndroidUtil.getString(R.string.success), this);
     }
 
     //******************************************************************
@@ -229,8 +270,8 @@ public class MedicationActivity extends BaseActivity
     public void onFailedToDeleteEvent(@NonNull String error)
     //******************************************************************
     {
-//        hideLoadingDialog();
-//        AndroidUtil.displayAlertDialog(error, AndroidUtil.getString(R.string.error), this);
+        hideLoadingDialog();
+        AndroidUtil.displayAlertDialog(error, AndroidUtil.getString(R.string.error), this);
     }
 
     //*******************************************************************
@@ -239,7 +280,8 @@ public class MedicationActivity extends BaseActivity
     //*******************************************************************
     {
         if (!TextUtils.isEmpty(mMedicineId))
-            Laila.instance().getMUser().getMedication().remove(mPosition);
+            getMedicationEvent();
+        Laila.instance().getMUser().getMedication().remove(mPosition);
         SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser());
         startRecyclerView();
         hideLoadingDialog();

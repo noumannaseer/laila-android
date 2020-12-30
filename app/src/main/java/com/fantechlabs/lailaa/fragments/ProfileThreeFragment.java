@@ -1,5 +1,6 @@
 package com.fantechlabs.lailaa.fragments;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +23,7 @@ import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.adapter.AllergiesListAdapter;
 import com.fantechlabs.lailaa.databinding.FragmentProfileThreeBinding;
+import com.fantechlabs.lailaa.databinding.LayoutAlergyConditionDialogBinding;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 
 import java.util.ArrayList;
@@ -39,7 +42,8 @@ public class ProfileThreeFragment extends BaseFragment
     private List<String> mAllergiesList;
     private List<String> mConditionList;
     private AllergiesListAdapter mAllergiesListAdapter;
-    private String mAllergies, mCondition;
+    private TextView mAllergyTitle, mAllergyName;
+    private EditText mAllergy;
 
     //***********************************************************
     public ProfileThreeFragment()
@@ -66,7 +70,6 @@ public class ProfileThreeFragment extends BaseFragment
     private void initControls()
     //***********************************************************
     {
-
         addAlergiesAndConditions();
         editTextWatcher();
     }
@@ -79,48 +82,45 @@ public class ProfileThreeFragment extends BaseFragment
             mAllergiesList = new ArrayList<>();
         if (mConditionList == null || mConditionList.size() == 0)
             mConditionList = new ArrayList<>();
-        mBinding.addAllergies.setOnClickListener(v -> inputAlert("Allergies"));
-        mBinding.addCondition.setOnClickListener(v -> inputAlert("Condition"));
+        mBinding.addAllergies.setOnClickListener(v -> openDialog("Allergies"));
+        mBinding.addCondition.setOnClickListener(v -> openDialog("Conditions"));
     }
 
     //******************************************************************************
-    private void inputAlert(String text)
+    private void openDialog(String text)
     //******************************************************************************
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(text + " " + AndroidUtil.getString(R.string.name));
-        builder.setMessage(AndroidUtil.getString(R.string.enter_name) + " " + text.toLowerCase());
 
-        final EditText input = new EditText(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setHint("Enter " + text + " " + AndroidUtil.getString(R.string.name));
+        View view = inflater.inflate(R.layout.layout_alergy_condition_dialog, null);
+        mAllergyTitle = view.findViewById(R.id.alergy_condition_name_title);
+        mAllergyName = view.findViewById(R.id.alergy_condition_name);
+        mAllergy = view.findViewById(R.id.enter_alergies_name);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(20, 10, 20, 10);
-        input.setLayoutParams(params);
-        builder.setView(input);
+        mAllergyTitle.setText(text);
+        mAllergyName.setText(text);
+        mAllergy.setHint("Enter " + text + " " + AndroidUtil.getString(R.string.name));
+        builder.setView(view)
+                .setNegativeButton("Cancel", (dialog, i) -> dialog.cancel())
+                .setPositiveButton("Save", (dialog, i) -> {
 
-        builder.setPositiveButton("save", (dialog, which) ->
-        {
-            val inputText = input.getText().toString();
-            if (TextUtils.isEmpty(inputText))
-                return;
-            switch (text) {
-                case "Allergies":
-                    mAllergiesList.add(inputText);
-                    startAllergiesRecyclerView();
-                    break;
-                case "Condition":
-                    mConditionList.add(inputText);
-                    startConditionRecyclerView();
-                    break;
-            }
+                    val inputText = mAllergy.getText().toString();
 
-        });
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+                    if (TextUtils.isEmpty(inputText))
+                        return;
+                    switch (text) {
+                        case "Allergies":
+                            mAllergiesList.add(inputText);
+                            startAllergiesRecyclerView();
+                            break;
+                        case "Conditions":
+                            mConditionList.add(inputText);
+                            startConditionRecyclerView();
+                            break;
+                    }
+                });
 
         builder.show();
     }

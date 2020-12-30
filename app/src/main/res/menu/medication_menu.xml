@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/view_interactions"
+        android:title="@string/view_interactions" />
 
+    <item
+        android:id="@+id/info"
+        android:title="Info" />
     <item
         android:id="@+id/update"
         android:title="Update" />

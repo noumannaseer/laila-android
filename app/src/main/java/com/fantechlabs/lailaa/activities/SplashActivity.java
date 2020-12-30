@@ -120,7 +120,7 @@ public class SplashActivity extends AppCompatActivity
                 break;
             case DeniedForNow:
             case DeniedPermanently:
-                AndroidUtil.toast(false, "" + status.name());
+                initPermission();
                 break;
         }
     }

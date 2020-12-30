@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".activities.MedicationDetailsActivity">
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/white"
+                app:theme="@style/ToolbarTheme">
+
+                <TextView
+                    android:id="@+id/tv_create_account_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/sfpro_display_regular"
+                    android:gravity="center_horizontal"
+                    android:text="@string/add_medication"
+                    android:textAlignment="center"
+                    android:textColor="@color/darkBlue"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/darkBlue"
+            app:tabMode="scrollable"
+            app:tabPadding="16dp">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/add_medication_item"
+                style="@style/MyCustomTabTextAppearance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/add_medication" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/qr_scanner_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/scanner" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/rx_number_item"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/din_number" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+</layout>

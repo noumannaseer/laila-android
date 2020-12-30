@@ -39,12 +39,12 @@
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/add_medication"
+                        app:layout_constraintEnd_toStartOf="@+id/add_btn"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-                        android:id="@+id/add_medication"
+                        android:id="@+id/add_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -79,7 +79,7 @@
                     app:abbreviationsLabelsColor="@color/white"
                     app:forwardButtonSrc="@drawable/ic_forward_arrow"
                     app:headerColor="@color/white"
-                    app:headerLabelColor="@color/gray_text"
+                    app:headerLabelColor="@color/black"
                     app:previousButtonSrc="@drawable/ic_back_arrow"
                     app:selectionColor="@color/green" />
 

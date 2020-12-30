@@ -200,16 +200,12 @@ public class AddMedicationThreeFragment
             mBinding.saveBtn.setText(R.string.update);
             mBinding.saveBtn.setBackgroundTintList(
                     ContextCompat.getColorStateList(getActivity(), R.color.button_background));
-
             if (medication == null)
                 return;
 
-            val refillDate = medication.getRefillDate();
             val pharmacy = medication.getPharmacy();
             val deliverType = medication.getDelivery_type();
 
-            if (refillDate != null)
-                mBinding.refillDate.setText(refillDate);
             mBinding.pickup.setChecked(deliverType == 1 ? false : true);
             mBinding.delivery.setChecked(deliverType == 1 ? true : false);
             setPharmacyToDropDown(pharmacy);
