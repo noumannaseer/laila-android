@@ -113,7 +113,6 @@ public class MedicationActivity extends BaseActivity
         super.onResume();
         mMedicationList = new ArrayList<>();
 
-
         if (Laila.instance().getMUser() == null || Laila.instance().getMUser().getMedication() == null) {
             mBinding.noRecord.setVisibility(View.VISIBLE);
             mBinding.medicineRecyclerview.setVisibility(View.GONE);
@@ -233,6 +232,7 @@ public class MedicationActivity extends BaseActivity
         mBinding.medicineRecyclerview.setAdapter(mMedicationListAdapter);
 
     }
+
     //**************************************************
     private void getMedicationEvent()
     //**************************************************
@@ -285,6 +285,7 @@ public class MedicationActivity extends BaseActivity
         SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser());
         startRecyclerView();
         hideLoadingDialog();
+
     }
 
     //*******************************************************************

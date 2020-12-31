@@ -31,7 +31,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="stateHidden">
-        <activity android:name=".IngredientsActivity"></activity>
+        <activity android:name=".activities.AddContactsActivity" />
+        <activity android:name=".activities.ContactsActivity" />
+        <activity android:name=".activities.ContactTypesHomeActivity" />
+        <activity android:name=".IngredientsActivity" />
         <activity android:name=".bodyreading.activities.AddBodyReadingActivity" />
         <activity android:name=".activities.AddAlarmActivity" />
         <activity android:name=".activities.MedicationDetailsActivity" />
