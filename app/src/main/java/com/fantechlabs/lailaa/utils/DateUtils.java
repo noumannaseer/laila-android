@@ -36,34 +36,29 @@ public class DateUtils
     {
         String dtStart = dateString;
         SimpleDateFormat format = new SimpleDateFormat(formatter, Locale.US);
-        try
-        {
+        try {
             Date date = format.parse(dtStart);
             return date;
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
             return null;
         }
     }
+
     //*****************************************************************
     public static Date addOneDayToDate(@NonNull String dateString, @NonNull String formatter)
     //*****************************************************************
     {
         String dtStart = dateString;
         SimpleDateFormat format = new SimpleDateFormat(formatter, Locale.US);
-        try
-        {
+        try {
             Date date = format.parse(dtStart);
             Calendar c = Calendar.getInstance();
             c.setTime(date);
             c.add(Calendar.DATE, 1);
             date = c.getTime();
             return date;
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
             return null;
         }
@@ -84,15 +79,12 @@ public class DateUtils
         SimpleDateFormat sdfOutPutToSend = new SimpleDateFormat(format);
         sdfOutPutToSend.setTimeZone(TimeZone.getDefault());
 
-        try
-        {
+        try {
 
             gmt = sdf.parse(dateTime);
             dateToReturn = sdfOutPutToSend.format(gmt);
 
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return gmt;
@@ -124,7 +116,7 @@ public class DateUtils
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
         cal.setTimeInMillis(timestamp);
         String date = DateFormat.format(format, cal)
-                                .toString();
+                .toString();
         return date;
     }
 
@@ -155,14 +147,11 @@ public class DateUtils
     //*****************************************************************
     {
         SimpleDateFormat formatter = new SimpleDateFormat(format);
-        try
-        {
+        try {
             Date date = formatter.parse(dtStart);
             System.out.println(date);
             return date;
-        }
-        catch (ParseException e)
-        {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
         return new Date();

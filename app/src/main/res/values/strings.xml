@@ -63,7 +63,7 @@
 
     <string name="Network_not_available">Network Not Available</string>
     <string name="Network_error">Network Error</string>
-    <string name="default_web_client_id" translatable="false">23845952533-lptj3bn7rvsotmhals17rlbn7qib76vu.apps.googleusercontent.com</string>
+<!--    <string name="default_web_client_id" translatable="false">23845952533-lptj3bn7rvsotmhals17rlbn7qib76vu.apps.googleusercontent.com</string>-->
 
     <string name="facebook_app_id">2956445277814614</string>
     <string name="fb_login_protocol_scheme">fb2956445277814614</string>
@@ -170,7 +170,10 @@
     <string name="ingredient">Ingredients</string>
     <string name="love_one">Love One</string>
     <string name="emergency_contact">Emergency Contacts</string>
+
     <string name="emergency_contact_added">Emergency contact added successfully!</string>
+    <string name="contact_added">Contact added successfully!</string>
+
     <string name="last_name">Last Name</string>
     <string name="email_phone">Email </string>
     <string name="password">Password</string>
@@ -308,6 +311,8 @@
     <string name="send_money_info">You can disable ads by pay money.Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</string>
     <string name="select_frequency">Select Frequency</string>
     <string name="pharmacy">Pharmacy</string>
+    <string name="pharmacy_s_letter">pharmacy</string>
+
     <string name="pharmacy_required">Pharmacy is required</string>
     <string name="select_pharmacy">Select Pharmacy</string>
     <string name="refill_date">Refill Date</string>
@@ -628,4 +633,14 @@
     <string name="thanks_you">Thank You!</string>
     <string name="record_successfully">Record added successfully</string>
     <string name="view_records">View Records</string>
+    <string name="add_contacts">Add Contacts</string>
+    <string name="family_contact">Family Contacts</string>
+    <string name="friends_contacts">Friends Contact</string>
+    <string name="care_giver">Care Giver</string>
+    <string name="add_care_giver">Add Caregiver</string>
+    <string name="caregiver_name">Caregiver Name</string>
+    <string name="caregiver_contact">Caregiver Contact</string>
+    <string name="primary_care_giver_title">Primary Caregiver</string>
+    <string name="no_contacts">No Contacts</string>
+    <string name="enter_nam">Enter name</string>
 </resources>

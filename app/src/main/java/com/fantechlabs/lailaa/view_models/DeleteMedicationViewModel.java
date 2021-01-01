@@ -67,9 +67,11 @@ public class DeleteMedicationViewModel
                         mDeleteMedicationListener.onFailed(response.body().getError());
                         return;
                     }
-
                     mDeleteMedicationListener.onSuccessfully(response.body());
+                    return;
                 }
+                mDeleteMedicationListener.onFailed(AndroidUtil.getString(R.string.server_error));
+
             }
 
             //***********************************************************

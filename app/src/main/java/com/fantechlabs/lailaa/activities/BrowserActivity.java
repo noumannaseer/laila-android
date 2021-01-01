@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 
 import com.fantechlabs.lailaa.R;
+import com.fantechlabs.lailaa.databinding.ActivitySettingBinding;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.ConnectionChangeCallback;
 import com.fantechlabs.lailaa.utils.NetworkChangeReceiver;
@@ -40,8 +41,7 @@ public class BrowserActivity
     //*********************************************************************
     {
         Bundle args = getIntent().getExtras();
-        if (args != null)
-        {
+        if (args != null) {
             mTitle = args.getString(INFO_TITLE);
             mUrl = args.getString(SCREEN_URL);
         }
@@ -55,10 +55,11 @@ public class BrowserActivity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
         if (!TextUtils.isEmpty(mTitle))
-            getSupportActionBar().setTitle(mTitle);
-    }
+            mToolbarTextView.setText(mTitle);
 
+    }
 
     //**********************************************************************
     @Override
@@ -66,16 +67,15 @@ public class BrowserActivity
     //**********************************************************************
     {
         setContentView(R.layout.browser_activity);
-        getData();
-        setTab();
+        mToolbarTextView = findViewById(R.id.toolbar_text);
         mWebView = findViewById(R.id.web_view);
         mProgressView = findViewById(R.id.progress_view);
         mNoInternetImage = findViewById(R.id.no_internet);
         mProgressView.setVisibility(View.VISIBLE);
+        getData();
+        setTab();
         switchVisibility(false);
-        mWebView.setWebViewClient(new WebViewClient()
-        {
-
+        mWebView.setWebViewClient(new WebViewClient() {
 
             //**********************************************************************
             @Override
@@ -156,24 +156,18 @@ public class BrowserActivity
     private void switchVisibility(boolean pageLoaded)
     //**********************************************************************
     {
-        if (AndroidUtil.isNetworkStatusAvailable())
-        {
-            if (pageLoaded)
-            {
+        if (AndroidUtil.isNetworkStatusAvailable()) {
+            if (pageLoaded) {
                 mWebView.setVisibility(View.VISIBLE);
                 mProgressView.setVisibility(View.GONE);
                 mNoInternetImage.setVisibility(View.GONE);
-            }
-            else
-            {
+            } else {
                 mWebView.setVisibility(View.GONE);
                 mProgressView.setVisibility(View.VISIBLE);
                 mNoInternetImage.setVisibility(View.GONE);
             }
 
-        }
-        else
-        {
+        } else {
             mWebView.setVisibility(View.GONE);
             mProgressView.setVisibility(View.GONE);
             mNoInternetImage.setVisibility(View.VISIBLE);
@@ -197,14 +191,11 @@ public class BrowserActivity
     public void onConnectionChanged(boolean isConnected)
     //**********************************************************************
     {
-        if (!isConnected)
-        {
+        if (!isConnected) {
             mWebView.setVisibility(View.GONE);
             mProgressView.setVisibility(View.GONE);
             mNoInternetImage.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             mWebView.setVisibility(View.GONE);
             mWebView.reload();
             mProgressView.setVisibility(View.VISIBLE);

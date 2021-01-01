@@ -437,7 +437,6 @@ public class AddPharmacyActivity extends BaseActivity
     //*******************************************************************************************
     {
         hideLoadingDialog();
-        // AndroidUtil.toast(false, "Successfully added pharmacy.");
         val contact = Response.getContact();
         if (Laila.instance()
                 .getMUser() == null || contact == null)

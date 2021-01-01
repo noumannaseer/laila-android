@@ -219,7 +219,7 @@ public class AddMedicationTwoFragment
     private void setData()
     //*************************************************************
     {
-        val disDate = DateUtils.getCurrentDate("dd-MMM-YYYY");
+        val disDate = DateUtils.getCurrentDate("dd-MMM-yyyy");
         val time = DateUtils.getCurrentTime("hh:mm a").toUpperCase();
         mBinding.disDate.setText(disDate);
         mBinding.intakeTime1.setText(time);

@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 
@@ -22,24 +23,33 @@ import com.fantechlabs.lailaa.databinding.ActivityHomeBinding;
 import com.fantechlabs.lailaa.models.Events;
 import com.fantechlabs.lailaa.models.Profile;
 import com.fantechlabs.lailaa.models.ProfileImages;
+import com.fantechlabs.lailaa.models.response_models.FollowUpResponse;
 import com.fantechlabs.lailaa.request_models.ProfileRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
+import com.fantechlabs.lailaa.utils.UIUtils;
 import com.fantechlabs.lailaa.view_models.InsertFollowUpViewModel;
 import com.fantechlabs.lailaa.view_models.UpdateFollowUpViewModel;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import lombok.SneakyThrows;
 import lombok.val;
 
+import static com.fantechlabs.lailaa.utils.Constants.NO;
 import static com.fantechlabs.lailaa.utils.Constants.PROFILE;
+import static com.fantechlabs.lailaa.utils.Constants.YES;
 
 //**********************************************************
 public class HomeActivity extends BaseActivity
+        implements InsertFollowUpViewModel.InsertFollowUpModelListener,
+        UpdateFollowUpViewModel.UpdateFollowUpModelListener
 //**********************************************************
 {
     private ActivityHomeBinding mBinding;
@@ -58,10 +68,6 @@ public class HomeActivity extends BaseActivity
     private int mFollowUpId;
     private String mStatus;
     private boolean mDismiss = false;
-    private List<Events> mTodayEvents;
-    private ArrayList<String> mSortedTimes;
-    private int mCompareTime;
-    private Date mDateOne, mDateTwo;
 
     //**********************************************************
     @Override
@@ -78,7 +84,124 @@ public class HomeActivity extends BaseActivity
     private void initControls()
     //**********************************************************
     {
+        mInsertFollowUpViewModel = new InsertFollowUpViewModel(this);
+        mUpdateFollowUpViewModel = new UpdateFollowUpViewModel(this);
+        getParcelable();
+        openNotification();
         gotoScreens();
+    }
+
+    //*******************************************************************
+    private void openNotification()
+    //*******************************************************************
+    {
+
+        if (mNotification && !TextUtils.isEmpty(mMedicineId)) {
+            AndroidUtil.displayAlertDialog(
+                    AndroidUtil.getString(R.string.take_medicine),
+                    AndroidUtil.getString(R.string.reminder),
+                    this,
+                    AndroidUtil.getString(
+                            R.string.taken),
+                    AndroidUtil.getString(
+                            R.string.dismiss),
+                    mFollowUpId != 0 ?
+                            "" : AndroidUtil.getString(
+                            R.string.remind_later),
+                    (dialog, which) ->
+                    {
+                        switch (which) {
+                            case -1:
+                                insertFollowUp(YES, false);
+                                break;
+                            case -2:
+                                insertFollowUp(NO, false);
+                                break;
+                            case -3:
+                                insertFollowUp(NO, true);
+                                break;
+                        }
+                    });
+        }
+
+    }
+
+
+    private void addLocalAlarm()
+    //*******************************************************************
+    {
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.MINUTE, 30);
+
+        Date time = now.getTime();
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        String formattedTime = timeFormat.format(time).toUpperCase();
+
+        Events events = new Events();
+        events.setTimeSchedule(formattedTime);
+        events.setStartDate(UIUtils.getCurrentDate("dd-MMM-YYYY") + " 08:00AM");
+        events.setEndDate(UIUtils.getCurrentDate("dd-MMM-YYYY") + " 11:59PM");
+        events.setFollowupId(mFollowUpId);
+        if (!TextUtils.isEmpty(mMedicineId))
+            events.setMedicationId(Integer.valueOf(mMedicineId));
+        events.setEventTitle(mEventName);
+
+        List<Events> eventsList = new ArrayList<>();
+        eventsList.add(events);
+
+        Laila.instance().addMedicineAlarm(eventsList, mFollowUpId);
+
+    }
+
+    //*******************************************************************
+    private void insertFollowUp(String status, boolean dismiss)
+    //*******************************************************************
+    {
+        mDismiss = dismiss;
+        if (!TextUtils.isEmpty(mMedicineId) && mFollowUpId != 0) {
+            updateFollowUp(status);
+            return;
+        }
+
+        mStatus = status;
+        val followUpRequest = Laila.instance()
+                .getMFollowUpRequest().Builder();
+        followUpRequest.setUser_private_code(Laila.instance().getCurrentUserProfile().getUserPrivateCode());
+        followUpRequest.setMedication_id(mMedicineId);
+        followUpRequest.setLog_DateTime(UIUtils.getCurrentDate("yyyy-MM-dd") + " " + UIUtils.getCurrentTime("hh:mm:ss"));
+        followUpRequest.setStatus(status);
+
+        showLoadingDialog();
+        mInsertFollowUpViewModel.insertFollowUp(followUpRequest);
+    }
+
+    //*******************************************************************
+    private void updateFollowUp(String status)
+    //*******************************************************************
+    {
+        val updateFollowUpRequest = Laila.instance()
+                .getMFollowUpUpdateRequest().Builder();
+        updateFollowUpRequest.setUser_private_code(Laila.instance().getCurrentUserProfile().getUserPrivateCode());
+        updateFollowUpRequest.setMedication_id(mMedicineId);
+        updateFollowUpRequest.setLog_DateTime(UIUtils.getCurrentDate("yyyy-MM-dd") + " " + UIUtils.getCurrentTime("hh:mm:ss"));
+        updateFollowUpRequest.setStatus(status);
+        updateFollowUpRequest.setFollowup_id(mFollowUpId);
+
+        showLoadingDialog();
+        mUpdateFollowUpViewModel.updateFollowUp(updateFollowUpRequest);
+    }
+
+    //*********************************************************************
+    private void getParcelable()
+    //*********************************************************************
+    {
+        Bundle args = getIntent().getExtras();
+        if (args != null) {
+            mNotification = args.getBoolean(IS_NOTIFICATION);
+            mFollowUpId = args.getInt(FOLLOW_UP_ID);
+            mMedicineId = args.getString(MEDICINE_ID);
+            mEventName = args.getString(MEDICINE_NAME);
+        }
     }
 
     //**********************************************************
@@ -92,7 +215,6 @@ public class HomeActivity extends BaseActivity
         mBinding.telehealth.setOnClickListener(view -> startActivity(new Intent(this, TelehealthActivity.class)));
         mBinding.profile.setOnClickListener(view -> startActivity(new Intent(this, ProfileActivity.class)));
         mBinding.bodyreading.setOnClickListener(view -> startActivity(new Intent(this, BodyReadingActivity.class)));
-
 
     }
 
@@ -201,6 +323,46 @@ public class HomeActivity extends BaseActivity
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    //*********************************************************************
+    @Override
+    public void onInsertFollowUpSuccess(@Nullable FollowUpResponse response)
+    //*********************************************************************
+    {
+        hideLoadingDialog();
+        if (mStatus.equals(NO) && mDismiss) {
+            mFollowUpId = response.getFollowupId();
+            addLocalAlarm();
+        }
+        AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.thank_you), AndroidUtil.getString(R.string.alert), this);
+    }
+
+    //*********************************************************************
+    @Override
+    public void onInsertFollowUpFailed(String msg)
+    //*********************************************************************
+    {
+        hideLoadingDialog();
+        AndroidUtil.displayAlertDialog(msg, AndroidUtil.getString(R.string.error), this);
+    }
+
+    //*********************************************************************
+    @Override
+    public void onUpdateFollowUpSuccess(@Nullable String msg)
+    //*********************************************************************
+    {
+        hideLoadingDialog();
+        AndroidUtil.displayAlertDialog(msg, AndroidUtil.getString(R.string.alert), this);
+    }
+
+    //*********************************************************************
+    @Override
+    public void onUpdateFollowUpFailed(String msg)
+    //*********************************************************************
+    {
+        hideLoadingDialog();
+        AndroidUtil.displayAlertDialog(msg, AndroidUtil.getString(R.string.error), this);
     }
 
     //**********************************************************

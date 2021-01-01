@@ -31,7 +31,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="stateHidden">
-        <activity android:name=".IngredientsActivity"></activity>
+        <activity android:name=".activities.AddContactsActivity" />
+        <activity android:name=".activities.ContactsActivity" />
+        <activity android:name=".activities.ContactTypesHomeActivity" />
+        <activity android:name=".IngredientsActivity" />
         <activity android:name=".bodyreading.activities.AddBodyReadingActivity" />
         <activity android:name=".activities.AddAlarmActivity" />
         <activity android:name=".activities.MedicationDetailsActivity" />
@@ -84,6 +87,19 @@
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="ocr" />
+
+        <service android:name=".alarms.LoadAlarmsService" />
+
+        <receiver android:name=".alarms.LoadAlarmsReceiver" />
+        <receiver android:name=".alarms.AlarmReceiver" />
+        <receiver
+            android:name=".alarms.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter android:priority="${bootPriority}">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

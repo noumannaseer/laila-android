@@ -61,7 +61,8 @@ public class Constants
     public static final int RADIUS = 5000;
     public static final String LOCATION = "location";
     public static final String CURRENT_LOCATION = "Current location";
-    public static final String CONTACT = "Caregiver";
+    public static final String CAREGIVER = "Caregiver";
+
     public static final String HUMAN = "Human";
     public static final String SELECT_PHARMACY = "Select Pharmacy";
     public static final String DOSAGE = "dosage";
@@ -82,6 +83,9 @@ public class Constants
                     "application/pdf",
                     "image/jpeg",
                     "image/png"};
+    public static final String CONTACT_TYPE = "CONTACT_TYPE";
+    public static final String CONTACT_LIST = "CONTACT_LIST";
+
 
     // for body readings
     public static final int ONE = 1;

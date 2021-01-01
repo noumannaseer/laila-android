@@ -449,11 +449,7 @@ public class AddMedicationThreeFragment
 
         SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser());
         Laila.instance().is_medicine_added = true;
-//        if (RXCare.instance().is_over_the_counter)
-//        {
-//            goToHome();
-//            return;
-//        }
+
         addMedicineEvents();
     }
 

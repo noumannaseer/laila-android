@@ -10,6 +10,7 @@ import com.fantechlabs.lailaa.alarms.DatabaseHelper;
 import com.fantechlabs.lailaa.alarms.LoadAlarmsService;
 import com.fantechlabs.lailaa.bodyreading.repository.storge.requestmodel.AddHealthDataRequest;
 import com.fantechlabs.lailaa.bodyreading.repository.storge.requestmodel.ReadHealthDataRequest;
+import com.fantechlabs.lailaa.models.Contact;
 import com.fantechlabs.lailaa.models.Events;
 import com.fantechlabs.lailaa.models.Medication;
 import com.fantechlabs.lailaa.models.Profile;
@@ -17,6 +18,8 @@ import com.fantechlabs.lailaa.models.SearchMedicine;
 import com.fantechlabs.lailaa.models.response_models.UserResponse;
 import com.fantechlabs.lailaa.request_models.AddMedicationRequest;
 import com.fantechlabs.lailaa.request_models.AddPharmacyRequest;
+import com.fantechlabs.lailaa.request_models.FollowUpRequest;
+import com.fantechlabs.lailaa.request_models.FollowUpUpdateRequest;
 import com.fantechlabs.lailaa.request_models.ProfileRequest;
 import com.fantechlabs.lailaa.request_models.UserRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
@@ -60,10 +63,23 @@ public class Laila extends Application
     public Medication mUpdateMedication;
     @Getter
     @Setter
+    public Contact mUpdateContact;
+    @Getter
+    @Setter
+    private FollowUpRequest mFollowUpRequest;
+    @Getter
+    @Setter
+    private FollowUpUpdateRequest mFollowUpUpdateRequest;
+    @Getter
+    @Setter
     public String mSearchData;
+    @Getter
+    @Setter
+    public String mContactType;
 
     public boolean Edit_Profile = false;
     public boolean on_update_medicine = false;
+    public boolean on_update_contact = false;
     public boolean is_medicine_added = false;
     public boolean is_pharmacy_added = false;
     public boolean text_recognizer = false;
@@ -73,6 +89,9 @@ public class Laila extends Application
     @Getter
     @Setter
     public int mMedicationPosition;
+    @Getter
+    @Setter
+    public int mContactPosition;
     @Getter
     @Setter
     public int mMedicationId;
@@ -154,10 +173,6 @@ public class Laila extends Application
 
                 val timeArray = timeZoneArray[0].split(":");
                 int hour = Integer.parseInt(timeArray[0]);
-
-//                    val aaa = timeZoneArray[1].toLowerCase().equals("pm") ?
-//                            calendar.set(Calendar.HOUR_OF_DAY, 12 + hour)
-//                            : calendar.set(calendar.HOUR_OF_DAY, hour);
 
                 if (timeZoneArray[1].toLowerCase()
                         .equals("pm"))
