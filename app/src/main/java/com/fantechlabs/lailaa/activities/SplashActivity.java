@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.fantechlabs.lailaa.Laila;
@@ -132,5 +133,4 @@ public class SplashActivity extends AppCompatActivity
     {
         AndroidUtil.toast(false, "" + permission);
     }
-
 }

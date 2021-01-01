@@ -10,7 +10,6 @@ import java.util.concurrent.Executors;
 
 import static android.content.Intent.ACTION_BOOT_COMPLETED;
 import static com.fantechlabs.lailaa.alarms.AlarmReceiver.setReminderAlarms;
-import static com.fantechlabs.lailaa.alarms.AlarmReceiver.setReminderAlarms;
 
 
 /**

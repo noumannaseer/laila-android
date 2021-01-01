@@ -87,6 +87,19 @@
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="ocr" />
+
+        <service android:name=".alarms.LoadAlarmsService" />
+
+        <receiver android:name=".alarms.LoadAlarmsReceiver" />
+        <receiver android:name=".alarms.AlarmReceiver" />
+        <receiver
+            android:name=".alarms.BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter android:priority="${bootPriority}">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

@@ -18,7 +18,6 @@ import java.util.List;
 
 import lombok.val;
 
-
 //**************************************************************************
 public class CareTakerListAdapter
         extends RecyclerView.Adapter<CareTakerListAdapter.ContactListViewHolder>

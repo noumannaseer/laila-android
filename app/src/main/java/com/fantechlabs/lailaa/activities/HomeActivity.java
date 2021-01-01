@@ -68,10 +68,6 @@ public class HomeActivity extends BaseActivity
     private int mFollowUpId;
     private String mStatus;
     private boolean mDismiss = false;
-    private List<Events> mTodayEvents;
-    private ArrayList<String> mSortedTimes;
-    private int mCompareTime;
-    private Date mDateOne, mDateTwo;
 
     //**********************************************************
     @Override
@@ -219,7 +215,6 @@ public class HomeActivity extends BaseActivity
         mBinding.telehealth.setOnClickListener(view -> startActivity(new Intent(this, TelehealthActivity.class)));
         mBinding.profile.setOnClickListener(view -> startActivity(new Intent(this, ProfileActivity.class)));
         mBinding.bodyreading.setOnClickListener(view -> startActivity(new Intent(this, BodyReadingActivity.class)));
-
 
     }
 

@@ -63,7 +63,7 @@
 
     <string name="Network_not_available">Network Not Available</string>
     <string name="Network_error">Network Error</string>
-    <string name="default_web_client_id" translatable="false">23845952533-lptj3bn7rvsotmhals17rlbn7qib76vu.apps.googleusercontent.com</string>
+<!--    <string name="default_web_client_id" translatable="false">23845952533-lptj3bn7rvsotmhals17rlbn7qib76vu.apps.googleusercontent.com</string>-->
 
     <string name="facebook_app_id">2956445277814614</string>
     <string name="fb_login_protocol_scheme">fb2956445277814614</string>

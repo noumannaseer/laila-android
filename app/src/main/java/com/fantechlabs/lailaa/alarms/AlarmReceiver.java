@@ -60,9 +60,6 @@ public final class AlarmReceiver
 
         final int id = alarm.notificationId();
 
-//        DatabaseHelper.getInstance(context)
-//                .deleteAlarm(alarm);
-
         final NotificationManager manager =
                 (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -82,25 +79,16 @@ public final class AlarmReceiver
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Laila.CHANNEL_ID);
         builder.setContentIntent(pendingIntent);
         builder.setSmallIcon(R.mipmap.laila_logo);
-        builder.setColor(ContextCompat.getColor(context, R.color.colorAccent));
+        builder.setColor(ContextCompat.getColor(context, R.color.darkBlue));
         builder.setContentTitle(context.getString(R.string.app_name));
         builder.setContentText(alarm.getLabel());
         builder.setTicker(alarm.getLabel());
         builder.setVibrate(new long[]{1000, 500, 1000, 500, 1000, 500});
         builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-//        builder.setContentIntent(launchAlarmLandingPage(context, alarm));
         builder.setAutoCancel(true);
         builder.setPriority(Notification.PRIORITY_HIGH);
 
         manager.notify(id, builder.build());
-
-        //alarm.setDay(Alarm.MON,false);
-        //alarm.setDay(Alarm.TUES,false);
-        //alarm.setDay(Alarm.WED,false);
-        //alarm.setDay(Alarm.THURS,false);
-        //alarm.setDay(Alarm.FRI,false);
-        //alarm.setDay(Alarm.SAT,false);
-        // alarm.setDay(Alarm.SUN,false);
 
         DatabaseHelper.getInstance(context)
                 .deleteAlarm(alarm);
@@ -108,14 +96,6 @@ public final class AlarmReceiver
         //Reset Alarm manually
         setReminderAlarm(context, alarm);
     }
-
-//    public static void removeAlarm()
-//    {
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,
-//                11111, intent,
-//                PendingIntent.FLAG_UPDATE_CURRENT);
-//        alarmManager.cancel(pendingIntent);
-//    }
 
     //Convenience method for setting a notification
     public static void setReminderAlarm(Context context, Alarm alarm) {
@@ -252,13 +232,6 @@ public final class AlarmReceiver
             mgr.createNotificationChannel(channel);
         }
     }
-
-//    private static PendingIntent launchAlarmLandingPage(Context ctx, Alarm alarm)
-//    {
-//        return PendingIntent.getActivity(
-////                ctx, alarm.notificationId(), launchIntent(ctx, alarm), FLAG_UPDATE_CURRENT
-//        );
-//    }
 
     private static class ScheduleAlarm {
 

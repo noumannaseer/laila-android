@@ -245,7 +245,6 @@ public class CalenderActivity extends BaseActivity
         if (events1 == null || events1.size() == 0)
             return;
         Laila.instance().getMUser().getEvents().remove(mPosition);
-//        mTodayEvents.remove(mPosition);
 
         val user = Laila.instance().getMUser();
         SharedPreferencesUtils.setValue(Constants.USER_DATA, user);
