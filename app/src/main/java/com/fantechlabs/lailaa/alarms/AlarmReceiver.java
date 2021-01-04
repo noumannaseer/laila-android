@@ -78,7 +78,7 @@ public final class AlarmReceiver
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, Laila.CHANNEL_ID);
         builder.setContentIntent(pendingIntent);
-        builder.setSmallIcon(R.mipmap.laila_logo);
+        builder.setSmallIcon(R.mipmap.logo);
         builder.setColor(ContextCompat.getColor(context, R.color.darkBlue));
         builder.setContentTitle(context.getString(R.string.app_name));
         builder.setContentText(alarm.getLabel());

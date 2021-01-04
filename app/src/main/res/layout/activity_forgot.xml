@@ -55,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/app_name"
-                    android:textColor="@color/black"
+                    android:textColor="@color/darkBlue"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
@@ -88,14 +88,14 @@
                     android:id="@+id/signin_button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:backgroundTint="@color/green"
                     android:elevation="5dp"
                     android:fontFamily="@font/helveticaneueltpro_md"
                     android:padding="16dp"
                     android:text="@string/send_email"
                     android:textColor="@color/white"
-                    app:cornerRadius="10dp" />
+                    app:cornerRadius="2dp" />
 
 
             </LinearLayout>

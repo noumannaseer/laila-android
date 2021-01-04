@@ -9,8 +9,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class LoadAlarmsService extends IntentService
-{
+public final class LoadAlarmsService extends IntentService {
 
     private static final String TAG = LoadAlarmsService.class.getSimpleName();
     public static final String ACTION_COMPLETE = TAG + ".ACTION_COMPLETE";
@@ -21,7 +20,7 @@ public final class LoadAlarmsService extends IntentService
         this(TAG);
     }
 
-    public LoadAlarmsService(String name){
+    public LoadAlarmsService(String name) {
         super(name);
     }
 

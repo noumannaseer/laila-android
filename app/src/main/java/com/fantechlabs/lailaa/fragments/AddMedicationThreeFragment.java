@@ -132,6 +132,7 @@ public class AddMedicationThreeFragment
                 AndroidUtil.showToolTip(v, R.string.refill_date_info);
                 break;
             case R.id.add_medication_three_main_view:
+            case R.id.add_medication_three_container:
                 if (AndroidUtil.mTooltip != null)
                     AndroidUtil.mTooltip.dismiss();
                 break;

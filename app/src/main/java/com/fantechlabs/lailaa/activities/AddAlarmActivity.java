@@ -80,7 +80,7 @@ public class AddAlarmActivity extends BaseActivity
     private void setCurrentDateAndTime()
     //***********************************************************
     {
-        val date = DateUtils.getCurrentDate("dd-MMM-YYYY");
+        val date = DateUtils.getCurrentDate("dd-MM-yyyy");
         val time = DateUtils.getCurrentTime("hh:mm a").toUpperCase();
         mBinding.setStartDate.setText(date);
         mBinding.setEndDate.setText(date);

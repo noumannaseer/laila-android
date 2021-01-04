@@ -49,7 +49,7 @@ public class Constants
     public static final String MEDECINE_FORM = "medecine_form";
     public static final String NUM_REFILLS = "num_refills";
     public static final String NUMBER_OF_PILLS = "number_of_pills";
-    public static final String PHARMACY = "pharmacy";
+    public static final String PHARMACY = "Pharmacy";
     public static final String REFILL_DATE = "refill_date";
     public static final String DELIVERY_TYPE = "delivery_type";
     public static final String MEDICATION = "medication";
