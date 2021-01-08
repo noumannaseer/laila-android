@@ -48,7 +48,8 @@ public class SignUpActivity extends BaseActivity
         mBinding.signinTv.setOnClickListener(view -> startActivity(new Intent(SignUpActivity.this, SignInActivity.class)));
         mSignUpViewModel = new SignUpViewModel(this);
         mBinding.signupButton.setOnClickListener(v -> signUpUser());
-     }
+    }
+
     //********************************************
     private void signUpUser()
     //********************************************
@@ -60,39 +61,32 @@ public class SignUpActivity extends BaseActivity
         val confirmPassword = mBinding.confirmPassword.getText()
                 .toString();
 
-        if (TextUtils.isEmpty(email))
-        {
+        if (TextUtils.isEmpty(email)) {
             AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.email_is_required), AndroidUtil.getString(R.string.alert), this);
             return;
         }
-        if (!UIUtils.isValidEmailId(email))
-        {
+        if (!UIUtils.isValidEmailId(email)) {
             AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.invalid_email), AndroidUtil.getString(R.string.alert), this);
             return;
         }
-        if (TextUtils.isEmpty(password))
-        {
-            AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.password_required), AndroidUtil.getString(R.string.alert), this );
+        if (TextUtils.isEmpty(password)) {
+            AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.password_required), AndroidUtil.getString(R.string.alert), this);
             return;
         }
-        if (password.length() < Constants.PASSWORD_LENGTH)
-        {
+        if (password.length() < Constants.PASSWORD_LENGTH) {
             AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.password_must_be__character), AndroidUtil.getString(R.string.alert), this);
             return;
         }
-        if (TextUtils.isEmpty(confirmPassword))
-        {
+        if (TextUtils.isEmpty(confirmPassword)) {
             AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.confirm_password_required), AndroidUtil.getString(R.string.alert), this);
             return;
         }
-        if (confirmPassword.length() < Constants.PASSWORD_LENGTH)
-        {
+        if (confirmPassword.length() < Constants.PASSWORD_LENGTH) {
             AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.confirm_password_must_be__character), AndroidUtil.getString(R.string.alert), this);
             return;
         }
-        if (!password.equals(confirmPassword))
-        {
-            AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.new_and_confirm_password_not_match), AndroidUtil.getString(R.string.alert), this);
+        if (!password.equals(confirmPassword)) {
+            AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.password_not_match), AndroidUtil.getString(R.string.alert), this);
             return;
         }
 
@@ -103,6 +97,7 @@ public class SignUpActivity extends BaseActivity
         showLoadingDialog();
         mSignUpViewModel.signUpUser(userRequest);
     }
+
     //****************************************************
     @Override
     protected boolean showStatusBar()
@@ -110,6 +105,7 @@ public class SignUpActivity extends BaseActivity
     {
         return false;
     }
+
     //****************************************************
     @Override
     public void onSignUpSuccessfully(@Nullable SignUpResponse userResponse)
@@ -122,8 +118,7 @@ public class SignUpActivity extends BaseActivity
                 AndroidUtil.getString(R.string.ok),
                 (dialog, which) ->
                 {
-                    if (which == -1)
-                    {
+                    if (which == -1) {
                         mBinding.email.setText("");
                         mBinding.password.setText("");
                         mBinding.confirmPassword.setText("");
@@ -131,6 +126,7 @@ public class SignUpActivity extends BaseActivity
                     }
                 });
     }
+
     //****************************************************
     @Override
     public void onSignUpFailed(@NonNull String errorMessage)

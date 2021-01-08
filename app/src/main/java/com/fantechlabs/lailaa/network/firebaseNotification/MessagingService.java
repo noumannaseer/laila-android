@@ -56,7 +56,7 @@ public class MessagingService
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                     .setContentIntent(pendingIntent)
-                    .setSmallIcon(R.mipmap.laila_logo)
+                    .setSmallIcon(R.mipmap.logo)
                     .setContentTitle(title)
                     .setContentText(body)
                     .setAutoCancel(true);

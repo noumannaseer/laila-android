@@ -87,7 +87,6 @@ public class AddMedicationOneFragment extends BaseFragment
                 mBinding.addBtn.setBackgroundTintList(
                         ContextCompat.getColorStateList(getActivity(), onUpdateMedicine ? R.color.button_background : R.color.darkBlue));
             }
-//            RXCare.instance().is_over_the_counter = isCheck? false : true;
         });
         mBinding.navigateNext.setOnClickListener(v -> validation());
         mBinding.addBtn.setOnClickListener(v -> validation());
@@ -120,7 +119,14 @@ public class AddMedicationOneFragment extends BaseFragment
             case R.id.strength_info:
                 AndroidUtil.showToolTip(v, R.string.strength_info);
                 break;
+            case R.id.form_unit_info:
+                AndroidUtil.showToolTip(v, R.string.enter_medicine_form_unit);
+                break;
+            case R.id.strength_unit_info:
+                AndroidUtil.showToolTip(v, R.string.strength_info);
+                break;
             case R.id.add_medication_one_main_view:
+            case R.id.add_medication_one_container:
                 if (AndroidUtil.mTooltip != null)
                     AndroidUtil.mTooltip.dismiss();
                 break;
@@ -284,7 +290,7 @@ public class AddMedicationOneFragment extends BaseFragment
             if (din == null)
                 return;
             if (!TextUtils.isEmpty(from))
-                settingDropDownItems(from);
+                settingFormDropDown(from);
             mBinding.rxDinNumber.setText(din);
             if (strength == null)
                 return;
@@ -362,6 +368,18 @@ public class AddMedicationOneFragment extends BaseFragment
         }
         showLoadingDialog();
         mAddMedicationViewModel.addMedication(addMedicationRequest);
+    }
+
+    //*************************************************************
+    private void settingFormDropDown(@NonNull String unit)
+    //*************************************************************
+    {
+        ArrayAdapter<CharSequence> strengthUnitAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.from_type, android.R.layout.simple_spinner_dropdown_item);
+        strengthUnitAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mBinding.formSpin.setAdapter(strengthUnitAdapter);
+
+        int spinnerPosition = strengthUnitAdapter.getPosition(unit);
+        mBinding.formSpin.setSelection(spinnerPosition);
     }
 
     //*************************************************************

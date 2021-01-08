@@ -77,7 +77,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="16dp"
                         android:hint="@string/password"
                         app:passwordToggleEnabled="true"
                         app:passwordToggleTint="@color/darkBlue">
@@ -96,7 +96,7 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="16dp"
                         android:hint="@string/confirm_password"
                         app:passwordToggleEnabled="true"
                         app:passwordToggleTint="@color/darkBlue">
@@ -114,7 +114,7 @@
                         android:id="@+id/signup_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="16dp"
                         android:backgroundTint="@color/green"
                         android:elevation="5dp"
                         android:fontFamily="@font/roboto_regular"
@@ -122,12 +122,12 @@
                         android:text="@string/signup"
                         android:textAllCaps="false"
                         android:textColor="@color/white"
-                        app:cornerRadius="6dp" />
+                        app:cornerRadius="2dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
+                        android:layout_marginTop="16dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -148,6 +148,7 @@
                             android:background="?attr/selectableItemBackground"
                             android:gravity="end"
                             android:text="@string/signin"
+                            android:textStyle="bold"
                             android:textColor="@color/darkBlue"
                             android:textSize="16sp" />
 

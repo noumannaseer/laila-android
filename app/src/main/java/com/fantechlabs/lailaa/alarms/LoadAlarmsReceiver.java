@@ -7,18 +7,15 @@ import android.content.Intent;
 import java.util.ArrayList;
 
 public final class LoadAlarmsReceiver
-        extends BroadcastReceiver
-{
+        extends BroadcastReceiver {
 
     private OnAlarmsLoadedListener mListener;
 
     @SuppressWarnings("unused")
-    public LoadAlarmsReceiver()
-    {
+    public LoadAlarmsReceiver() {
     }
 
-    public LoadAlarmsReceiver(OnAlarmsLoadedListener listener)
-    {
+    public LoadAlarmsReceiver(OnAlarmsLoadedListener listener) {
         mListener = listener;
     }
 
@@ -30,13 +27,11 @@ public final class LoadAlarmsReceiver
         mListener.onAlarmsLoaded(alarms);
     }
 
-    public void setOnAlarmsLoadedListener(OnAlarmsLoadedListener listener)
-    {
+    public void setOnAlarmsLoadedListener(OnAlarmsLoadedListener listener) {
         mListener = listener;
     }
 
-    public interface OnAlarmsLoadedListener
-    {
+    public interface OnAlarmsLoadedListener {
         void onAlarmsLoaded(ArrayList<Alarm> alarms);
     }
 

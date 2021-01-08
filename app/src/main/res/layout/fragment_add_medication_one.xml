@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:id="@+id/add_medication_one_main_view"
@@ -21,6 +21,7 @@
                 android:fillViewport="true">
 
                 <LinearLayout
+                    android:id="@+id/add_medication_one_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -135,6 +136,7 @@
                         android:maxLines="1"
                         android:minLines="1"
                         android:padding="2dp"
+                        android:inputType="number"
                         android:singleLine="true"
                         android:textSize="16sp" />
 
@@ -175,8 +177,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/from_type"
-                        android:paddingVertical="2dp"
-                        android:paddingEnd="2dp"
                         android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar"
                         tools:ignore="RtlSymmetry" />
 
@@ -221,6 +221,7 @@
                         android:maxLines="1"
                         android:minLines="1"
                         android:padding="2dp"
+                        android:inputType="number"
                         android:singleLine="true"
                         android:textSize="16sp" />
 
@@ -261,7 +262,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/strength_unit"
-                        android:paddingEnd="2dp"
                         android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar"
                         tools:ignore="RtlSymmetry" />
 

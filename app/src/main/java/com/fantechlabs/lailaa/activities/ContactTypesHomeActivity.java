@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.ActivityContactTypesHomeBinding;
+import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 
 import lombok.val;

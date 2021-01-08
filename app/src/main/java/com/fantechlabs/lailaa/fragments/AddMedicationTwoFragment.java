@@ -123,10 +123,11 @@ public class AddMedicationTwoFragment
             case R.id.dosage_info:
                 AndroidUtil.showToolTip(v, R.string.dosage_info);
                 break;
-            case R.id.refill_date_info:
+            case R.id.refill_info:
                 AndroidUtil.showToolTip(v, R.string.no_of_refill_info);
                 break;
             case R.id.add_medication_two_main_view:
+            case R.id.add_medication_two_container:
                 if (AndroidUtil.mTooltip != null)
                     AndroidUtil.mTooltip.dismiss();
                 break;

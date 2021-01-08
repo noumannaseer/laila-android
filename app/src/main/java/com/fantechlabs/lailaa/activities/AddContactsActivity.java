@@ -219,7 +219,9 @@ public class AddContactsActivity extends BaseActivity
                     if (which == -1) {
                         hideLoadingDialog();
                         gotoContactScreen();
+                        return;
                     }
+                    hideLoadingDialog();
                 });
     }
 

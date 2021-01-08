@@ -174,11 +174,17 @@ public class Laila extends Application
                 val timeArray = timeZoneArray[0].split(":");
                 int hour = Integer.parseInt(timeArray[0]);
 
+
                 if (timeZoneArray[1].toLowerCase()
-                        .equals("pm"))
-                    calendar.set(Calendar.HOUR_OF_DAY, 12 + hour);
-                else
+                        .equals("pm")) {
+                    if (hour == 12)
+                        calendar.set(calendar.HOUR_OF_DAY, hour);
+                    else
+                        calendar.set(Calendar.HOUR_OF_DAY, 12 + hour);
+
+                } else
                     calendar.set(calendar.HOUR_OF_DAY, hour);
+
 
                 calendar.set(Calendar.MINUTE, Integer.parseInt(timeArray[1]));
                 Date date = calendar.getTime();

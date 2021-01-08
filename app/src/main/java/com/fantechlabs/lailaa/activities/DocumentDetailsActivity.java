@@ -54,7 +54,7 @@ public class DocumentDetailsActivity extends BaseActivity
 
         mGlideRequestManager
                 .load(url)
-                .fallback(R.mipmap.laila_logo)
+                .fallback(R.mipmap.logo)
                 .placeholder(R.color.background)
                 .centerInside()
                 .thumbnail(0.1f)
