@@ -3,30 +3,29 @@ package com.fantechlabs.lailaa.adapter;
 import android.app.Activity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.AllergiesListBinding;
-import com.fantechlabs.lailaa.databinding.ResourcesAllergiesListBinding;
+import com.fantechlabs.lailaa.databinding.AllergySummaryListBinding;
 
+import java.util.HashMap;
 import java.util.List;
 
 import lombok.val;
 
 
 //**************************************************************************
-public class AllergiesListAdapter
-        extends RecyclerView.Adapter<AllergiesListAdapter.AllergiesListViewHolder>
+public class DetailAllergieAdapter
+        extends RecyclerView.Adapter<DetailAllergieAdapter.AllergiesListViewHolder>
 //*******************************************************************
 {
-    private List<String> mAllergiesList;
-    private ListClickListener mListClickListener;
+    private final List<String> mSummaryList;
+    private final ListClickListener mListClickListener;
 
     //*******************************************************************
     @NonNull
@@ -34,21 +33,21 @@ public class AllergiesListAdapter
     public AllergiesListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType)
     //*******************************************************************
     {
-        ResourcesAllergiesListBinding AllergiesListViewBinding = DataBindingUtil.inflate(LayoutInflater
+        AllergySummaryListBinding AllergySummaryListBinding = DataBindingUtil.inflate(LayoutInflater
                         .from(parent.getContext()),
-                R.layout.resources_allergies_list,
+                R.layout.allergy_summary_list,
                 parent, false);
-        return new AllergiesListViewHolder(AllergiesListViewBinding);
+        return new AllergiesListViewHolder(AllergySummaryListBinding);
     }
 
 
     //********************************************************************************************
-    public AllergiesListAdapter(List<String> mList, ListClickListener listClickListener)
+    public DetailAllergieAdapter(List<String> mList, ListClickListener listClickListener)
     //********************************************************************************************
     {
-        this.mAllergiesList = mList;
+        this.mSummaryList = mList;
         this.mListClickListener = listClickListener;
-        setHasStableIds(true);
+
     }
 
     //*********************************************************************************************
@@ -56,20 +55,17 @@ public class AllergiesListAdapter
     public void onBindViewHolder(@NonNull AllergiesListViewHolder holder, int position)
     //*********************************************************************************************
     {
-        final val item = mAllergiesList
+        final val item = mSummaryList
                 .get(position);
 
         if (TextUtils.isEmpty(item))
             return;
-        holder.AllergiesViewBinding.name.setText(item);
-
-
-//        if (Laila.instance().Edit_Profile) {
-        holder.AllergiesViewBinding.allergy.setOnClickListener(v ->
+        holder.AllergySummaryListBinding.summary.setText(item);
+        holder.AllergySummaryListBinding.readMore.setText(R.string.read_more);
+        holder.AllergySummaryListBinding.readMore.setOnClickListener(v ->
         {
-            mListClickListener.onClick(item);
+            mListClickListener.onClick(position);
         });
-
     }
 
     //*******************************************************************
@@ -77,7 +73,7 @@ public class AllergiesListAdapter
     public int getItemCount()
     //*******************************************************************
     {
-        return mAllergiesList.size();
+        return mSummaryList.size();
     }
 
     //*******************************************************************
@@ -86,14 +82,14 @@ public class AllergiesListAdapter
             //*******************************************************************
     {
 
-        ResourcesAllergiesListBinding AllergiesViewBinding;
+        AllergySummaryListBinding AllergySummaryListBinding;
 
         //*******************************************************************
-        public AllergiesListViewHolder(@NonNull ResourcesAllergiesListBinding itemView)
+        public AllergiesListViewHolder(@NonNull AllergySummaryListBinding itemView)
         //*******************************************************************
         {
             super(itemView.getRoot());
-            AllergiesViewBinding = itemView;
+            AllergySummaryListBinding = itemView;
         }
     }
 
@@ -101,9 +97,6 @@ public class AllergiesListAdapter
     public interface ListClickListener
             //*******************************************************************
     {
-        void onDelete(int position);
-
-        void onClick(String title);
+        void onClick(int position);
     }
-
 }

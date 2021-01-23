@@ -6,11 +6,13 @@ public class Constants
 {
 
     public static final String BASE_URL = "https://mychc.co/api/";
-//    public static final String BASE_URL = "http://18.223.189.200:8000/api/";
-
+    //    public static final String BASE_URL = "http://18.223.189.200:8000/api/";
     public static final String BASE_URL2 = "https://mychcare.com/api/";
-    public static final String MEDICINE_INFO_URL = "https://health-products.canada.ca/api/drug/";
 
+    public static final String BASE_URL_Terms = "https://wsearch.nlm.nih.gov/ws/query?db=healthTopics&term=";
+    public static final String BASE_URL_SEARCH_TERMS = "https://medlineplus.gov/";
+
+    public static final String MEDICINE_INFO_URL = "https://health-products.canada.ca/api/drug/";
 
     public static final String SEARCH_URL = "https://health-products.canada.ca/api/drug/";
     public static final String HEALTH_CARE_URL = "https://myconnectedhealthcare.com/api/";
@@ -25,14 +27,18 @@ public class Constants
     public static final String USER_DATA = "userData";
     public static final String FACEBOOK_ACCESS_TOKEN = "facebookAccessToken";
     public static final int PASSWORD_LENGTH = 8;
-
     public static final String PROFILE = "profile";
+
+    public static final String DISEASE_NAME = "DISEASE_NAME";
     public static final String INTRO_SCREEN_SHOWN = "IntroScreenShown";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
     public static final String USER_PRIVATE_CODE = "user_private_code";
     public static final String PAYMENT_ID = "payment_id";
     public static final String MEDICATION_NAME = "medication_name";
+    public static final String ALLERGIES = "allergies";
+    public static final String CONDITIONS = "medical_Conditions";
+
     public static final String DIN_RX_NUMBER = "din_rx_number";
     public static final String STRENGTH = "strength";
     public static final String STRENGTH_UOM = "strength_uom";
@@ -62,6 +68,7 @@ public class Constants
     public static final String LOCATION = "location";
     public static final String CURRENT_LOCATION = "Current location";
     public static final String CAREGIVER = "Caregiver";
+    public static final String IS_DOCUMENT_CONTAINS = "IS_DOCUMENT_CONTAINS";
 
     public static final String HUMAN = "Human";
     public static final String SELECT_PHARMACY = "Select Pharmacy";

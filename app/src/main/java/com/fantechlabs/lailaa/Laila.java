@@ -15,6 +15,7 @@ import com.fantechlabs.lailaa.models.Events;
 import com.fantechlabs.lailaa.models.Medication;
 import com.fantechlabs.lailaa.models.Profile;
 import com.fantechlabs.lailaa.models.SearchMedicine;
+import com.fantechlabs.lailaa.models.allergie_models.DocumentList;
 import com.fantechlabs.lailaa.models.response_models.UserResponse;
 import com.fantechlabs.lailaa.request_models.AddMedicationRequest;
 import com.fantechlabs.lailaa.request_models.AddPharmacyRequest;
@@ -29,6 +30,7 @@ import com.fantechlabs.lailaa.utils.UIUtils;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -42,7 +44,15 @@ public class Laila extends Application
 {
     private static Context mContext;
     public AutoCompleteLoadingBar mAutoCompleteLoadingBar;
-
+    @Getter
+    @Setter
+    private List<DocumentList> mDocumentList;
+    @Getter
+    @Setter
+    private List<HashMap<String, String>> mDocumentListWithHashMap;
+    @Getter
+    @Setter
+    private DocumentList mDocument;
     @Getter
     @Setter
     private UserResponse mUser;
@@ -76,7 +86,7 @@ public class Laila extends Application
     @Getter
     @Setter
     public String mContactType;
-
+    public boolean IS_Documents = false;
     public boolean Edit_Profile = false;
     public boolean on_update_medicine = false;
     public boolean on_update_contact = false;

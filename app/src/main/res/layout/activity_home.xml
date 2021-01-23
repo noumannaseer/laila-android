@@ -240,7 +240,7 @@
                         </androidx.cardview.widget.CardView>
 
                         <androidx.cardview.widget.CardView
-                            android:id="@+id/telehealth"
+                            android:id="@+id/recources"
                             android:layout_width="0dp"
                             android:layout_height="180dp"
                             android:layout_margin="8dp"
@@ -261,7 +261,7 @@
                                     android:layout_width="70dp"
                                     android:layout_height="70dp"
                                     android:layout_margin="4dp"
-                                    android:src="@drawable/telehealth_3x" />
+                                    android:src="@drawable/resource_icon" />
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -271,7 +271,7 @@
                                     android:fontFamily="@font/sfpro_text_bold"
                                     android:gravity="left"
                                     android:lineSpacingExtra="3sp"
-                                    android:text="@string/telehealth"
+                                    android:text="@string/medical_resources"
                                     android:textColor="@color/black"
                                     android:textSize="16sp" />
 
@@ -281,8 +281,7 @@
                                     android:layout_marginLeft="4dp"
                                     android:layout_marginTop="4dp"
                                     android:fontFamily="@font/sfpro_display_regular"
-                                    android:lineSpacingExtra="2sp"
-                                    android:text="@string/see_telehealth"
+                                    android:text="@string/add_or_search_resources"
                                     android:textColor="@color/black"
                                     android:textSize="14sp" />
 
@@ -346,10 +345,54 @@
                         </androidx.cardview.widget.CardView>
 
                         <androidx.cardview.widget.CardView
+                            android:id="@+id/telehealth"
                             android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"></androidx.cardview.widget.CardView>
+                            android:layout_height="180dp"
+                            android:layout_margin="8dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/card_background"
+                            android:foreground="?selectableItemBackground"
+                            app:cardCornerRadius="10dp"
+                            app:cardElevation="8dp">
 
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginLeft="12dp"
+                                android:layout_marginTop="8dp"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="70dp"
+                                    android:layout_height="70dp"
+                                    android:layout_margin="4dp"
+                                    android:src="@drawable/telehealth_3x" />
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+                                    android:layout_marginTop="8dp"
+                                    android:fontFamily="@font/sfpro_text_bold"
+                                    android:gravity="left"
+                                    android:lineSpacingExtra="3sp"
+                                    android:text="@string/telehealth"
+                                    android:textColor="@color/black"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="4dp"
+                                    android:layout_marginTop="4dp"
+                                    android:fontFamily="@font/sfpro_display_regular"
+                                    android:lineSpacingExtra="2sp"
+                                    android:text="@string/see_telehealth"
+                                    android:textColor="@color/black"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+                        </androidx.cardview.widget.CardView>
                     </LinearLayout>
 
                 </LinearLayout>

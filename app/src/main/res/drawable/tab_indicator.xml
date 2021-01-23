@@ -2,13 +2,13 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- UNSELECTED TAB STATE -->
     <item android:state_selected="false" android:state_pressed="false">
-        <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+        <layer-listDocuments xmlns:android="http://schemas.android.com/apk/res/android">
             <!-- Bottom indicator color for the UNSELECTED tab state -->
             <item  android:top="-10dp" android:left="-1000dp" android:right="-1000dp">
                 <shape android:shape="rectangle" >
                     <stroke android:color="#4CB5B5B5" android:width="5dp"/>
                 </shape>
             </item>
-        </layer-list>
+        </layer-listDocuments>
     </item>
 </selector>
