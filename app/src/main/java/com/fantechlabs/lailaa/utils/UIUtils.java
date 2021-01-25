@@ -67,19 +67,6 @@ import static android.content.Context.MODE_PRIVATE;
 import static com.fantechlabs.lailaa.utils.AndroidUtil.getApplicationContext;
 import static com.fantechlabs.lailaa.utils.AndroidUtil.getResources;
 
-//import com.bumptech.glide.Glide;
-//import com.bumptech.glide.request.RequestOptions;
-//import com.bumptech.glide.request.target.CustomTarget;
-//import com.bumptech.glide.request.transition.Transition;
-//import com.fitfriendme.fantechlabs.models.UserDetails;
-//import com.google.common.reflect.TypeToken;
-//import com.google.gson.Gson;
-//import androidx.navigation.NavOptions;
-//import okhttp3.MediaType;
-//import okhttp3.MultipartBody;
-//import okhttp3.RequestBody;
-//import okhttp3.ResponseBody;
-
 
 //*****************************************************************
 public class UIUtils

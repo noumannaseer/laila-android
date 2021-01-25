@@ -79,7 +79,7 @@ public class AddMedicationViewModel
 
         //***********************************************************
         medicationService.enqueue(new Callback<MedicationResponse>()
-        //***********************************************************
+                //***********************************************************
         {
 
             //***********************************************************
@@ -87,11 +87,9 @@ public class AddMedicationViewModel
             public void onResponse(Call<MedicationResponse> call, Response<MedicationResponse> response)
             //***********************************************************
             {
-                if (response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
                     Log.d("SessionToken", "onResponse: " + response.toString());
-                    if (response.body().getError() != null)
-                    {
+                    if (response.body().getError() != null) {
                         mAddMedicationListener.onFailed(response.body().getError());
                         return;
                     }
@@ -113,7 +111,7 @@ public class AddMedicationViewModel
 
     //***********************************************************
     public interface AddMedicationListener
-    //***********************************************************
+            //***********************************************************
     {
         void onSuccessfully(@Nullable MedicationResponse medicationResponse);
 

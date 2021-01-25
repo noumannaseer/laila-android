@@ -140,7 +140,7 @@ public class CalenderActivity extends BaseActivity
                 Calendar finalCalender = Calendar.getInstance();
                 finalCalender.setTimeInMillis(calendar.getTimeInMillis());
                 mCalenderEvent.add(
-                        new EventDay(finalCalender, R.drawable.record, Color.parseColor("#228B22")));
+                        new EventDay(finalCalender, R.drawable.record));
                 calendar.add(Calendar.HOUR, 24);
             }
         }

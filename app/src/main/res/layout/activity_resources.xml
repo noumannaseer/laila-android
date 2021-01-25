@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/profile_background"
+        android:orientation="vertical"
+        tools:context=".activities.ResourcesActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/white"
+                app:theme="@style/ToolbarTheme">
+
+                <TextView
+                    android:id="@+id/tv_create_account_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/sfpro_display_regular"
+                    android:gravity="center_horizontal"
+                    android:text="@string/resources"
+                    android:textAlignment="center"
+                    android:textColor="@color/darkBlue"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginVertical="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <EditText
+                    android:id="@+id/disease_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:layout_weight="0.9"
+                    android:background="@drawable/roundcorner_et"
+                    android:hint="@string/enter_condition_name"
+                    android:maxLines="1"
+                    android:paddingHorizontal="4dp"
+                    android:paddingVertical="12dp"
+                    android:textSize="16sp" />
+
+                <ImageButton
+                    android:id="@+id/search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.1"
+                    android:backgroundTint="@color/darkBlue"
+                    android:paddingVertical="12dp"
+                    android:src="@drawable/ic_search" />
+
+
+            </LinearLayout>
+            <!--            <FrameLayout-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content">-->
+
+            <!--                <AutoCompleteTextView-->
+            <!--                    android:id="@+id/search_disease"-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:drawableRight="@drawable/ic_search"-->
+            <!--                    android:fontFamily="@font/helveticaneueltpro_roman"-->
+            <!--                    android:hint="@string/enter_disease_name"-->
+            <!--                    android:paddingHorizontal="2dp"-->
+            <!--                    android:paddingVertical="10dp"-->
+            <!--                    android:textColor="@color/darkBlue"-->
+            <!--                    android:textColorHint="@color/textHintColor"-->
+            <!--                    android:textSize="16sp" />-->
+
+            <!--                <ProgressBar-->
+            <!--                    android:id="@+id/loading_indicator"-->
+            <!--                    style="?android:attr/progressBarStyleSmall"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_gravity="center_vertical|right"-->
+            <!--                    android:layout_marginRight="24dp"-->
+            <!--                    android:elevation="8dp"-->
+            <!--                    android:indeterminate="true"-->
+            <!--                    android:progressTint="@color/black"-->
+            <!--                    android:visibility="gone" />-->
+
+            <!--            </FrameLayout>-->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/helveticaneueltpro_roman"
+                android:text="@string/allergies"
+                android:textColor="@color/text_blue"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/allergies_recycleView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/helveticaneueltpro_roman"
+                android:text="@string/condition"
+                android:textColor="@color/text_blue"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/condition_recycleView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:nestedScrollingEnabled="false" />
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

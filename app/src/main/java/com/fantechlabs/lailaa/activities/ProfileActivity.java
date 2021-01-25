@@ -254,7 +254,6 @@ public class ProfileActivity extends BaseActivity
         val address1 = profile.getAddressLine1();
         val addressProvince = profile.getAddressProvince();
 
-
         if (TextUtils.isEmpty(firstName)) {
             AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.first_name_required), AndroidUtil.getString(R.string.alert), this);
             return;

@@ -38,7 +38,6 @@ public interface OnboardingService {
             @Body Map<String, String> signup
     );
 
-
     //**************************************************************
     @Headers("Accept: application/json")
     @POST("signup/1")

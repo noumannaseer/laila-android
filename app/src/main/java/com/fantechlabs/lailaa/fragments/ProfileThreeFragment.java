@@ -1,21 +1,18 @@
 package com.fantechlabs.lailaa.fragments;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -23,8 +20,12 @@ import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.adapter.AllergiesListAdapter;
 import com.fantechlabs.lailaa.databinding.FragmentProfileThreeBinding;
-import com.fantechlabs.lailaa.databinding.LayoutAlergyConditionDialogBinding;
+import com.fantechlabs.lailaa.models.allergie_models.RetrieveXmlParcer;
+import com.fantechlabs.lailaa.models.allergie_models.XmlParcer;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
+import com.fantechlabs.lailaa.utils.Constants;
+
+import org.xmlpull.v1.XmlPullParser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +45,7 @@ public class ProfileThreeFragment extends BaseFragment
     private AllergiesListAdapter mAllergiesListAdapter;
     private TextView mAllergyTitle, mAllergyName;
     private EditText mAllergy;
+    private RetrieveXmlParcer mRetrieveXmlParcer;
 
     //***********************************************************
     public ProfileThreeFragment()
@@ -136,28 +138,32 @@ public class ProfileThreeFragment extends BaseFragment
             val allergy = AndroidUtil.stringJoin(mAllergiesList, ";");
             mUser.setAllergies(allergy);
         }
+        mAllergiesListAdapter = new AllergiesListAdapter(mAllergiesList, new AllergiesListAdapter.ListClickListener() {
+            @Override
+            public void onDelete(int position) {
+                AndroidUtil.displayAlertDialog(
+                        AndroidUtil.getString(
+                                R.string.delete_item),
+                        AndroidUtil.getString(
+                                R.string.delete),
+                        getActivity(),
+                        AndroidUtil.getString(
+                                R.string.ok),
+                        AndroidUtil.getString(
+                                R.string.cancel),
+                        (dialog, which) -> {
+                            if (which == -1) {
+                                mAllergiesList.remove(position);
+                                startAllergiesRecyclerView();
+                            }
+                        });
+            }
 
-        mAllergiesListAdapter = new AllergiesListAdapter(mAllergiesList, position ->
-        {
-            AndroidUtil.displayAlertDialog(
-                    AndroidUtil.getString(
-                            R.string.delete_item),
-                    AndroidUtil.getString(
-                            R.string.delete),
-                    getActivity(),
-                    AndroidUtil.getString(
-                            R.string.ok),
-                    AndroidUtil.getString(
-                            R.string.cancel),
-                    (dialog, which) -> {
-                        if (which == -1) {
-                            mAllergiesList.remove(position);
-                            startAllergiesRecyclerView();
-                        }
-                    });
-        }
-
-        );
+            @Override
+            public void onClick(String title) {
+                //                new XmlParcer().execute(Constants.BASE_URL_Terms);
+            }
+        });
         mBinding.allergiesRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.allergiesRecycleView.setAdapter(mAllergiesListAdapter);
     }
@@ -172,27 +178,33 @@ public class ProfileThreeFragment extends BaseFragment
             val condition = AndroidUtil.stringJoin(mConditionList, ";");
             mUser.setMedicalConditions(condition);
         }
+        mAllergiesListAdapter = new AllergiesListAdapter(mConditionList, new AllergiesListAdapter.ListClickListener() {
+            @Override
+            public void onDelete(int position) {
+                AndroidUtil.displayAlertDialog(
+                        AndroidUtil.getString(
+                                R.string.delete_item),
+                        AndroidUtil.getString(
+                                R.string.delete),
+                        getActivity(),
+                        AndroidUtil.getString(
+                                R.string.ok),
+                        AndroidUtil.getString(
+                                R.string.cancel),
+                        (dialog, which) -> {
+                            if (which == -1) {
+                                mConditionList.remove(position);
+                                startConditionRecyclerView();
+                            }
+                        });
+            }
 
-        mAllergiesListAdapter = new AllergiesListAdapter(mConditionList, position ->
-        {
-            AndroidUtil.displayAlertDialog(
-                    AndroidUtil.getString(
-                            R.string.delete_item),
-                    AndroidUtil.getString(
-                            R.string.delete),
-                    getActivity(),
-                    AndroidUtil.getString(
-                            R.string.ok),
-                    AndroidUtil.getString(
-                            R.string.cancel),
-                    (dialog, which) -> {
-                        if (which == -1) {
-                            mConditionList.remove(position);
-                            startConditionRecyclerView();
-                        }
-                    });
-        }
-        );
+            @Override
+            public void onClick(String title) {
+
+            }
+        });
+
         mBinding.conditionRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.conditionRecycleView.setAdapter(mAllergiesListAdapter);
     }
@@ -335,6 +347,7 @@ public class ProfileThreeFragment extends BaseFragment
         mBinding.insuranceName.setText(userDetail.getPrivateInsurance());
         mBinding.insuranceNumber.setText(userDetail.getPrivateInsuranceNumber());
         setData();
+        setAllergiesAndCondition();
     }
 
     //*************************************************************
@@ -356,4 +369,37 @@ public class ProfileThreeFragment extends BaseFragment
 
     }
 
+    //*************************************************************
+    private void setAllergiesAndCondition()
+    //*************************************************************
+    {
+        if (Laila.instance().getMUser() == null || Laila.instance().getMUser().getProfile() == null)
+            return;
+        val userProfile = Laila.instance().getMUser().getProfile();
+        val allergies = userProfile.getAllergies();
+        val medicalCondition = userProfile.getMedicalConditions();
+
+        if (!TextUtils.isEmpty(allergies)) {
+            mAllergiesList = new ArrayList<>();
+            String[] allergiesList = allergies.split(";");
+            for (val allergy : allergiesList) {
+                if (!TextUtils.isEmpty(allergy))
+                    mAllergiesList.add(allergy);
+            }
+
+            startAllergiesRecyclerView();
+        }
+
+        if (!TextUtils.isEmpty(medicalCondition)) {
+            mConditionList = new ArrayList<>();
+            String[] conditionList = medicalCondition.split(";");
+            for (val condition : conditionList) {
+                if (!TextUtils.isEmpty(condition))
+                    mConditionList.add(condition);
+            }
+
+            startConditionRecyclerView();
+        }
+
+    }
 }

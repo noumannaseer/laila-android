@@ -1,0 +1,517 @@
+<?xml version="1.0" encoding="utf-8"?>
+<nlmSearchResult>
+    <term>asthma</term>
+    <file>viv_wet4HT</file>
+    <server>pvlb7srch15</server>
+    <count>59</count>
+    <retstart>0</retstart>
+    <retmax>10</retmax>
+    <list
+        num="59"
+        per="10"
+        start="0">
+        <document
+            rank="0"
+            url="https://medlineplus.gov/asthma.html">
+            <content name="title">
+                <span class="qt0">Asthma</span>
+            </content>
+            <content name="organizationName">National Library of Medicine</content>
+            <content name="altTitle">Bronchial
+                <span class="qt0">Asthma</span>
+            </content>
+            <content name="FullSummary">
+                <p>
+                    <span class="qt0">Asthma</span>
+                    is a chronic disease that affects your airways. Your airways are tubes that
+                    carry air in and out of your lungs. If you have <span class="qt0">asthma</span>,
+                    the inside walls of your airways become sore and swollen. That makes them very
+                    sensitive, and they may react strongly to things that you are allergic to or
+                    find irritating. When your airways react, they get narrower and your lungs get
+                    less air.
+                </p>
+                <p>Symptoms of <span class="qt0">asthma</span> include
+                </p>
+                <ul>
+                    <li>Wheezing</li>
+                    <li>Coughing, especially early in the morning or at night</li>
+                    <li>Chest tightness</li>
+                    <li>Shortness of breath</li>
+                </ul>
+                <p>Not all people who have <span class="qt0">asthma</span> have these symptoms.
+                    Having these symptoms doesn't always mean that you have <span class="qt0">
+                        asthma</span>. Your doctor will diagnose <span class="qt0">asthma</span> based
+                    on lung function tests, your medical history, and a physical exam. You may also
+                    have allergy tests.
+                </p>
+                <p>When your <span class="qt0">asthma</span> symptoms become worse than usual, it's
+                    called an <span class="qt0">asthma</span> attack. Severe <span class="qt0">
+                        asthma
+                    </span> attacks may require emergency care, and they can be fatal.
+                </p>
+                <p>
+                    <span class="qt0">Asthma</span>
+                    is treated with two kinds of medicines: quick-relief medicines to stop <span class="qt0">
+                    asthma
+                </span> symptoms and long-term control medicines to prevent symptoms.
+                </p>
+                <p>NIH: National Heart, Lung, and Blood Institute</p>
+            </content>
+            <content name="mesh">
+                <span class="qt0">Asthma</span>
+            </content>
+            <content name="groupName">Lungs and Breathing</content>
+            <content name="groupName">Immune System</content>
+            <content name="snippet">
+                <span class="qt0">Asthma</span>
+                is a chronic disease that affects your airways. Your
+                airways are tubes that carry air in and out of your lungs. If you
+                have <span class="qt0">asthma</span>, the inside walls ...
+            </content>
+        </document>
+        <document
+            rank="1"
+            url="https://medlineplus.gov/asthmainchildren.html">
+            <content name="title">
+                <span class="qt0">Asthma</span>
+                in Children
+            </content>
+            <content name="organizationName">National Library of Medicine</content>
+            <content name="altTitle">Childhood
+                <span class="qt0">Asthma</span>
+            </content>
+            <content name="FullSummary">
+                <p>
+                    <span class="qt0">Asthma</span>
+                    is a chronic disease that affects your airways. Your airways are tubes that
+                    carry air in and out of your lungs. If you have <span class="qt0">asthma</span>,
+                    the inside walls of your airways become sore and swollen.
+                </p>
+                <p>In the United States, about 20 million people have <span class="qt0">
+                    asthma</span>. Nearly 9 million of them are children. Children have smaller
+                    airways than adults, which makes <span class="qt0">asthma</span> especially
+                    serious for them. Children with <span class="qt0">asthma</span> may experience
+                    wheezing, coughing, chest tightness, and trouble breathing, especially early in
+                    the morning or at night.
+                </p>
+                <p>Many things can cause <span class="qt0">asthma</span>, including
+                </p>
+                <ul>
+                    <li>Allergens - mold, pollen, animals</li>
+                    <li>Irritants - cigarette smoke, air pollution</li>
+                    <li>Weather - cold air, changes in weather</li>
+                    <li>Exercise</li>
+                    <li>Infections - flu, common cold</li>
+                </ul>
+                <p>When <span class="qt0">asthma</span> symptoms become worse than usual, it is
+                    called an <span class="qt0">asthma</span> attack. <span class="qt0">Asthma
+                    </span> is treated with two kinds of medicines: quick-relief medicines to stop <span class="qt0">
+                        asthma
+                    </span> symptoms and long-term control medicines to prevent symptoms.
+                </p>
+            </content>
+            <content name="mesh">
+                <span class="qt0">Asthma</span>
+            </content>
+            <content name="groupName">Children and Teenagers</content>
+            <content name="groupName">Lungs and Breathing</content>
+            <content name="groupName">Immune System</content>
+            <content name="snippet">
+                <span class="qt0">Asthma</span>
+                is a chronic disease that affects your airways. Your
+                airways are tubes that carry air in and out of your lungs. If you
+                have <span class="qt0">asthma</span>, the inside walls ...
+            </content>
+        </document>
+        <document
+            rank="2"
+            url="https://medlineplus.gov/allergy.html">
+            <content name="title">Allergy</content>
+            <content name="organizationName">National Library of Medicine</content>
+            <content name="altTitle">Allergic Rhinitis</content>
+            <content name="altTitle">Hypersensitivity</content>
+            <content name="FullSummary">
+                <p>An allergy is a reaction by your immune system to something that does not bother
+                    most other people. People who have allergies often are sensitive to more than
+                    one thing. Substances that often cause reactions are
+                </p>
+                <ul>
+                    <li>Pollen</li>
+                    <li>Dust mites</li>
+                    <li>Mold spores</li>
+                    <li>Pet dander</li>
+                    <li>Food</li>
+                    <li>Insect stings</li>
+                    <li>Medicines</li>
+                </ul>
+                <p>Normally, your immune system fights germs. It is your body's defense system. In
+                    most allergic reactions, however, it is responding to a false alarm. Genes and
+                    the environment probably both play a role.
+                </p>
+                <p>Allergies can cause a variety of symptoms such as a runny nose, sneezing,
+                    itching, rashes, swelling, or <span class="qt0">asthma</span>. Allergies can
+                    range from minor to severe. Anaphylaxis is a severe reaction that can be
+                    life-threatening. Doctors use skin and blood tests to diagnose allergies.
+                    Treatments include medicines, allergy shots, and avoiding the substances that
+                    cause the reactions.
+                </p>
+            </content>
+            <content name="mesh">Hypersensitivity</content>
+            <content name="groupName">Ear, Nose and Throat</content>
+            <content name="groupName">Immune System</content>
+            <content name="snippet">An allergy is a reaction by your immune system to something that
+                does not bother most other people. People who have allergies often are sensitive to
+                more ...
+            </content>
+        </document>
+        <document
+            rank="3"
+            url="https://medlineplus.gov/steroids.html">
+            <content name="title">Steroids</content>
+            <content name="organizationName">National Library of Medicine</content>
+            <content name="altTitle">Corticosteroids</content>
+            <content name="altTitle">Glucocorticoids</content>
+            <content name="altTitle">Prednisone</content>
+            <content name="FullSummary">
+                <p>You may have heard of anabolic steroids, which can have harmful effects. But
+                    there's another type of steroid - sometimes called a corticosteroid - that
+                    treats a variety of problems. These steroids are similar to hormones that your
+                    adrenal glands make to fight stress associated with illnesses and injuries. They
+                    reduce inflammation and affect the immune system.
+                </p>
+                <p>You may need to take corticosteroids to treat</p>
+                <ul>
+                    <li>Arthritis</li>
+                    <li>
+                        <span class="qt0">Asthma</span>
+                    </li>
+                    <li>Autoimmune diseases such as lupus and multiple sclerosis</li>
+                    <li>Skin conditions such as eczema and rashes</li>
+                    <li>Some kinds of cancer</li>
+                </ul>
+                <p>Steroids are strong medicines, and they can have side effects, including weakened
+                    bones and cataracts. Because of this, you usually take them for as short a time
+                    as possible.
+                </p>
+            </content>
+            <content name="mesh">Glucocorticoids</content>
+            <content name="mesh">Adrenal Cortex Hormones</content>
+            <content name="mesh">Prednisone</content>
+            <content name="groupName">Drug Therapy</content>
+            <content name="snippet">... may need to take corticosteroids to treat Arthritis <span class="qt0">
+                Asthma
+            </span> Autoimmune diseases such as lupus and multiple sclerosis ...
+            </content>
+        </document>
+        <document
+            rank="4"
+            url="https://medlineplus.gov/flu.html">
+            <content name="title">Flu</content>
+            <content name="organizationName">National Library of Medicine</content>
+            <content name="altTitle">Grippe</content>
+            <content name="altTitle">Influenza</content>
+            <content name="FullSummary">What is the flu?<p>The flu, also called influenza, is a
+                respiratory infection caused by viruses. Each year, millions of Americans get sick
+                with the flu. Sometimes it causes mild illness. But it can also be serious or even
+                deadly, especially for people over 65, newborn babies, and people with certain
+                chronic illnesses.</p>What causes the flu?<p>The flu is caused by flu viruses that
+                spread from person to person. When someone with the flu coughs, sneezes, or talks,
+                they spray tiny droplets. These droplets can land in the mouths or noses of people
+                who are nearby. Less often, a person may get flu by touching a surface or object
+                that has flu virus on it and then touching their own mouth, nose, or possibly their
+                eyes.</p>What are the symptoms of the flu?
+                <p>Symptoms of the flu come on suddenly and may include</p>
+                <ul>
+                    <li>Fever or feeling feverish/chills</li>
+                    <li>Cough</li>
+                    <li>Sore throat</li>
+                    <li>Runny or stuffy nose</li>
+                    <li>Muscle or body aches</li>
+                    <li>Headaches</li>
+                    <li>Fatigue (tiredness)</li>
+                </ul>
+                <p>Some people may also have vomiting and diarrhea. This is more common in
+                    children.
+                </p>
+                <p>Sometimes people have trouble figuring out whether they have a cold or the flu.
+                    There are differences between them. The symptoms of a cold usually come on more
+                    slowly and are less severe than symptoms of the flu. Colds rarely cause a fever
+                    or headaches.
+                </p>
+                <p>Sometimes people say that they have a "flu" when they really have something else.
+                    For example, "stomach flu" isn't the flu; it's gastroenteritis.</p>What other
+                problems can the flu cause?
+                <p>Some people who get the flu will develop complications. Some of these
+                    complications can be serious or even life-threatening. They include
+                </p>
+                <ul>
+                    <li>Bronchitis</li>
+                    <li>Ear infection</li>
+                    <li>Sinus infection</li>
+                    <li>Pneumonia</li>
+                    <li>Inflammation of the heart (myocarditis), brain (encephalitis), or muscle
+                        tissues (myositis, rhabdomyolysis)
+                    </li>
+                </ul>
+                <p>The flu also can make chronic health problems worse. For example, people with <span class="qt0">
+                    asthma
+                </span> may have <span class="qt0">asthma</span> attacks while they have flu.
+                </p>
+                <p>Certain people are more likely to have complications from the flu, including</p>
+                <ul>
+                    <li>Adults 65 and older</li>
+                    <li>Pregnant women</li>
+                    <li>Children younger than 5</li>
+                    <li>People with certain chronic health conditions, such as <span class="qt0">
+                        asthma</span>, diabetes, and heart disease
+                    </li>
+                </ul>
+                How is the flu diagnosed?
+                <p>To diagnose the flu, health care providers will first do a medical history and
+                    ask about your symptoms. There are several tests for the flu. For the tests,
+                    your provider will swipe the inside of your nose or the back of your throat with
+                    a swab. Then the swab will be tested for the flu virus.
+                </p>
+                <p>Some tests are quick and give results in 15-20 minutes. But these tests are not
+                    as accurate as other flu tests. These other tests can give you the results in
+                    one hour or several hours.</p>What are the treatments for the flu?
+                <p>Most people with the flu recover on their own without medical care. People with
+                    mild cases of the flu should stay home and avoid contact with others, except to
+                    get medical care.
+                </p>
+                <p>But if you have symptoms of flu and are in a high risk group or are very sick or
+                    worried about your illness, contact your health care provider. You might need
+                    antiviral medicines to treat your flu. Antiviral medicines can make the illness
+                    milder and shorten the time you are sick. They also can prevent serious flu
+                    complications. They usually work best when you start taking them within 2 days
+                    of getting sick.</p>Can the flu be prevented?
+                <p>The best way to prevent the flu is to get flu vaccine every year. But it's also
+                    important to have good health habits like covering your cough and washing your
+                    hands often. This can help stop the spread of germs and prevent the flu.
+                </p>
+                <p>Centers for Disease Control and Prevention</p>
+            </content>
+            <content name="mesh">Influenza, Human</content>
+            <content name="groupName">Infections</content>
+            <content name="groupName">Lungs and Breathing</content>
+            <content name="snippet">... chronic health problems worse. For example, people with <span class="qt0">
+                asthma
+            </span> may have <span class="qt0">asthma</span> attacks while they have flu. Certain
+                people are ... People with certain chronic health conditions, such
+                as <span class="qt0">asthma</span>, diabetes, and heart disease How is the flu ...
+            </content>
+        </document>
+        <document
+            rank="5"
+            url="https://medlineplus.gov/hayfever.html">
+            <content name="title">Hay Fever</content>
+            <content name="organizationName">National Library of Medicine</content>
+            <content name="altTitle">Allergic Rhinitis</content>
+            <content name="altTitle">Pollen Allergy</content>
+            <content name="altTitle">Seasonal Allergies</content>
+            <content name="FullSummary">
+                <p>Each spring, summer, and fall, trees, weeds, and grasses release tiny pollen
+                    grains into the air. Some of the pollen ends up in your nose and throat. This
+                    can trigger a type of allergy called hay fever.
+                </p>
+                <p>Symptoms can include</p>
+                <ul>
+                    <li>Sneezing, often with a runny or clogged nose</li>
+                    <li>Coughing and postnasal drip</li>
+                    <li>Itching eyes, nose and throat</li>
+                    <li>Red and watery eyes</li>
+                    <li>Dark circles under the eyes</li>
+                </ul>
+                <p>Your health care provider may diagnose hay fever based on a physical exam and
+                    your symptoms. Sometimes skin or blood tests are used. Taking medicines and
+                    using nasal sprays can relieve symptoms. You can also rinse out your nose, but
+                    be sure to use distilled or sterilized water with saline. Allergy shots can help
+                    make you less sensitive to pollen and provide long-term relief.
+                </p>
+            </content>
+            <content name="mesh">Rhinitis, Allergic, Seasonal</content>
+            <content name="groupName">Ear, Nose and Throat</content>
+            <content name="groupName">Immune System</content>
+            <content name="snippet">Each spring, summer, and fall, trees, weeds, and grasses release
+                tiny pollen grains into the air. Some of the pollen ends up in your nose and throat.
+                This ...
+            </content>
+        </document>
+        <document
+            rank="6"
+            url="https://medlineplus.gov/molds.html">
+            <content name="title">Molds</content>
+            <content name="organizationName">National Library of Medicine</content>
+            <content name="altTitle">Fungi</content>
+            <content name="FullSummary">
+                <p>Molds are fungi that can be found both outdoors and indoors. They grow best in
+                    warm, damp and humid conditions. If you have damp or wet spots in your house,
+                    you will probably get mold.
+                </p>
+                <p>Molds can cause health problems. Inhaling or touching mold or mold spores may
+                    cause allergic reactions or <span class="qt0">asthma</span> attacks in sensitive
+                    people. Molds can cause fungal infections. In addition, mold exposure may
+                    irritate your eyes, skin, nose, throat, and lungs.
+                </p>
+                <p>Centers for Disease Control and Prevention</p>
+            </content>
+            <content name="mesh">Fungi</content>
+            <content name="groupName">Poisoning, Toxicology, Environmental Health</content>
+            <content name="snippet">... or mold spores may cause allergic reactions or <span class="qt0">
+                asthma
+            </span> attacks in sensitive people. Molds can cause fungal ...
+            </content>
+        </document>
+        <document
+            rank="7"
+            url="https://medlineplus.gov/occupationalhealth.html">
+            <content name="title">Occupational Health</content>
+            <content name="organizationName">National Library of Medicine</content>
+            <content name="altTitle">Employee Health</content>
+            <content name="altTitle">Occupational Injuries</content>
+            <content name="FullSummary">
+                <p>Occupational health problems occur at work or because of the kind of work you do.
+                    These problems can include
+                </p>
+                <ul>
+                    <li>Cuts, fractures (broken bones), and sprains and strains</li>
+                    <li>Loss of limbs</li>
+                    <li>Repetitive motion disorders</li>
+                    <li>Hearing problems caused by exposure to noise</li>
+                    <li>Vision problems</li>
+                    <li>Illness caused by breathing, touching, or swallowing unsafe substances</li>
+                    <li>Illness caused by exposure to radiation</li>
+                    <li>Exposure to germs in health care settings</li>
+                </ul>
+                <p>Good job safety and prevention practices can reduce your risk of these problems.
+                    Try to stay fit, reduce stress, set up your work area properly, and use the
+                    right equipment and gear.
+                </p>
+            </content>
+            <content name="mesh">Accidents, Occupational</content>
+            <content name="mesh">Occupational Stress</content>
+            <content name="mesh">Occupational Injuries</content>
+            <content name="mesh">Occupational Diseases</content>
+            <content name="mesh">Occupational Exposure</content>
+            <content name="groupName">Wellness and Lifestyle</content>
+            <content name="groupName">Safety Issues</content>
+            <content name="snippet">Occupational health problems occur at work or because of the
+                kind of work you do. These problems can include Cuts, fractures (broken bones), and
+                sprains and strains ...
+            </content>
+        </document>
+        <document
+            rank="8"
+            url="https://medlineplus.gov/ozone.html">
+            <content name="title">Ozone</content>
+            <content name="organizationName">National Library of Medicine</content>
+            <content name="FullSummary">
+                <p>Ozone is a gas. It can be good or bad, depending on where it is. "Good" ozone
+                    occurs naturally about 10 to 30 miles above the Earth's surface. It shields us
+                    from the sun's ultraviolet rays. Part of the good ozone layer is gone. Man-made
+                    chemicals have destroyed it. Without enough good ozone, people may get too much
+                    ultraviolet radiation. This may increase the risk of skin cancer, cataracts, and
+                    immune system problems.
+                </p>
+                <p>"Bad" ozone is at ground level. It forms when pollutants from cars, factories,
+                    and other sources react chemically with sunlight. It is the main ingredient in
+                    smog. It is usually worst in the summer. Breathing bad ozone can be harmful. It
+                    can cause coughing, throat irritation, worsening of <span class="qt0">
+                        asthma</span>, bronchitis, and emphysema. It can lead to permanent lung
+                    damage, if you are regularly exposed to it.
+                </p>
+                <p>Environmental Protection Agency</p>
+            </content>
+            <content name="mesh">Ozone</content>
+            <content name="mesh">Stratospheric Ozone</content>
+            <content name="groupName">Poisoning, Toxicology, Environmental Health</content>
+            <content name="snippet">... It can cause coughing, throat irritation, worsening
+                of <span class="qt0">asthma</span>, bronchitis, and emphysema. It can lead to
+                permanent ...
+            </content>
+        </document>
+        <document
+            rank="9"
+            url="https://medlineplus.gov/smoking.html">
+            <content name="title">Smoking</content>
+            <content name="organizationName">National Library of Medicine</content>
+            <content name="altTitle">Nicotine</content>
+            <content name="altTitle">Tobacco Smoking</content>
+            <content name="altTitle">Cigar smoking</content>
+            <content name="altTitle">Cigarette smoking</content>
+            <content name="altTitle">Pipe smoking</content>
+            <content name="FullSummary">What are the health effects of smoking?
+                <p>There's no way around it; smoking is bad for your health. It harms nearly every
+                    organ of the body, some that you would not expect. Cigarette smoking causes
+                    nearly one in five deaths in the United States. It can also cause many other
+                    cancers and health problems. These include
+                </p>
+                <ul>
+                    <li>Cancers, including lung and oral cancers</li>
+                    <li>Lung diseases, such as COPD (chronic obstructive pulmonary disease)</li>
+                    <li>Damage to and thickening of blood vessels, which causes high blood
+                        pressure
+                    </li>
+                    <li>Blood clots and stroke</li>
+                    <li>Vision problems, such as cataracts and macular degeneration (AMD)</li>
+                </ul>
+                <p>Women who smoke while pregnant have a greater chance of certain pregnancy
+                    problems. Their babies are also at higher risk of dying of sudden infant death
+                    syndrome (SIDS).
+                </p>
+                <p>Smoking also causes addiction to nicotine, a stimulant drug that is in tobacco.
+                    Nicotine addiction makes it much harder for people to quit smoking.</p>What are
+                the health risks of secondhand smoke?
+                <p>Your smoke is also bad for other people - they breathe in your smoke secondhand
+                    and can get many of the same problems as smokers do. This includes heart disease
+                    and lung cancer. Children exposed to secondhand smoke have a higher risk of ear
+                    infections, colds, pneumonia, bronchitis, and more severe <span class="qt0">
+                        asthma</span>. Mothers who breathe secondhand smoke while pregnant are more
+                    likely to have preterm labor and babies with low birth weight.
+                </p>
+                Are other forms of tobacco also dangerous?
+                <p>Besides cigarettes, there are several other forms of tobacco. Some people smoke
+                    tobacco in cigars and water pipes (hookahs). These forms of tobacco also contain
+                    harmful chemicals and nicotine. Some cigars contain as much tobacco as an entire
+                    pack of cigarettes.
+                </p>
+                <p>E-cigarettes often look like cigarettes, but they work differently. They are
+                    battery-operated smoking devices. Using an e-cigarette is called vaping. Not
+                    much is known about the health risks of using them. We do know they contain
+                    nicotine, the same addictive substance in tobacco cigarettes. E-cigarettes also
+                    expose non-smokers to secondhand aerosols (rather than secondhand smoke), which
+                    contain harmful chemicals.
+                </p>
+                <p>Smokeless tobacco, such as chewing tobacco and snuff, is also bad for your
+                    health. Smokeless tobacco can cause certain cancers, including oral cancer. It
+                    also increases your risk of getting heart disease, gum disease, and oral
+                    lesions.</p>Why should I quit?
+                <p>Remember, there is no safe level of tobacco use. Smoking even just one cigarette
+                    per day over a lifetime can cause smoking-related cancers and premature death.
+                    Quitting smoking can reduce your risk of health problems. The earlier you quit,
+                    the greater the benefit. Some immediate benefits of quitting include
+                </p>
+                <ul>
+                    <li>Lower heart rate and blood pressure</li>
+                    <li>Less carbon monoxide in the blood (carbon monoxide reduces the blood's
+                        ability to carry oxygen)
+                    </li>
+                    <li>Better circulation</li>
+                    <li>Less coughing and wheezing</li>
+                </ul>
+                <p>NIH National Cancer Institute</p>
+            </content>
+            <content name="mesh">Cigarette Smoking</content>
+            <content name="mesh">Pipe Smoking</content>
+            <content name="mesh">Tobacco Smoking</content>
+            <content name="mesh">Water Pipe Smoking</content>
+            <content name="mesh">Cigar Smoking</content>
+            <content name="groupName">Substance Abuse Problems</content>
+            <content name="groupName">Lungs and Breathing</content>
+            <content name="snippet">... ear infections, colds, pneumonia, bronchitis, and more
+                severe <span class="qt0">asthma</span>. Mothers who breathe secondhand smoke while
+                pregnant are ...
+            </content>
+        </document>
+    </list>
+</nlmSearchResult>

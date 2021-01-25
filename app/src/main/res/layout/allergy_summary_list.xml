@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/white"
+        android:padding="16dp"
+        android:paddingBottom="@dimen/stripe_3ds2_divider"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp">
+
+            <TextView
+                android:id="@+id/summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:letterSpacing="0.02"
+                android:lineSpacingExtra="3sp"
+                android:textColor="@color/gray_text"
+                android:textSize="18sp"
+                tools:text="@string/summary" />
+
+            <TextView
+                android:id="@+id/read_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="80dp"
+                android:background="?attr/selectableItemBackground"
+                android:letterSpacing="0.02"
+                android:lineSpacingExtra="3sp"
+                android:padding="2dp"
+                android:textAlignment="center"
+                android:textColor="@color/darkBlue"
+                android:textSize="18sp"
+                tools:text="@string/read_more" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/darkBlue" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>
