@@ -34,6 +34,8 @@ public class AlergieResourceDetails extends BaseActivity
     private List<String> mSummaryList = new ArrayList<>();
     private List<String> mUrlList = new ArrayList<>();
     private Boolean isScroll = false;
+    private Boolean isGetCompleteData = false;
+    private Boolean isFetchingData = false;
     int currentItems, totalItems, scrollOutItems;
     private LinearLayoutManager mLinearLayoutManager;
     private String mDiseaseName = "";
@@ -92,7 +94,8 @@ public class AlergieResourceDetails extends BaseActivity
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    isScroll = true;
+                    if (!isGetCompleteData)
+                        isScroll = true;
                 }
             }
 
@@ -105,7 +108,8 @@ public class AlergieResourceDetails extends BaseActivity
 
                 if (isScroll && currentItems + scrollOutItems == totalItems) {
                     isScroll = false;
-                    fetchData();
+                    if (!isFetchingData)
+                        fetchData();
                 }
             }
         });
@@ -129,37 +133,40 @@ public class AlergieResourceDetails extends BaseActivity
     private void fetchData()
     //******************************************************
     {
-        getParcelable();
-        val start = totalItems + 1;
+        val start = totalItems;
         mBinding.progress.setVisibility(View.VISIBLE);
-        new XmlParcer(new AllergieListerner() {
-            //***********************************************************
-            @Override
-            public void onExecutionCompleted()
-            //***********************************************************
-            {
+        isFetchingData = true;
+        if (isFetchingData)
+            new XmlParcer(new AllergieListerner() {
+                //***********************************************************
+                @Override
+                public void onExecutionCompleted()
+                //***********************************************************
+                {
+                    runOnUiThread(() -> {
+                        if (mSummaryList == null && mUrlList == null)
+                            return;
+                        mSummaryList.clear();
+                        mUrlList.clear();
+                        getFormatDocumentList();
+                        mBinding.progress.setVisibility(View.GONE);
+                        mDetailAllergieAdapter.notifyDataSetChanged();
+                        isFetchingData = false;
+                    });
+                }
 
-                runOnUiThread(() -> {
-                    if (mSummaryList == null)
-                        return;
-                    mSummaryList.clear();
-                    getFormatDocumentList();
-                    mBinding.progress.setVisibility(View.GONE);
-                    mBinding.summaryRecyclerView.setLayoutManager(mLinearLayoutManager);
-                    mBinding.summaryRecyclerView.setAdapter(mDetailAllergieAdapter);
-                    mDetailAllergieAdapter.notifyDataSetChanged();
-                });
-            }
-
-            //&retstart=11&retmax=10
-            //***********************************************************
-            @Override
-            public void onExecutionFailed()
-            //***********************************************************
-            {
-//                mBinding.progress.setVisibility(View.GONE);
-            }
-        }).execute(Constants.BASE_URL_Terms + mDiseaseName + "&retstart=" + start + "&retmax=10");
+                //***********************************************************
+                @Override
+                public void onExecutionFailed()
+                //***********************************************************
+                {
+                    runOnUiThread(() -> {
+                        mBinding.progress.setVisibility(View.GONE);
+                        isScroll = false;
+                        isGetCompleteData = true;
+                    });
+                }
+            }).execute(Constants.BASE_URL_Terms + mDiseaseName + "&retstart=" + start + "&retmax=10");
     }
 
     //********************************************

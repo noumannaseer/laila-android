@@ -44,11 +44,7 @@ public class ResourcesActivity extends BaseActivity
     private List<String> mAllergiesList;
     private List<String> mConditionList;
     private AllergiesListAdapter mAllergiesListAdapter;
-    private TextView mAllergyTitle, mAllergyName;
-    private EditText mAllergy;
     private Profile mUser;
-    private SearchMedicationViewModel mSearchMedicationViewModel;
-    private Runnable mSearchRunnable;
 
     //*****************************************************
     @Override
@@ -100,29 +96,8 @@ public class ResourcesActivity extends BaseActivity
                         startActivity(intent);
                     }
                 }).execute(Constants.BASE_URL_Terms + diseaseName);
-
-//                moveToBrowserActivity(diseaseName, Constants.BASE_URL_SEARCH_TERMS + diseaseName + ".html");
-
             }
         });
-    }
-
-    //********************************************
-    private void moveToBrowserActivity(String title, String url)
-    //********************************************
-    {
-        Intent browserIntent = new Intent(ResourcesActivity.this, BrowserActivity.class);
-        browserIntent.putExtra(BrowserActivity.SCREEN_URL, url);
-        browserIntent.putExtra(BrowserActivity.INFO_TITLE, title);
-        startActivity(browserIntent);
-    }
-
-    //**************************************************************
-    private void goToAddMedication()
-    //**************************************************************
-    {
-        Intent addMedicationIntent = new Intent(getContext(), AddMedicationActivity.class);
-        getContext().startActivity(addMedicationIntent);
     }
 
     //******************************************************
@@ -133,48 +108,8 @@ public class ResourcesActivity extends BaseActivity
             mAllergiesList = new ArrayList<>();
         if (mConditionList == null || mConditionList.size() == 0)
             mConditionList = new ArrayList<>();
-//        mBinding.addAllergies.setOnClickListener(v -> openDialog("Allergies"));
-//        mBinding.addCondition.setOnClickListener(v -> openDialog("Conditions"));
     }
 
-    //******************************************************************************
-    private void openDialog(String text)
-    //******************************************************************************
-    {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        LayoutInflater inflater = this.getLayoutInflater();
-
-        View view = inflater.inflate(R.layout.layout_alergy_condition_dialog, null);
-        mAllergyTitle = view.findViewById(R.id.alergy_condition_name_title);
-        mAllergyName = view.findViewById(R.id.alergy_condition_name);
-        mAllergy = view.findViewById(R.id.enter_alergies_name);
-
-        mAllergyTitle.setText(text);
-        mAllergyName.setText(text);
-        mAllergy.setHint("Enter " + text + " " + AndroidUtil.getString(R.string.name));
-        builder.setView(view)
-                .setNegativeButton("Cancel", (dialog, i) -> dialog.cancel())
-                .setPositiveButton("Save", (dialog, i) -> {
-
-                    val inputText = mAllergy.getText().toString();
-
-                    if (TextUtils.isEmpty(inputText))
-                        return;
-                    switch (text) {
-                        case "Allergies":
-                            mAllergiesList.add(inputText);
-                            startAllergiesRecyclerView();
-                            break;
-                        case "Conditions":
-                            mConditionList.add(inputText);
-                            startConditionRecyclerView();
-                            break;
-                    }
-                });
-
-        builder.show();
-    }
 
     //**************************************************************
     private void startAllergiesRecyclerView()
@@ -219,7 +154,6 @@ public class ResourcesActivity extends BaseActivity
                     public void onExecutionCompleted()
                     //***********************************************************
                     {
-
                         hideLoadingDialog();
                         Intent intent = new Intent(ResourcesActivity.this, AlergieResourceDetails.class);
                         intent.putExtra(Constants.DISEASE_NAME, diseaseName);

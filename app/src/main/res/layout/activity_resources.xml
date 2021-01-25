@@ -60,6 +60,7 @@
                     android:layout_weight="0.9"
                     android:background="@drawable/roundcorner_et"
                     android:hint="@string/enter_condition_name"
+                    android:inputType="text"
                     android:maxLines="1"
                     android:paddingHorizontal="4dp"
                     android:paddingVertical="12dp"
@@ -74,38 +75,7 @@
                     android:paddingVertical="12dp"
                     android:src="@drawable/ic_search" />
 
-
             </LinearLayout>
-            <!--            <FrameLayout-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content">-->
-
-            <!--                <AutoCompleteTextView-->
-            <!--                    android:id="@+id/search_disease"-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:drawableRight="@drawable/ic_search"-->
-            <!--                    android:fontFamily="@font/helveticaneueltpro_roman"-->
-            <!--                    android:hint="@string/enter_disease_name"-->
-            <!--                    android:paddingHorizontal="2dp"-->
-            <!--                    android:paddingVertical="10dp"-->
-            <!--                    android:textColor="@color/darkBlue"-->
-            <!--                    android:textColorHint="@color/textHintColor"-->
-            <!--                    android:textSize="16sp" />-->
-
-            <!--                <ProgressBar-->
-            <!--                    android:id="@+id/loading_indicator"-->
-            <!--                    style="?android:attr/progressBarStyleSmall"-->
-            <!--                    android:layout_width="wrap_content"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:layout_gravity="center_vertical|right"-->
-            <!--                    android:layout_marginRight="24dp"-->
-            <!--                    android:elevation="8dp"-->
-            <!--                    android:indeterminate="true"-->
-            <!--                    android:progressTint="@color/black"-->
-            <!--                    android:visibility="gone" />-->
-
-            <!--            </FrameLayout>-->
 
             <TextView
                 android:layout_width="wrap_content"
