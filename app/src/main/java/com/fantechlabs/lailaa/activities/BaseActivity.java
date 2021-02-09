@@ -36,25 +36,19 @@ public abstract class BaseActivity
         onCreation(savedInstanceState);
     }
 
-    void processStatusBar(boolean showStatusBar)
-    {
+    void processStatusBar(boolean showStatusBar) {
         if (showStatusBar)
             return;
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
         decorView.setOnSystemUiVisibilityChangeListener
-                (new View.OnSystemUiVisibilityChangeListener()
-                {
+                (new View.OnSystemUiVisibilityChangeListener() {
                     @Override
-                    public void onSystemUiVisibilityChange(int visibility)
-                    {
-                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0)
-                        {
+                    public void onSystemUiVisibilityChange(int visibility) {
+                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
                             decorView.setSystemUiVisibility(uiOptions);
-                        }
-                        else
-                        {
+                        } else {
                         }
                     }
                 });
@@ -64,9 +58,8 @@ public abstract class BaseActivity
     protected void showLoadingDialog()
     //********************************************************************
     {
-        if (mDialog == null)
-        {
-             mDialog = new Dialog(this, R.style.CustomTransparentDialog);
+        if (mDialog == null) {
+            mDialog = new Dialog(this, R.style.CustomTransparentDialog);
             mDialog.setContentView(R.layout.progress_dialog);
             mDialog.setCancelable(false);
             mDialog.setCanceledOnTouchOutside(false);
@@ -85,8 +78,7 @@ public abstract class BaseActivity
     protected void showLoadingDialog(@NonNull String loadingMessage)
     //********************************************************************
     {
-        if (mDialog == null)
-        {
+        if (mDialog == null) {
             mDialog = new Dialog(this, R.style.CustomTransparentDialog);
             mDialog.setContentView(R.layout.progress_dialog);
             mDialog.setCancelable(false);
@@ -117,8 +109,8 @@ public abstract class BaseActivity
     {
         view.setText(
                 TextUtils.isEmpty(value)
-                ? getString(R.string.n_a) :
-                AndroidUtil.getString(R.string.total_ammout_template, value));
+                        ? getString(R.string.n_a) :
+                        AndroidUtil.getString(R.string.total_ammout_template, value));
     }
 
     //********************************************************************
@@ -145,8 +137,7 @@ public abstract class BaseActivity
      */
     //********************************************************************
     @Override
-    public void setContentView(@LayoutRes int layoutResID)
-    {
+    public void setContentView(@LayoutRes int layoutResID) {
         super.setContentView(layoutResID);
     }
     //********************************************************************
@@ -210,11 +201,10 @@ public abstract class BaseActivity
     public boolean onOptionsItemSelected(@NonNull MenuItem item)
     // ******************************************************************
     {
-        switch (item.getItemId())
-        {
-        case android.R.id.home:
-            onBackPressed();
-            return true;
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

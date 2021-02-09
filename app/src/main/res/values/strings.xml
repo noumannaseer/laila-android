@@ -658,4 +658,9 @@
     <string name="enter_condition_name">Enter condition name</string>
     <string name="disease_name_required">Disease name required</string>
     <string name="medical_resources">Medical Resources</string>
+    <string name="reading_material">Reading Materials</string>
+    <string name="handouts">Handouts</string>
+    <string name="there_is_no_any_record_in_handouts">There is no any record in handouts</string>
+    <string name="there_is_no_any_record_in_reading_materials">There is no any record in reading materials</string>
+
 </resources>

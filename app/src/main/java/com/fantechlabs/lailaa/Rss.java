@@ -17,7 +17,6 @@ public class Rss {
 
     }
 
-
     public Rss(String title, String description, String link, List<ClipData.Item> item, String language) {
 
         this.title = title;

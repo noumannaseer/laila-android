@@ -215,7 +215,7 @@ public class HomeActivity extends BaseActivity
         mBinding.telehealth.setOnClickListener(view -> startActivity(new Intent(this, TelehealthActivity.class)));
         mBinding.profile.setOnClickListener(view -> startActivity(new Intent(this, ProfileActivity.class)));
         mBinding.bodyreading.setOnClickListener(view -> startActivity(new Intent(this, BodyReadingActivity.class)));
-        mBinding.recources.setOnClickListener(view -> startActivity(new Intent(this, ResourcesActivity.class)));
+        mBinding.recources.setOnClickListener(view -> startActivity(new Intent(this, ResourcesActivity1.class)));
 
     }
 

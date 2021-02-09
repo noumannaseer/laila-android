@@ -161,7 +161,6 @@ public class ProfileThreeFragment extends BaseFragment
 
             @Override
             public void onClick(String title) {
-                //                new XmlParcer().execute(Constants.BASE_URL_Terms);
             }
         });
         mBinding.allergiesRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));

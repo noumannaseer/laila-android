@@ -73,7 +73,13 @@ public class XmlParcer extends AsyncTask<String, Void, org.w3c.dom.Document> {
             e.printStackTrace();
         }
         try {
-
+            if (is == null) {
+                if (mAllergieListerner != null) {
+                    Laila.instance().IS_Documents = false;
+                    mAllergieListerner.onExecutionFailed();
+                }
+                return null;
+            }
             doc = dBuilder.parse(is);
             Element element = doc.getDocumentElement();
             element.normalize();
@@ -85,8 +91,9 @@ public class XmlParcer extends AsyncTask<String, Void, org.w3c.dom.Document> {
         }
 
         val root = doc.getDocumentElement().getNodeName();
-        if (Laila.instance().getMDocument() == null)
-            Laila.instance().setMDocumentList(new ArrayList<>());
+
+        if (root == null)
+            return null;
         DocumentList document = new DocumentList();
 
         NodeList list = doc.getElementsByTagName("term");
@@ -101,9 +108,6 @@ public class XmlParcer extends AsyncTask<String, Void, org.w3c.dom.Document> {
         document.setCount(mCountValue);
         Laila.instance().setMDocument(document);
 
-        NodeList listNode = doc.getElementsByTagName("list");
-        Element element2 = (Element) listNode.item(0);
-
         if (mCountValue == 0 || root == null) {
             if (mAllergieListerner != null) {
                 Laila.instance().IS_Documents = false;
@@ -112,6 +116,8 @@ public class XmlParcer extends AsyncTask<String, Void, org.w3c.dom.Document> {
             return null;
         }
 
+        NodeList listNode = doc.getElementsByTagName("list");
+        Element element2 = (Element) listNode.item(0);
 
         val num = listNode.getLength();
         for (int i = 0; i < num; i++) {
@@ -126,6 +132,7 @@ public class XmlParcer extends AsyncTask<String, Void, org.w3c.dom.Document> {
             if (hasMap.get("per") != null) {
                 document.setPer(Integer.parseInt(hasMap.get("per")));
             }
+            Laila.instance().setMDocument(document);
         }
 
         if (element2.hasChildNodes()) {
@@ -149,12 +156,7 @@ public class XmlParcer extends AsyncTask<String, Void, org.w3c.dom.Document> {
                                     ((Element) content).getChildNodes().item(0).getNodeValue());
                         }
                     }
-                    document.setDocumentList(documentAttribautes);
-
                     mDocList.add(documentAttribautes);
-
-                    Laila.instance().getMDocumentList().add(document);
-
                 }
             }
         }
@@ -163,9 +165,6 @@ public class XmlParcer extends AsyncTask<String, Void, org.w3c.dom.Document> {
             Laila.instance().setMDocumentListWithHashMap(new ArrayList<>());
         }
         Laila.instance().getMDocumentListWithHashMap().addAll(mDocList);
-
-//        Laila.instance().setMDocumentListWithHashMap(mDocList);
-        Laila.instance().setMDocument(document);
 
         val withHashMap = Laila.instance().getMDocumentListWithHashMap();
         val documentLIst = Laila.instance().getMDocumentList();
