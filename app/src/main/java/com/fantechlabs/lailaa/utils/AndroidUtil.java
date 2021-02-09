@@ -85,17 +85,12 @@ public class AndroidUtil
     //******************************************************************
     {
         Method m = null;
-        try
-        {
+        try {
             Class<?> c = Class.forName("android.os.SystemProperties");
             m = c.getMethod("get", String.class);
-        }
-        catch (ClassNotFoundException e)
-        {
+        } catch (ClassNotFoundException e) {
 
-        }
-        catch (NoSuchMethodException e)
-        {
+        } catch (NoSuchMethodException e) {
 
         }
         sGetSystemProperty = m;
@@ -122,15 +117,12 @@ public class AndroidUtil
         Api16()
         //******************************************************************
         {
-            try
-            {
+            try {
                 final Class<?> appCompat = Class.forName(
                         "android.support.v7.content.res.AppCompatResources");
                 mAppCompatGetDrawable = appCompat.getMethod("getDrawable", Context.class,
                         int.class);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
             }
         }
 
@@ -200,16 +192,11 @@ public class AndroidUtil
         //******************************************************************
         {
             if (mAppCompatGetDrawable != null)
-                try
-                {
-                    return (Drawable)mAppCompatGetDrawable.invoke(null, sContext, resId);
-                }
-                catch (RuntimeException e)
-                {
+                try {
+                    return (Drawable) mAppCompatGetDrawable.invoke(null, sContext, resId);
+                } catch (RuntimeException e) {
                     throw e;
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     mAppCompatGetDrawable = null;
                 }
             return getDrawableDirect(resId);
@@ -558,22 +545,17 @@ public class AndroidUtil
     public static void rendezvous(final @NonNull Runnable runnable)
     //******************************************************************
     {
-        if (isMainThread())
-        {
+        if (isMainThread()) {
             runnable.run();
             return;
         }
 
         final RendezvousRunnable rendezvous = new RendezvousRunnable(runnable);
-        synchronized (rendezvous)
-        {
+        synchronized (rendezvous) {
             handler.post(rendezvous);
-            try
-            {
+            try {
                 rendezvous.wait();
-            }
-            catch (InterruptedException e)
-            {
+            } catch (InterruptedException e) {
                 Thread.currentThread()
                         .interrupt();
             }
@@ -649,14 +631,10 @@ public class AndroidUtil
         public void run()
         //******************************************************************
         {
-            synchronized (this)
-            {
-                try
-                {
+            synchronized (this) {
+                try {
                     mRunnable.run();
-                }
-                catch (RuntimeException e)
-                {
+                } catch (RuntimeException e) {
                     mException = e;
                 }
                 notifyAll();
@@ -822,12 +800,9 @@ public class AndroidUtil
         final Resources resources = sContext.getResources();
         CharSequence seq = resources.getText(resId, null);
         if (seq == null && values.length > 0 && values[0] instanceof Number)
-            try
-            {
-                seq = resources.getQuantityText(resId, ((Number)values[0]).intValue());
-            }
-            catch (Resources.NotFoundException e)
-            {
+            try {
+                seq = resources.getQuantityText(resId, ((Number) values[0]).intValue());
+            } catch (Resources.NotFoundException e) {
             }
         if (seq == null)
             throw new Resources.NotFoundException(
@@ -839,11 +814,10 @@ public class AndroidUtil
     public static boolean isNetworkStatusAvailable()
     //******************************************************************
     {
-        ConnectivityManager connectivityManager = (ConnectivityManager)AndroidUtil.getApplicationContext()
+        ConnectivityManager connectivityManager = (ConnectivityManager) AndroidUtil.getApplicationContext()
                 .getSystemService(
                         Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager != null)
-        {
+        if (connectivityManager != null) {
             NetworkInfo netInfos = connectivityManager.getActiveNetworkInfo();
             if (netInfos != null)
                 return netInfos.isConnected();
@@ -874,15 +848,14 @@ public class AndroidUtil
     WindowManager getWindowManager()
     // ******************************************************************
     {
-        WindowManager manager = (WindowManager)sContext.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager manager = (WindowManager) sContext.getSystemService(Context.WINDOW_SERVICE);
         assert manager != null;
         return manager;
     }
 
 
     public static Bitmap getThumbnail(Uri uri)
-            throws IOException
-    {
+            throws IOException {
         InputStream input = AndroidUtil.getApplicationContext()
                 .getContentResolver()
                 .openInputStream(uri);
@@ -894,8 +867,7 @@ public class AndroidUtil
         BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
         input.close();
 
-        if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1))
-        {
+        if ((onlyBoundsOptions.outWidth == -1) || (onlyBoundsOptions.outHeight == -1)) {
             return null;
         }
 
@@ -915,9 +887,8 @@ public class AndroidUtil
         return bitmap;
     }
 
-    private static int getPowerOfTwoForSampleRatio(double ratio)
-    {
-        int k = Integer.highestOneBit((int)Math.floor(ratio));
+    private static int getPowerOfTwoForSampleRatio(double ratio) {
+        int k = Integer.highestOneBit((int) Math.floor(ratio));
         if (k == 0) return 1;
         else return k;
     }
@@ -933,11 +904,10 @@ public class AndroidUtil
     public static boolean isNetworkStatusAvialable()
     //******************************************************************
     {
-        ConnectivityManager connectivityManager = (ConnectivityManager)AndroidUtil.getApplicationContext()
+        ConnectivityManager connectivityManager = (ConnectivityManager) AndroidUtil.getApplicationContext()
                 .getSystemService(
                         Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager != null)
-        {
+        if (connectivityManager != null) {
             NetworkInfo netInfos = connectivityManager.getActiveNetworkInfo();
             if (netInfos != null)
                 return netInfos.isConnected();
@@ -958,8 +928,7 @@ public class AndroidUtil
             byte[] buffer = new byte[bufferSize];
             try {
                 int len;
-                while ((len = iStream.read(buffer)) != -1)
-                {
+                while ((len = iStream.read(buffer)) != -1) {
                     byteBuffer.write(buffer, 0, len);
                 }
                 bytesResult = byteBuffer.toByteArray();
@@ -997,8 +966,7 @@ public class AndroidUtil
         String countryCode;
 
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        if(tm != null)
-        {
+        if (tm != null) {
             countryCode = tm.getSimCountryIso();
             if (countryCode != null && countryCode.length() == 2)
                 return countryCode.toLowerCase();
@@ -1019,7 +987,7 @@ public class AndroidUtil
         }
 
         if (countryCode != null && countryCode.length() == 2)
-            return  countryCode.toLowerCase();
+            return countryCode.toLowerCase();
 
         return "us";
     }
@@ -1040,24 +1008,42 @@ public class AndroidUtil
             int mcc = Integer.parseInt(homeOperator.substring(0, 3));
 
             switch (mcc) {
-                case 330: return "PR";
-                case 310: return "US";
-                case 311: return "US";
-                case 312: return "US";
-                case 316: return "US";
-                case 283: return "AM";
-                case 460: return "CN";
-                case 455: return "MO";
-                case 414: return "MM";
-                case 619: return "SL";
-                case 450: return "KR";
-                case 634: return "SD";
-                case 434: return "UZ";
-                case 232: return "AT";
-                case 204: return "NL";
-                case 262: return "DE";
-                case 247: return "LV";
-                case 255: return "UA";
+                case 330:
+                    return "PR";
+                case 310:
+                    return "US";
+                case 311:
+                    return "US";
+                case 312:
+                    return "US";
+                case 316:
+                    return "US";
+                case 283:
+                    return "AM";
+                case 460:
+                    return "CN";
+                case 455:
+                    return "MO";
+                case 414:
+                    return "MM";
+                case 619:
+                    return "SL";
+                case 450:
+                    return "KR";
+                case 634:
+                    return "SD";
+                case 434:
+                    return "UZ";
+                case 232:
+                    return "AT";
+                case 204:
+                    return "NL";
+                case 262:
+                    return "DE";
+                case 247:
+                    return "LV";
+                case 255:
+                    return "UA";
             }
         } catch (ClassNotFoundException ignored) {
         } catch (NoSuchMethodException ignored) {
@@ -1073,11 +1059,10 @@ public class AndroidUtil
     public static ArrayList<String> getLanguagesList()
     //*************************************************************
     {
-        ArrayList<String> localLanguages=new ArrayList<String>();
+        ArrayList<String> localLanguages = new ArrayList<String>();
         Locale[] locales = Locale.getAvailableLocales();
 
-        for(Locale l:locales)
-        {
+        for (Locale l : locales) {
             if (!localLanguages.contains(l.getDisplayLanguage()))
                 localLanguages.add(l.getDisplayLanguage());
         }
@@ -1086,31 +1071,31 @@ public class AndroidUtil
     }
 
     //******************************************************************
-    public static  Object cloneObject(Object obj)
+    public static Object cloneObject(Object obj)
     //******************************************************************
     {
-        try{
+        try {
             Object clone = obj.getClass().newInstance();
             for (Field field : obj.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
-                if(field.get(obj) == null || Modifier.isFinal(field.getModifiers())){
+                if (field.get(obj) == null || Modifier.isFinal(field.getModifiers())) {
                     continue;
                 }
-                if(field.getType().isPrimitive() || field.getType().equals(String.class)
+                if (field.getType().isPrimitive() || field.getType().equals(String.class)
                         || field.getType().getSuperclass().equals(Number.class)
-                        || field.getType().equals(Boolean.class)){
+                        || field.getType().equals(Boolean.class)) {
                     field.set(clone, field.get(obj));
-                }else{
+                } else {
                     Object childObj = field.get(obj);
-                    if(childObj == obj){
+                    if (childObj == obj) {
                         field.set(clone, clone);
-                    }else{
+                    } else {
                         field.set(clone, cloneObject(field.get(obj)));
                     }
                 }
             }
             return clone;
-        }catch(Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
@@ -1120,8 +1105,7 @@ public class AndroidUtil
     //******************************************************************
     {
         StringBuilder sbStr = new StringBuilder();
-        for (int i = 0, il = aArr.size(); i < il; i++)
-        {
+        for (int i = 0, il = aArr.size(); i < il; i++) {
             if (i > 0)
                 sbStr.append(sSep);
             sbStr.append(aArr.get(i));

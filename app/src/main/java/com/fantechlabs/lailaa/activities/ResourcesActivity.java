@@ -209,7 +209,29 @@ public class ResourcesActivity extends BaseActivity
 
             @Override
             public void onClick(String title) {
+                showLoadingDialog();
+                new XmlParcer(new AllergieListerner() {
+                    //***********************************************************
+                    @Override
+                    public void onExecutionCompleted()
+                    //***********************************************************
+                    {
+                        hideLoadingDialog();
+                        Intent intent = new Intent(ResourcesActivity.this, AlergieResourceDetails.class);
+                        intent.putExtra(Constants.DISEASE_NAME, title);
+                        startActivity(intent);
+                    }
 
+                    //***********************************************************
+                    @Override
+                    public void onExecutionFailed()
+                    //***********************************************************
+                    {
+                        hideLoadingDialog();
+                        Intent intent = new Intent(ResourcesActivity.this, AlergieResourceDetails.class);
+                        startActivity(intent);
+                    }
+                }).execute(Constants.BASE_URL_Terms + title);
             }
         });
 

@@ -39,6 +39,7 @@
         android:windowSoftInputMode="stateHidden">
         <activity android:name=".activities.AlergieResourceDetails"></activity>
         <activity android:name=".activities.ResourcesActivity" />
+        <activity android:name=".activities.ResourcesActivity1" />
         <activity android:name=".activities.AllergiesDetailActivity" />
 
         <receiver

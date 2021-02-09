@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AbsListView;
 
 import com.fantechlabs.lailaa.Laila;
@@ -46,6 +47,10 @@ public class AlergieResourceDetails extends BaseActivity
     //*****************************************************
     {
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_alergie_resource_details);
+        WindowManager.LayoutParams layoutParams = getWindow().getAttributes();
+        layoutParams.dimAmount = 0.75f;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        getWindow().setAttributes(layoutParams);
         setSupportActionBar(mBinding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -115,7 +120,10 @@ public class AlergieResourceDetails extends BaseActivity
         });
     }
 
-    private void getFormatDocumentList() {
+    //************************************************************
+    private void getFormatDocumentList()
+    //************************************************************
+    {
 
         if (mSummaryList == null)
             mSummaryList = new ArrayList<>();
@@ -187,6 +195,13 @@ public class AlergieResourceDetails extends BaseActivity
         if (args != null) {
             mDiseaseName = args.getString(Constants.DISEASE_NAME);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (Laila.instance().getMDocumentListWithHashMap() != null)
+            Laila.instance().getMDocumentListWithHashMap().clear();
     }
 
     //*****************************************************
