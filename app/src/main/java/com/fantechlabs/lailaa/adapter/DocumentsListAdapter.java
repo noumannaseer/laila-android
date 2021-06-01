@@ -15,7 +15,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.DocumentListLayoutBinding;
-import com.fantechlabs.lailaa.models.Document;
+import com.fantechlabs.lailaa.models.updates.models.Document;
+import com.fantechlabs.lailaa.utils.DateUtils;
 import com.fantechlabs.lailaa.utils.UIUtils;
 
 import java.util.List;
@@ -50,9 +51,9 @@ public class DocumentsListAdapter
         return new DocumentsListViewHolder(documentsListViewBinding);
     }
 
-    //********************************************************************************************
+    //************************* *******************************************************************
     public DocumentsListAdapter(List<Document> mFilterList, ListClickListener listClickListener, Activity activity)
-    //********************************************************************************************
+    //************************* *******************************************************************
     {
         this.mDocumentsList = mFilterList;
         this.mActivity = activity;
@@ -71,11 +72,12 @@ public class DocumentsListAdapter
         if (TextUtils.isEmpty(item.getFileName()))
             return;
         holder.DocumentsViewBinding.name.setText(item.getFileName());
-        holder.DocumentsViewBinding.date.setText(UIUtils.getDate(item.getCreated(), "dd-MMM-yyyy"));
+        val createdDate = DateUtils.getDateFromTimeStamp(item.getCreatedAt(), "dd-MMM-yyyy");
 
-        getSize(item.getSize(), holder);
+        holder.DocumentsViewBinding.date.setText(createdDate);
+
+        getSize(Double.parseDouble(item.getFileSize()), holder);
         holder.DocumentsViewBinding.type.setText(item.getFileType());
-
         loadThumbnail(item.getThumbnail(), holder.DocumentsViewBinding.image, item.getFileType());
 
         holder.DocumentsViewBinding.optionMenu.setOnClickListener(v ->
@@ -86,7 +88,7 @@ public class DocumentsListAdapter
         });
         holder.DocumentsViewBinding.documentCard.setOnClickListener(v ->
         {
-            mListClickListener.openBrowserActivity(item.getFileName(), item.getUrl(), item.getFileType());
+            mListClickListener.openBrowserActivity(item.getFileName(), item.getFileUrl(), item.getFileType());
         });
     }
 
@@ -106,13 +108,10 @@ public class DocumentsListAdapter
     public void loadThumbnail(String url, ImageView imageView, String fileType)
     //*******************************************************************
     {
-        if (TextUtils.isEmpty(url))
-            return;
-
         mGlideRequestManager
                 .load(url)
                 .fallback(R.drawable.documents)
-                .placeholder(fileType.equals("PDF") ? R.drawable.pdf : fileType.equals("DOC") ? R.drawable.word : R.drawable.documents)
+                .placeholder(fileType.equals(".pdf") ? R.drawable.pdf : fileType.equals(".docx") ? R.drawable.word : R.drawable.documents)
                 .centerCrop()
                 .thumbnail(0.1f)
                 .into(imageView);

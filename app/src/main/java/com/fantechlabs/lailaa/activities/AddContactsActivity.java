@@ -14,7 +14,7 @@ import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.ActivityAddContactsBinding;
 import com.fantechlabs.lailaa.models.Contact;
-import com.fantechlabs.lailaa.models.response_models.PharmacyResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.PharmacyResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.utils.SharedPreferencesUtils;
@@ -161,10 +161,10 @@ public class AddContactsActivity extends BaseActivity
                 .Builder();
 
         val contactType = Laila.instance().getMContactType();
-        addPharmacyRequest.setFirst_name(mName);
-        addPharmacyRequest.setPhone(mPhone);
-        addPharmacyRequest.setContact_type(contactType);
-        addPharmacyRequest.setUser_private_code(Laila.instance().getMUser().getProfile()
+        addPharmacyRequest.setName(mName);
+        addPharmacyRequest.setContactNo(mPhone);
+//        addPharmacyRequest.setContact_type(contactType);
+        addPharmacyRequest.setToken(Laila.instance().getMUser().getProfile()
                 .getUserPrivateCode());
 
         if (mUpdateContact) {
@@ -186,7 +186,7 @@ public class AddContactsActivity extends BaseActivity
                             .getContacts()
                             .get(pos - 1);
                     mUpdateContactId = contactId.getId();
-                    addPharmacyRequest.setId(mUpdateContactId);
+//                    addPharmacyRequest.setId(mUpdateContactId);
                     break;
                 }
             }
@@ -195,35 +195,35 @@ public class AddContactsActivity extends BaseActivity
         showLoadingDialog();
         mAddPharmacyViewModel.addPharmacy(addPharmacyRequest);
     }
-
-    //*************************************************************
-    @Override
-    public void onPharmacySuccessfullyAdded(@Nullable PharmacyResponse response)
-    //*************************************************************
-    {
-        if (response.getContact() == null) {
-            hideLoadingDialog();
-            return;
-        }
-        setData(response.getContact());
-        AndroidUtil.displayAlertDialog(
-                AndroidUtil.getString(R.string.contact_added),
-                AndroidUtil.getString(
-                        R.string.contacts),
-                this,
-                AndroidUtil.getString(
-                        R.string.ok),
-                AndroidUtil.getString(
-                        R.string.cancel),
-                (dialog, which) -> {
-                    if (which == -1) {
-                        hideLoadingDialog();
-                        gotoContactScreen();
-                        return;
-                    }
-                    hideLoadingDialog();
-                });
-    }
+//
+//    //*************************************************************
+//    @Override
+//    public void onPharmacySuccessfullyAdded(@Nullable PharmacyResponse response)
+//    //*************************************************************
+//    {
+//        if (response.getContact() == null) {
+//            hideLoadingDialog();
+//            return;
+//        }
+//        setData(response.getContact());
+//        AndroidUtil.displayAlertDialog(
+//                AndroidUtil.getString(R.string.contact_added),
+//                AndroidUtil.getString(
+//                        R.string.contacts),
+//                this,
+//                AndroidUtil.getString(
+//                        R.string.ok),
+//                AndroidUtil.getString(
+//                        R.string.cancel),
+//                (dialog, which) -> {
+//                    if (which == -1) {
+//                        hideLoadingDialog();
+//                        gotoContactScreen();
+//                        return;
+//                    }
+//                    hideLoadingDialog();
+//                });
+//    }
 
     //**********************************************♪
     private void gotoContactScreen()
@@ -257,6 +257,11 @@ public class AddContactsActivity extends BaseActivity
                 .getMUser());
     }
 
+    @Override
+    public void onPharmacySuccessfullyAdded(@Nullable PharmacyResponse Response) {
+
+    }
+
     //*************************************************************
     @Override
     public void onPharmacyFailedToAdded(@NonNull String errorMessage)
@@ -264,6 +269,16 @@ public class AddContactsActivity extends BaseActivity
     {
         hideLoadingDialog();
         AndroidUtil.displayAlertDialog(errorMessage, AndroidUtil.getString(R.string.error), this);
+    }
+
+    @Override
+    public void onSuccessfullyGet(@Nullable PharmacyResponse userResponse) {
+
+    }
+
+    @Override
+    public void onFailedGet(@NonNull String errorMessage) {
+
     }
 
     //*********************************************************************

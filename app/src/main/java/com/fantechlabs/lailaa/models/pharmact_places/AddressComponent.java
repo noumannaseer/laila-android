@@ -9,8 +9,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class AddressComponent
-    implements Parcelable
-{
+        implements Parcelable {
 
     @SerializedName("long_name")
     @Expose
@@ -22,7 +21,8 @@ public class AddressComponent
     @Expose
     private List<String> types = null;
 
-    public AddressComponent(){}
+    public AddressComponent() {
+    }
 
     protected AddressComponent(Parcel in) {
         longName = in.readString();
@@ -42,17 +42,29 @@ public class AddressComponent
         }
     };
 
-    public String getLongName() { return longName; }
+    public String getLongName() {
+        return longName;
+    }
 
-    public void setLongName(String longName) { this.longName = longName; }
+    public void setLongName(String longName) {
+        this.longName = longName;
+    }
 
-    public String getShortName() { return shortName; }
+    public String getShortName() {
+        return shortName;
+    }
 
-    public void setShortName(String shortName) { this.shortName = shortName; }
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
 
-    public List<String> getTypes() { return types; }
+    public List<String> getTypes() {
+        return types;
+    }
 
-    public void setTypes(List<String> types) { this.types = types; }
+    public void setTypes(List<String> types) {
+        this.types = types;
+    }
 
     @Override
     public int describeContents() {

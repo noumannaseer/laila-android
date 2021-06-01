@@ -1,6 +1,6 @@
 package com.fantechlabs.lailaa.view_models;
 
-import android.util.Log;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,10 +8,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.Laila;
-import com.fantechlabs.lailaa.models.response_models.MedicationResponse;
+import com.fantechlabs.lailaa.models.updates.request_models.AddMedicationRequest;
+import com.fantechlabs.lailaa.models.updates.response_models.MedicationResponse;
+import com.fantechlabs.lailaa.network.NetworkUtils;
 import com.fantechlabs.lailaa.network.ServiceGenerator;
 import com.fantechlabs.lailaa.network.services.MedicationService;
-import com.fantechlabs.lailaa.request_models.AddMedicationRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 
@@ -41,61 +42,54 @@ public class AddMedicationViewModel
     //***********************************************************
     {
         val service = ServiceGenerator.createService(MedicationService.class, true,
-                Constants.BASE_URL);
+                Constants.BASE_URL_U);
         if (service == null) {
             mAddMedicationListener.onFailed(
                     AndroidUtil.getString(R.string.internet_not_vailable));
             return;
         }
 
+        val user_token = Laila.instance().getMUser_U().getData().getUser().getToken();
+        val user_id = Laila.instance().getMUser_U().getData().getUser().getId();
         HashMap<String, Object> medicationList = new HashMap<String, Object>();
-        medicationList.put(Constants.USER_PRIVATE_CODE, Laila.instance().getMUser().getProfile().getUserPrivateCode());
+
         medicationList.put(Constants.MEDICATION_NAME, addMedicationRequest.getMedicationName());
-        medicationList.put(Constants.DIN_RX_NUMBER, addMedicationRequest.getMedicationDin());
-        medicationList.put(Constants.STRENGTH, addMedicationRequest.getMedicationStrength());
-        medicationList.put(Constants.STRENGTH_UOM, addMedicationRequest.getMedicationStrengthUnit());
-        medicationList.put(Constants.COMMENTS, "");
-        medicationList.put(Constants.AMOUNT, addMedicationRequest.getDispensedAmount());
-        medicationList.put(Constants.START_DATE, addMedicationRequest.getDispensedDate());
-        medicationList.put(Constants.MEDSCAPE_ID, "");
-        medicationList.put(Constants.FREQUENCY1, "");
-        medicationList.put(Constants.WHEN_NEEDED, "n");
-        medicationList.put(Constants.PRESCRIBED, addMedicationRequest.getPrescribed());
-        medicationList.put(Constants.FREQUENCY2, addMedicationRequest.getFrequency());
-        medicationList.put(Constants.MEDECINE_FORM, addMedicationRequest.getFrom());
-        medicationList.put(Constants.NUM_REFILLS, addMedicationRequest.getNoOfRefills());
-        medicationList.put(Constants.PHARMACY, addMedicationRequest.getPharmacy());
+        medicationList.put(Constants.DIN_RX_NUMBER, addMedicationRequest.getDinRxNumber());
+        medicationList.put(Constants.STRENGTH, addMedicationRequest.getStrength());
+        medicationList.put(Constants.STRENGTH_UOM, addMedicationRequest.getStrengthUom());
+        medicationList.put(Constants.DISPENSED_AMOUNT, addMedicationRequest.getDispensedAmount());
+        medicationList.put(Constants.DISPENSED_DATE, addMedicationRequest.getDispensedDate());
+        medicationList.put(Constants.DELIVERY_TYPE, addMedicationRequest.getPrescribed());
+        medicationList.put(Constants.FREQUENCY, addMedicationRequest.getFrequency());
+        medicationList.put(Constants.MEDECINE_FORM, addMedicationRequest.getMedecineForm());
+        medicationList.put(Constants.NUM_REFILLS, addMedicationRequest.getNumRefills());
+        medicationList.put(Constants.PHARMACY_ID, addMedicationRequest.getPharmacyId());
         medicationList.put(Constants.REFILL_DATE, addMedicationRequest.getRefillDate());
-        medicationList.put(Constants.DELIVERY_TYPE, addMedicationRequest.getDeliveryType());
-        medicationList.put(Constants.NUMBER_OF_PILLS, addMedicationRequest.getNumber_of_pills());
+        medicationList.put(Constants.DOSAGE, addMedicationRequest.getDosage());
+        medicationList.put(Constants.USER_TOKEN, user_token);
+        medicationList.put(Constants.USER_ID, user_id);
 
-        if (Laila.instance().on_update_medicine)
-            medicationList.put(Constants.ID, addMedicationRequest.getId());
-
-        HashMap<String, Object> main = new HashMap<String, Object>();
-        main.put(Constants.MEDICATION, medicationList);
-
-        val medicationService = service.addMedication(main);
+        val medicationService = service.addMedication(medicationList);
 
         //***********************************************************
         medicationService.enqueue(new Callback<MedicationResponse>()
                 //***********************************************************
         {
-
             //***********************************************************
             @Override
             public void onResponse(Call<MedicationResponse> call, Response<MedicationResponse> response)
             //***********************************************************
             {
                 if (response.isSuccessful()) {
-                    Log.d("SessionToken", "onResponse: " + response.toString());
-                    if (response.body().getError() != null) {
-                        mAddMedicationListener.onFailed(response.body().getError());
+                    if (response.body().getStatus() != 200) {
+                        mAddMedicationListener.onFailed(response.body().getData().getMessage());
                         return;
                     }
-                    Log.d("SessionToken", "onResponse: responseBody -> " + response.body().toString());
                     mAddMedicationListener.onSuccessfully(response.body());
+                    return;
                 }
+                val error = NetworkUtils.errorResponse(response.errorBody());
+                mAddMedicationListener.onFailed(error);
             }
 
             //***********************************************************
@@ -110,12 +104,129 @@ public class AddMedicationViewModel
     }
 
     //***********************************************************
+    public void updateMedication(@NonNull AddMedicationRequest addMedicationRequest)
+    //***********************************************************
+    {
+        val service = ServiceGenerator.createService(MedicationService.class, true,
+                Constants.BASE_URL_U);
+        if (service == null) {
+            mAddMedicationListener.onFailed(
+                    AndroidUtil.getString(R.string.internet_not_vailable));
+            return;
+        }
+        val user_token = Laila.instance().getMUser_U().getData().getUser().getToken();
+        HashMap<String, Object> medicationList = new HashMap<String, Object>();
+        medicationList.put(Constants.ID, addMedicationRequest.getId());
+        medicationList.put(Constants.MEDICATION_NAME, addMedicationRequest.getMedicationName());
+        medicationList.put(Constants.DIN_RX_NUMBER, addMedicationRequest.getDinRxNumber());
+        medicationList.put(Constants.STRENGTH, addMedicationRequest.getStrength());
+        medicationList.put(Constants.STRENGTH_UOM, addMedicationRequest.getStrengthUom());
+        medicationList.put(Constants.DISPENSED_AMOUNT, addMedicationRequest.getDispensedAmount());
+        medicationList.put(Constants.DISPENSED_DATE, addMedicationRequest.getDispensedDate());
+        medicationList.put(Constants.DELIVERY_TYPE, addMedicationRequest.getPrescribed());
+        medicationList.put(Constants.FREQUENCY, addMedicationRequest.getFrequency());
+        medicationList.put(Constants.MEDECINE_FORM, addMedicationRequest.getMedecineForm());
+        medicationList.put(Constants.NUM_REFILLS, addMedicationRequest.getNumRefills());
+        medicationList.put(Constants.PHARMACY_ID, addMedicationRequest.getPharmacyId());
+        medicationList.put(Constants.REFILL_DATE, addMedicationRequest.getRefillDate());
+        medicationList.put(Constants.DOSAGE, addMedicationRequest.getDosage());
+        medicationList.put(Constants.USER_TOKEN, user_token);
+
+        val medicationService = service.updateMedication(medicationList);
+
+        //***********************************************************
+        medicationService.enqueue(new Callback<MedicationResponse>()
+                //***********************************************************
+        {
+            //***********************************************************
+            @Override
+            public void onResponse(Call<MedicationResponse> call, Response<MedicationResponse> response)
+            //***********************************************************
+            {
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus() != 200) {
+                        mAddMedicationListener.onFailed(response.body().getData().getMessage());
+                        return;
+                    }
+                    mAddMedicationListener.onSuccessfully(response.body());
+                    return;
+                }
+                val e = response.errorBody().toString();
+                val error = NetworkUtils.errorResponse(response.errorBody());
+                mAddMedicationListener.onFailed(error);
+            }
+
+            //***********************************************************
+            @Override
+            public void onFailure(Call<MedicationResponse> call, Throwable t)
+            //***********************************************************
+            {
+                mAddMedicationListener.onFailed(t.getLocalizedMessage());
+            }
+        });
+
+    }
+
+    //***********************************************************
+    public void getMedications()
+    //***********************************************************
+    {
+        val service = ServiceGenerator.createService(MedicationService.class, true,
+                Constants.BASE_URL_U);
+        if (service == null) {
+            mAddMedicationListener.onFailedGetMedications(
+                    AndroidUtil.getString(R.string.internet_not_vailable));
+            return;
+        }
+        val userResponse = Laila.instance().getMUser_U();
+        if (userResponse.getData() == null)
+            return;
+        val token = Laila.instance().getMUser_U().getData().getUser().getToken();
+        val user_id = Laila.instance().getMUser_U().getData().getUser().getId().toString();
+        HashMap<String, String> medications = new HashMap<>();
+        medications.put(Constants.USER_TOKEN, token);
+        medications.put(Constants.USER_ID, user_id);
+        val getDocumentsServices = service.getMedications(medications);
+
+        getDocumentsServices.enqueue(new Callback<MedicationResponse>() {
+            @Override
+            public void onResponse(Call<MedicationResponse> call, Response<MedicationResponse> response) {
+                if (response.isSuccessful()) {
+
+                    if (response.body().getStatus() == 200) {
+                        mAddMedicationListener.onSuccessfullyGetMedications(response.body());
+                        return;
+                    }
+
+                    mAddMedicationListener.onFailedGetMedications((TextUtils.isEmpty(response.body().getData().getMessage()) ?
+                            AndroidUtil.getString(R.string.server_error) :
+                            response.body().getData().getMessage()));
+                    return;
+                }
+                val error = NetworkUtils.errorResponse(response.errorBody());
+                mAddMedicationListener.onFailedGetMedications(error);
+
+            }
+
+            @Override
+            public void onFailure(Call<MedicationResponse> call, Throwable t) {
+                mAddMedicationListener.onFailedGetMedications(t.getLocalizedMessage());
+            }
+        });
+
+    }
+
+    //***********************************************************
     public interface AddMedicationListener
             //***********************************************************
     {
         void onSuccessfully(@Nullable MedicationResponse medicationResponse);
 
         void onFailed(@NonNull String errorMessage);
+
+        void onSuccessfullyGetMedications(@Nullable MedicationResponse medicationResponse);
+
+        void onFailedGetMedications(@NonNull String errorMessage);
     }
 
 }

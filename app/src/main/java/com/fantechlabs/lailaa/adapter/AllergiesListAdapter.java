@@ -63,11 +63,9 @@ public class AllergiesListAdapter
             return;
         holder.AllergiesViewBinding.name.setText(item);
 
-
-//        if (Laila.instance().Edit_Profile) {
-        holder.AllergiesViewBinding.allergy.setOnClickListener(v ->
+        holder.AllergiesViewBinding.delete.setOnClickListener(v ->
         {
-            mListClickListener.onClick(item);
+            mListClickListener.onDelete(position);
         });
 
     }

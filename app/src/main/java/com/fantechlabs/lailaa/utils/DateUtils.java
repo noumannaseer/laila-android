@@ -143,7 +143,7 @@ public class DateUtils
     }
 
     //*****************************************************************
-    public static final Date getDateFromStringFormat(String dtStart, String format)
+    public static Date getDateFromStringFormat(String dtStart, String format)
     //*****************************************************************
     {
         SimpleDateFormat formatter = new SimpleDateFormat(format);
@@ -174,4 +174,39 @@ public class DateUtils
         }
     }
 
+    //*************************************************************
+    public static String getGivenDate(long timestamp, String format)
+    //*************************************************************
+    {
+        Date date = new Date(timestamp * 1000);
+        SimpleDateFormat df = new SimpleDateFormat(format, Locale.getDefault());
+        String formattedDate = df.format(date);
+        return formattedDate;
+    }
+
+    //*************************************************************
+    public static Date getGivenDate(long timestamp)
+    //*************************************************************
+    {
+        Date date = new Date(timestamp * 1000);
+        return date;
+    }
+
+    //*****************************************************************
+    public static String getDateFromTimeStamp(long timestamp, @NonNull String formatter)
+    //*****************************************************************
+    {
+        SimpleDateFormat format = new SimpleDateFormat(formatter, Locale.US);
+        String dateString = format.format(new Date(timestamp * 1000));
+        return dateString;
+    }
+
+    //*****************************************************************
+    public static String getUpdateDateFromTimeStamp(long timestamp, @NonNull String formatter)
+    //*****************************************************************
+    {
+        SimpleDateFormat format = new SimpleDateFormat(formatter, Locale.US);
+        String dateString = format.format(new Date(timestamp));
+        return dateString;
+    }
 }

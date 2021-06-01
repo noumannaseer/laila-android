@@ -22,7 +22,6 @@ public class MedicationDetailsActivity extends BaseActivity
 
     private ActivityMedicationDetailsBinding mBinding;
 
-
     //****************************************************************
     @Override
     protected void onCreation(@Nullable Bundle savedInstanceState)
@@ -46,6 +45,13 @@ public class MedicationDetailsActivity extends BaseActivity
 
     //****************************************************************
     private void initControls()
+    //****************************************************************
+    {
+        setViewPager();
+    }
+
+    //****************************************************************
+    private void setViewPager()
     //****************************************************************
     {
         mBinding.viewpager.setAdapter(new MedicationDetailsAdapter(getSupportFragmentManager(), mBinding.tabLayout.getTabCount()));

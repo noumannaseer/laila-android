@@ -1,5 +1,6 @@
 package com.fantechlabs.lailaa.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -17,34 +19,35 @@ import com.fantechlabs.lailaa.activities.MedicationActivity;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.databinding.FragmentAddMedicationOneBinding;
-import com.fantechlabs.lailaa.models.response_models.MedicationResponse;
+import com.fantechlabs.lailaa.models.updates.request_models.AddMedicationRequest;
+import com.fantechlabs.lailaa.models.updates.response_models.MedicationResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.utils.SharedPreferencesUtils;
 import com.fantechlabs.lailaa.view_models.AddMedicationViewModel;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import lombok.NonNull;
 import lombok.val;
-
 
 //***********************************************************
 public class AddMedicationOneFragment extends BaseFragment
         implements View.OnClickListener,
         AddMedicationViewModel.AddMedicationListener
 //***********************************************************
-
 {
-
     public static final String TAG = "medicine-content";
     private FragmentAddMedicationOneBinding mBinding;
     private View mRootView;
     private String mMedicineName;
-    private String mMedicineType;
+    private String mMedicineType = "";
     private int mUpdateMedicineId;
     private AddMedicationViewModel mAddMedicationViewModel;
-
+    private AddMedicationRequest mAddMedicationRequest;
+    private String mMedicineStrengthUnit;
+    private List<String> mFormUnits, mStrengthUnits;
 
     //***********************************************************
     public AddMedicationOneFragment()
@@ -70,9 +73,67 @@ public class AddMedicationOneFragment extends BaseFragment
     public void initControl()
     //***********************************************************
     {
-        mAddMedicationViewModel = new AddMedicationViewModel(this);
+        initViewModels();
+        dropDownItemsList();
         infoClickListener();
         setData();
+        medicationType();
+        navigateToNextScreen();
+    }
+
+
+
+    //***********************************************************
+    private void dropDownItemsList()
+    //***********************************************************
+    {
+        mFormUnits.add("Teaspoon");
+        mFormUnits.add("Tablet");
+        mFormUnits.add("Capsule");
+        mFormUnits.add("Drops");
+        mFormUnits.add("Injection");
+        mFormUnits.add("Inhaler");
+
+        mStrengthUnits.add("mg");
+        mStrengthUnits.add("cc");
+        mStrengthUnits.add("mcg");
+        mStrengthUnits.add("iu");
+        mStrengthUnits.add("meq");
+    }
+
+    //***********************************************************
+    private void infoClickListener()
+    //***********************************************************
+    {
+        mBinding.nameInfo.setOnClickListener(this);
+        mBinding.rxDinInfo.setOnClickListener(this);
+        mBinding.formUnitInfo.setOnClickListener(this);
+        mBinding.strengthInfo.setOnClickListener(this);
+        mBinding.strengthUnitInfo.setOnClickListener(this);
+        mBinding.addMedicationOneMainView.setOnClickListener(this);
+    }
+
+    //***********************************************************
+    private void navigateToNextScreen()
+    //***********************************************************
+    {
+        mBinding.navigateNext.setOnClickListener(v -> validation());
+        mBinding.addBtn.setOnClickListener(v -> validation());
+    }
+
+    //***********************************************************
+    private void initViewModels()
+    //***********************************************************
+    {
+        mFormUnits = new ArrayList<>();
+        mStrengthUnits = new ArrayList<>();
+        mAddMedicationViewModel = new AddMedicationViewModel(this);
+    }
+
+    //***********************************************************
+    private void medicationType()
+    //***********************************************************
+    {
         val onUpdateMedicine = Laila.instance().on_update_medicine;
         mBinding.medicationType.setOnCheckedChangeListener((group, checkedId) ->
         {
@@ -88,20 +149,6 @@ public class AddMedicationOneFragment extends BaseFragment
                         ContextCompat.getColorStateList(getActivity(), onUpdateMedicine ? R.color.button_background : R.color.darkBlue));
             }
         });
-        mBinding.navigateNext.setOnClickListener(v -> validation());
-        mBinding.addBtn.setOnClickListener(v -> validation());
-    }
-
-    //***********************************************************
-    private void infoClickListener()
-    //***********************************************************
-    {
-        mBinding.nameInfo.setOnClickListener(this);
-        mBinding.rxDinInfo.setOnClickListener(this);
-        mBinding.formUnitInfo.setOnClickListener(this);
-        mBinding.strengthInfo.setOnClickListener(this);
-        mBinding.strengthUnitInfo.setOnClickListener(this);
-        mBinding.addMedicationOneMainView.setOnClickListener(this);
     }
 
     //*************************************************************
@@ -134,6 +181,7 @@ public class AddMedicationOneFragment extends BaseFragment
     }
 
     //*************************************************************
+    @SuppressLint("SetTextI18n")
     private void setData()
     //*************************************************************
     {
@@ -142,46 +190,46 @@ public class AddMedicationOneFragment extends BaseFragment
             onUpdate();
             return;
         }
-        try {
-            val medication = Laila.instance().getMSearchMedicine();
-            val medicineName = Laila.instance().getMSearchMedicine().getBrandName();
-            val title = Laila.instance().getMSearchMedicine().getTitle();
+        val medication = Laila.instance().getMSearchMedicine_U();
+        if (medication == null)
+            return;
+        val medicineName = Laila.instance().getMSearchMedicine_U().getBrandName();
+        val title = Laila.instance().getMSearchMedicine_U().getBrandName();
 
-            if (medication == null)
-                return;
 
-            val din = Laila.instance().getMSearchMedicine().getDrugIdentificationNumber();
-            if (!TextUtils.isEmpty(din))
-                mBinding.rxDinNumber.setText(din);
-            if (TextUtils.isEmpty(medicineName)) {
-                mBinding.mediName.setText(title);
-                return;
-            }
+        val din = Laila.instance().getMSearchMedicine_U().getDrugIdentificationNumber();
+        if (!TextUtils.isEmpty(din.toString()))
+            mBinding.rxDinNumber.setText(din.toString());
+        if (TextUtils.isEmpty(medicineName)) {
+            mBinding.mediName.setText(title);
+            return;
+        }
 
-            val check = medicineName.contains("%");
-            if (check) {
-                mBinding.mediName.setText(medicineName);
-                return;
-            }
+        val check = medicineName.contains("%");
+        if (check) {
+            mBinding.mediName.setText(medicineName);
+            return;
+        }
 
-            String[] medicineContent = Laila.instance()
-                    .getMSearchMedicine()
-                    .getBrandName()
-                    .split(" ");
+        String[] medicineContent = Laila.instance()
+                .getMSearchMedicine_U()
+                .getBrandName()
+                .split(" ");
 
-            if (medicineContent.length == 0) {
-                return;
-            }
+        if (medicineContent.length == 0) {
+            return;
+        }
 
-            for (val content : medicineContent) {
-                Log.d(TAG, "setData: " + content);
-            }
+        for (val content : medicineContent) {
+            Log.d(TAG, "setData: " + content);
+        }
 
-            if (medicineContent == null || medicineContent.length == 0)
-                return;
-            if (medicineContent[0] == null || medicineContent[0].length() == 0)
-                return;
-            mMedicineName = medicineContent[0];
+        if (medicineContent == null || medicineContent.length == 0)
+            return;
+        if (medicineContent[0] == null || medicineContent[0].length() == 0)
+            return;
+        mMedicineName = medicineContent[0];
+        if (medicineContent.length > 1) {
             if (medicineContent[1] == null || medicineContent[1].length() == 0)
                 return;
             val medicineType = medicineContent[1].toLowerCase();
@@ -203,15 +251,14 @@ public class AddMedicationOneFragment extends BaseFragment
             if (medicineType.equals("teaspoon") || medicineType.equals(
                     "teaspoons") || medicineType.equals("teas"))
                 mMedicineType = "Teaspoon";
+            else
+                mMedicineType = "";
+            if (mMedicineType.length() != 0)
+                setDropDownItems(mBinding.formSpin, mFormUnits, mMedicineType);
+        }
 
-            if (mMedicineType.length() == 0 || mMedicineType == null)
-                return;
-            settingDropDownItems(mMedicineType);
-
-            if (medicineContent[2] == null || medicineContent[2].length() == 0)
-                return;
+        if (medicineContent.length > 2) {
             val medicine_strength = medicineContent[2];
-
             String[] medicineStrengthArray = medicine_strength.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
 
             for (val strength : medicineStrengthArray) {
@@ -224,41 +271,52 @@ public class AddMedicationOneFragment extends BaseFragment
                 return;
             val medicineStrength = medicineStrengthArray[0];
 
-            if (medicineStrengthArray[1].length() == 0 || medicineContent[1] == null)
-                return;
-            val medicineStrengthUnit = medicineStrengthArray[1];
+            if (medicineStrengthArray.length > 1) {
+                mMedicineStrengthUnit = medicineStrengthArray[1];
+                if (mMedicineStrengthUnit == null || mMedicineStrengthUnit.length() == 0)
+                    return;
+                setDropDownItems(mBinding.strengthUnit, mStrengthUnits, mMedicineStrengthUnit);
 
-            if (TextUtils.isEmpty(din))
-                return;
-
-            if (medicineStrengthUnit == null || medicineStrengthUnit.length() == 0)
-                return;
-            settingDropDownItems(medicineStrengthUnit);
-
-            mBinding.mediName.setText(mMedicineName);
-            mBinding.mediStrength.setText(medicineStrength);
-        } catch (Exception e) {
-            mBinding.mediName.setText(mMedicineName);
-            Log.d(TAG, "Exception : " + e);
+            }
+            if (medicineStrength.matches("[0-9]+"))
+                mBinding.mediStrength.setText(medicineStrength);
+            else
+                mBinding.mediStrength.setText("");
         }
+
+        if (TextUtils.isEmpty(din.toString()))
+            return;
+        mBinding.mediName.setText(mMedicineName);
+    }
+
+    //*************************************************************
+    private void setDropDownItems(Spinner spinner, List<String> itemList, String name)
+    //*************************************************************
+    {
+        ArrayAdapter<String> countryListAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, itemList);
+        countryListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(countryListAdapter);
+
+        int spinnerPosition = countryListAdapter.getPosition(name);
+        spinner.setSelection(spinnerPosition);
     }
 
     //*************************************************************
     private void onUpdate()
     //*************************************************************
     {
-        if (Laila.instance().getMUser() == null)
+        if (Laila.instance().getMUser_U() == null)
             return;
         val onUpdateMedicine = Laila.instance().on_update_medicine;
         val position = Laila.instance().getMMedicationPosition();
-        if (Laila.instance()
-                .getMUser()
-                .getMedication() == null || Laila.instance()
-                .getMUser()
-                .getMedication()
-                .size() == 0)
+        val medicationList = Laila.instance()
+                .getMUser_U()
+                .getData()
+                .getMedicationList();
+
+        if (medicationList == null || medicationList.size() == 0)
             return;
-        val updateMedication = Laila.instance().getMUser().getMedication().get(position);
+        val updateMedication = Laila.instance().getMUser_U().getData().getMedicationList().get(position);
 
         Laila.instance().setMUpdateMedication(updateMedication);
 
@@ -291,10 +349,10 @@ public class AddMedicationOneFragment extends BaseFragment
                 return;
             if (!TextUtils.isEmpty(from))
                 settingFormDropDown(from);
-            mBinding.rxDinNumber.setText(din);
+            mBinding.rxDinNumber.setText(din.toString());
             if (strength == null)
                 return;
-            mBinding.mediStrength.setText(strength);
+            mBinding.mediStrength.setText(strength.toString());
             if (strengthUnit == null)
                 return;
             settingDropDownItems(strengthUnit);
@@ -306,6 +364,7 @@ public class AddMedicationOneFragment extends BaseFragment
     }
 
     //*************************************************************
+    @SuppressLint("SetTextI18n")
     private void validation()
     //*************************************************************
     {
@@ -320,8 +379,12 @@ public class AddMedicationOneFragment extends BaseFragment
         val strengthUnit = mBinding.strengthUnit.getSelectedItem().toString();
         val from = mBinding.formSpin.getSelectedItem().toString();
         val prescribed = mBinding.prescribed.isChecked();
-        val overTheCounter = mBinding.overTheCounter.isChecked();
 
+        if (!strength.matches("\\d+(?:\\.\\d+)?")) {
+            mBinding.mediStrength.setError(AndroidUtil.getString(R.string.strength_should_be_only_digits));
+            mBinding.mediStrength.requestFocus();
+            return;
+        }
         if (TextUtils.isEmpty(name)) {
             mBinding.mediName.setError(AndroidUtil.getString(R.string.required));
             mBinding.mediName.requestFocus();
@@ -338,18 +401,22 @@ public class AddMedicationOneFragment extends BaseFragment
             return;
         }
 
-        val addMedicationRequest = Laila.instance()
-                .getMAddMedicationRequest().Builder();
-        if (mUpdateMedicineId != 0)
-            addMedicationRequest.setId(mUpdateMedicineId);
-        addMedicationRequest.setMedicationName(name);
-        addMedicationRequest.setMedicationDin(din);
-        addMedicationRequest.setFrom(from);
-        addMedicationRequest.setMedicationStrength(strength);
-        addMedicationRequest.setMedicationStrengthUnit(strengthUnit);
-        addMedicationRequest.setPrescribed(prescribed ? 1 : 0);
+        if (Laila.instance().getMAddMedicationRequest() == null)
+            mAddMedicationRequest = Laila.instance()
+                    .getMAddMedicationRequest().Builder();
+        else
+            mAddMedicationRequest = Laila.instance().getMAddMedicationRequest();
 
-        Laila.instance().setMAddMedicationRequest(addMedicationRequest);
+        if (mUpdateMedicineId != 0)
+            mAddMedicationRequest.setId(mUpdateMedicineId);
+        mAddMedicationRequest.setMedicationName(name);
+        mAddMedicationRequest.setDinRxNumber(din);
+        mAddMedicationRequest.setMedecineForm(from);
+        mAddMedicationRequest.setStrength(Integer.parseInt(strength));
+        mAddMedicationRequest.setStrengthUom(strengthUnit);
+        mAddMedicationRequest.setPrescribed(prescribed ? 1 : 0);
+
+        Laila.instance().setMAddMedicationRequest(mAddMedicationRequest);
 
         val onUpdateMedicine = Laila.instance().on_update_medicine;
         if (onUpdateMedicine) {
@@ -357,17 +424,24 @@ public class AddMedicationOneFragment extends BaseFragment
             medication.setMedicationName(name);
             medication.setDinRxNumber(din);
             medication.setMedecineForm(from);
-            medication.setStrength(strength);
+            medication.setStrength(Integer.parseInt(strength));
             medication.setStrengthUom(strengthUnit);
             medication.setPrescribed(prescribed ? 1 : 0);
-        }
+            Laila.instance().setMUpdateMedication(medication);
 
+            if (prescribed) {
+                ((AddMedicationActivity) getActivity()).navigateToScreen(1);
+                return;
+            }
+            showLoadingDialog();
+            mAddMedicationViewModel.updateMedication(mAddMedicationRequest);
+            return;
+        }
         if (prescribed) {
             ((AddMedicationActivity) getActivity()).navigateToScreen(1);
             return;
         }
-        showLoadingDialog();
-        mAddMedicationViewModel.addMedication(addMedicationRequest);
+        mAddMedicationViewModel.addMedication(mAddMedicationRequest);
     }
 
     //*************************************************************
@@ -377,7 +451,6 @@ public class AddMedicationOneFragment extends BaseFragment
         ArrayAdapter<CharSequence> strengthUnitAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.from_type, android.R.layout.simple_spinner_dropdown_item);
         strengthUnitAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mBinding.formSpin.setAdapter(strengthUnitAdapter);
-
         int spinnerPosition = strengthUnitAdapter.getPosition(unit);
         mBinding.formSpin.setSelection(spinnerPosition);
     }
@@ -410,33 +483,35 @@ public class AddMedicationOneFragment extends BaseFragment
     public void onSuccessfully(@Nullable MedicationResponse response)
     //*************************************************************
     {
-        if (response.getMedication() == null) {
-            hideLoadingDialog();
+        hideLoadingDialog();
+        Laila.instance().setMAddMedicationRequest(null);
+        if (response.getData() == null) {
             return;
         }
-        if (Laila.instance()
-                .getMUser()
-                .getMedication() == null)
-            Laila.instance()
-                    .getMUser()
-                    .setMedication(new ArrayList<>());
-
-        val onUpdateMedicine = Laila.instance().on_update_medicine;
-        if (onUpdateMedicine && mUpdateMedicineId == response.getMedication().getId()) {
-            Laila.instance().getMUser().getMedication().set(Laila.instance().getMMedicationPosition(), response.getMedication());
+        val user = Laila.instance().getMUser_U().getData();
+        if (user.getMedicationList() == null)
+            user.setMedicationList(new ArrayList<>());
+        if (response.getData().getMedication() == null) {
             Laila.instance().on_update_medicine = false;
-        } else {
-            Laila.instance()
-                    .getMUser()
-                    .getMedication()
-                    .add(0, response.getMedication());
+            goToHome();
+            return;
         }
+        val onUpdateMedicine = Laila.instance().on_update_medicine;
+        if (onUpdateMedicine && mUpdateMedicineId == response.getData().getMedication().getId()) {
+            user.getMedicationList().set(Laila.instance().getMMedicationPosition(), response.getData().getMedication());
+            Laila.instance().on_update_medicine = false;
+        } else
+            Laila.instance()
+                    .getMUser_U()
+                    .getData()
+                    .getMedicationList()
+                    .add(response.getData().getMedication());
 
         Laila.instance()
-                .setMMedicationId(response.getMedication()
+                .setMMedicationId(response.getData().getMedication()
                         .getId());
 
-        SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser());
+        SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser_U());
         Laila.instance().is_medicine_added = true;
         goToHome();
     }
@@ -447,6 +522,17 @@ public class AddMedicationOneFragment extends BaseFragment
     //*************************************************************
     {
         hideLoadingDialog();
+        AndroidUtil.displayAlertDialog(errorMessage, "Error", getActivity());
+    }
+
+    @Override
+    public void onSuccessfullyGetMedications(@Nullable MedicationResponse medicationResponse) {
+
+    }
+
+    @Override
+    public void onFailedGetMedications(@androidx.annotation.NonNull String errorMessage) {
+
     }
 
     //*************************************************************
@@ -460,4 +546,30 @@ public class AddMedicationOneFragment extends BaseFragment
         getActivity().finish();
     }
 
+    //*************************************************************
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onResume()
+    //*************************************************************
+    {
+        super.onResume();
+        if (Laila.instance().on_update_medicine) {
+            val updateMedication = Laila.instance().getMUpdateMedication();
+            if (updateMedication == null)
+                return;
+            mBinding.mediName.setText(updateMedication.getMedicationName());
+            mBinding.rxDinNumber.setText(updateMedication.getDinRxNumber());
+            mBinding.mediStrength.setText(updateMedication.getStrength().toString());
+            setDropDownItems(mBinding.strengthUnit, mStrengthUnits, updateMedication.getStrengthUom());
+            return;
+        }
+        val medication = Laila.instance().getMAddMedicationRequest();
+        if (medication != null) {
+            mBinding.mediName.setText(medication.getMedicationName());
+            mBinding.rxDinNumber.setText(medication.getDinRxNumber());
+            mBinding.mediStrength.setText(medication.getStrength().toString());
+            setDropDownItems(mBinding.strengthUnit, mStrengthUnits, medication.getStrengthUom());
+            setDropDownItems(mBinding.formSpin, mFormUnits, medication.getMedecineForm());
+        }
+    }
 }

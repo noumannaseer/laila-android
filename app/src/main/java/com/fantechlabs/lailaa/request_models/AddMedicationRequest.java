@@ -29,7 +29,7 @@ public class AddMedicationRequest
     private List<String> intakeTimeList;
 
 
-    public com.fantechlabs.lailaa.request_models.AddMedicationRequest setIntakeTimeList(List<String> intakeTime)
+    public  AddMedicationRequest setIntakeTimeList(List<String> intakeTime)
     {
         this.intakeTimeList = intakeTime;
         return this;

@@ -222,6 +222,7 @@
                         android:id="@+id/frequency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="-6dp"
                         android:entries="@array/frequency"
                         android:paddingEnd="2dp"
                         android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar"

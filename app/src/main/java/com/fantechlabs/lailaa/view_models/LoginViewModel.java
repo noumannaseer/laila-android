@@ -7,7 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 
 import com.fantechlabs.lailaa.R;
-import com.fantechlabs.lailaa.models.response_models.UserResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.UserResponse;
+import com.fantechlabs.lailaa.network.NetworkUtils;
 import com.fantechlabs.lailaa.network.ServiceGenerator;
 import com.fantechlabs.lailaa.network.services.OnboardingService;
 import com.fantechlabs.lailaa.request_models.UserRequest;
@@ -39,9 +40,8 @@ public class LoginViewModel
     public void loginUser(@NonNull UserRequest userRequest)
     //***********************************************************
     {
-
         val service = ServiceGenerator.createService(OnboardingService.class, true,
-                Constants.BASE_URL);
+                Constants.BASE_URL_U);
 
         if (service == null) {
             mUserLoginListener.onLoginFailed(
@@ -52,7 +52,7 @@ public class LoginViewModel
         HashMap<String, String> login = new HashMap<String, String>();
         login.put("email", userRequest.getEmail());
         login.put("password", userRequest.getPassword());
-
+        login.put("user_type", "laila");
         val loginService = service.login(login);
 
         loginService.enqueue(new Callback<UserResponse>() {
@@ -62,15 +62,17 @@ public class LoginViewModel
             //***********************************************************
             {
                 if (response.isSuccessful()) {
-                    if (response.body().getError() != null) {
-                        mUserLoginListener.onLoginFailed((TextUtils.isEmpty(response.body().getError()) ? AndroidUtil.getString(R.string.server_error) : response.body().getError()));
+                    if (response.body().getStatus() != 200) {
+                        mUserLoginListener.onLoginFailed((TextUtils.isEmpty(response.body().getData().getMessage()) ?
+                                AndroidUtil.getString(R.string.server_error) :
+                                response.body().getData().getMessage()));
                         return;
                     }
                     mUserLoginListener.onLoginSuccessfully(response.body());
                     return;
                 }
-
-                mUserLoginListener.onLoginFailed(AndroidUtil.getString(R.string.server_error));
+                val error = NetworkUtils.errorResponse(response.errorBody());
+                mUserLoginListener.onLoginFailed(error);
             }
 
             //***********************************************************

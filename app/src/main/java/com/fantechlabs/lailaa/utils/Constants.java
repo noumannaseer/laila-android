@@ -4,6 +4,7 @@ package com.fantechlabs.lailaa.utils;
 public class Constants
 //*************************************
 {
+    public static final String BASE_URL_U = "https://laila.mychcare.com/api/";
 
     public static final String BASE_URL = "https://mychc.co/api/";
     //    public static final String BASE_URL = "http://18.223.189.200:8000/api/";
@@ -23,7 +24,7 @@ public class Constants
     public static final String PAYMENT_URL = "https://mychc.co/";
     public static final String UPC = " https://api.upcitemdb.com/prod/trial/";
 
-
+    public static final String MEDICINE_REMINDER = "medicine reminder";
     public static final String USER_DATA = "userData";
     public static final String FACEBOOK_ACCESS_TOKEN = "facebookAccessToken";
     public static final int PASSWORD_LENGTH = 8;
@@ -32,8 +33,15 @@ public class Constants
     public static final String DISEASE_NAME = "DISEASE_NAME";
     public static final String INTRO_SCREEN_SHOWN = "IntroScreenShown";
     public static final String EMAIL = "email";
+    public static final String SOCIAL_TYPE = "social_type";
+
     public static final String PASSWORD = "password";
     public static final String USER_PRIVATE_CODE = "user_private_code";
+    public static final String USER_ID = "user_id";
+    public static final String USER_TOKEN = "token";
+    public static final String EVENTS = "events";
+    public static final String EVENT_ID = "event_id";
+
     public static final String PAYMENT_ID = "payment_id";
     public static final String MEDICATION_NAME = "medication_name";
     public static final String ALLERGIES = "allergies";
@@ -44,18 +52,24 @@ public class Constants
     public static final String STRENGTH_UOM = "strength_uom";
     public static final String COMMENTS = "comments";
     public static final String AMOUNT = "amount";
+    public static final String DISPENSED_AMOUNT = "dispensed_amount";
+    public static final String DISPENSED_DATE = "dispensed_date";
+
     public static final String START_DATE = "start_date";
     public static final String MEDSCAPE_ID = "medscape_id";
+    public static final String MEDICINE_ID = "med_id";
     public static final String ID = "id";
     public static final String REMEMBER = "remember";
     public static final String FREQUENCY1 = "frequency1";
     public static final String WHEN_NEEDED = "when_needed";
     public static final String PRESCRIBED = "prescribed";
     public static final String FREQUENCY2 = "frequency2";
+    public static final String FREQUENCY = "frequency";
     public static final String MEDECINE_FORM = "medecine_form";
     public static final String NUM_REFILLS = "num_refills";
     public static final String NUMBER_OF_PILLS = "number_of_pills";
     public static final String PHARMACY = "Pharmacy";
+    public static final String PHARMACY_ID = "pharmacy_id";
     public static final String REFILL_DATE = "refill_date";
     public static final String DELIVERY_TYPE = "delivery_type";
     public static final String MEDICATION = "medication";
@@ -120,4 +134,7 @@ public class Constants
     public static final String DIASTOLIC = "Diastolic";
     public static final String DEVICE_TYPE = "Android";
     public static final String DECIMAL_FORMATTER = "#####.##";
+    public static final String DATE_FORMAT = "dd-MMM-yyyy";
+    public static final String OLD_PASSWORD = "old_password";
+    public static final String NEW_PASSWORD = "new_password";
 }

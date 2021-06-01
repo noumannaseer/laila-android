@@ -177,6 +177,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:entries="@array/from_type"
+                        android:layout_marginStart="-6dp"
                         android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar"
                         tools:ignore="RtlSymmetry" />
 
@@ -261,6 +262,7 @@
                         android:id="@+id/strength_unit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="-6dp"
                         android:entries="@array/strength_unit"
                         android:theme="@android:style/Theme.DeviceDefault.Light.DarkActionBar"
                         tools:ignore="RtlSymmetry" />

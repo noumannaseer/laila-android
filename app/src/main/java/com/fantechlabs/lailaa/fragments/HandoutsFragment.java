@@ -14,12 +14,13 @@ import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.activities.AlergieResourceDetails;
 import com.fantechlabs.lailaa.activities.ResourcesActivity;
 import com.fantechlabs.lailaa.adapter.AllergiesListAdapter;
+import com.fantechlabs.lailaa.adapter.ResourcesListAdapter;
 import com.fantechlabs.lailaa.databinding.FragmentHandoutsBinding;
 import com.fantechlabs.lailaa.databinding.FragmentReadingMaterialsBinding;
 import com.fantechlabs.lailaa.models.Profile;
 import com.fantechlabs.lailaa.models.allergie_models.AllergieListerner;
 import com.fantechlabs.lailaa.models.allergie_models.XmlParcer;
-import com.fantechlabs.lailaa.request_models.ProfileRequest;
+import com.fantechlabs.lailaa.models.updates.request_models.ProfileRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 
@@ -35,8 +36,8 @@ public class HandoutsFragment extends BaseFragment
 {
     private FragmentHandoutsBinding mBinding;
     private List<String> mConditionList;
-    private AllergiesListAdapter mAllergiesListAdapter;
-    private Profile mUser;
+    private ResourcesListAdapter mResourcesListAdapter;
+//    private ProfileRequest mUser;
 
     //****************************************************************************
     @Override
@@ -72,10 +73,7 @@ public class HandoutsFragment extends BaseFragment
     //*******************************************************************
     {
         super.onResume();
-        Laila.instance().setMProfileRequest(new ProfileRequest());
-        Laila.instance().getMProfileRequest().setProfile(new Profile());
-
-        if (Laila.instance().getMProfileRequest() == null || Laila.instance().getMProfileRequest().getProfile() == null)
+        if (Laila.instance().getMUser_U().getData() == null || Laila.instance().getMUser_U().getData().getProfile() == null)
             return;
         setConditions();
     }
@@ -84,9 +82,8 @@ public class HandoutsFragment extends BaseFragment
     private void setConditions()
     //*************************************************************
     {
-        if (Laila.instance().getMUser() == null || Laila.instance().getMUser().getProfile() == null)
-            return;
-        val userProfile = Laila.instance().getMUser().getProfile();
+
+        val userProfile = Laila.instance().getMUser_U().getData().getProfile();
         val medicalCondition = userProfile.getMedicalConditions();
 
         if (!TextUtils.isEmpty(medicalCondition)) {
@@ -110,32 +107,13 @@ public class HandoutsFragment extends BaseFragment
     private void startConditionRecyclerView()
     //**************************************************************
     {
-        mUser = Laila.instance().getMProfileRequest().getProfile();
-
-        if (mConditionList != null && mConditionList.size() > 0) {
-            val condition = AndroidUtil.stringJoin(mConditionList, ";");
-            mUser.setMedicalConditions(condition);
-        }
-        mAllergiesListAdapter = new AllergiesListAdapter(mConditionList, new AllergiesListAdapter.ListClickListener() {
-            @Override
-            public void onDelete(int position) {
-                AndroidUtil.displayAlertDialog(
-                        AndroidUtil.getString(
-                                R.string.delete_item),
-                        AndroidUtil.getString(
-                                R.string.delete),
-                        getContext(),
-                        AndroidUtil.getString(
-                                R.string.ok),
-                        AndroidUtil.getString(
-                                R.string.cancel),
-                        (dialog, which) -> {
-                            if (which == -1) {
-                                mConditionList.remove(position);
-                                startConditionRecyclerView();
-                            }
-                        });
-            }
+//        mUser = Laila.instance().getMProfileRequest();
+//
+//        if (mConditionList != null && mConditionList.size() > 0) {
+//            val condition = AndroidUtil.stringJoin(mConditionList, ";");
+//            mUser.setMedicalConditions(condition);
+//        }
+        mResourcesListAdapter = new ResourcesListAdapter(mConditionList, new ResourcesListAdapter.ListClickListener() {
 
             @Override
             public void onClick(String title) {
@@ -166,7 +144,7 @@ public class HandoutsFragment extends BaseFragment
         });
 
         mBinding.conditionRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.conditionRecycleView.setAdapter(mAllergiesListAdapter);
+        mBinding.conditionRecycleView.setAdapter(mResourcesListAdapter);
     }
 
 }

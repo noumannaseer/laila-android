@@ -236,17 +236,17 @@
 
             </LinearLayout>
 
-            <ProgressBar
-                android:id="@+id/ProgressBar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:indeterminate="false"
-                android:maxHeight="24dip"
-                android:minHeight="24dip"
-                android:progress="60"
-                android:progressDrawable="@drawable/data_progress_bar" />
+<!--            <ProgressBar-->
+<!--                android:id="@+id/ProgressBar"-->
+<!--                style="?android:attr/progressBarStyleHorizontal"-->
+<!--                android:layout_width="fill_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="32dp"-->
+<!--                android:indeterminate="false"-->
+<!--                android:maxHeight="24dip"-->
+<!--                android:minHeight="24dip"-->
+<!--                android:progress="60"-->
+<!--                android:progressDrawable="@drawable/data_progress_bar" />-->
 
             <TextView
                 android:layout_width="wrap_content"

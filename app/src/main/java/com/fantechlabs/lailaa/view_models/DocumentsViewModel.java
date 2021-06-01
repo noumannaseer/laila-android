@@ -11,12 +11,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
-import com.fantechlabs.lailaa.models.Document;
-import com.fantechlabs.lailaa.models.response_models.DocumentResponse;
+import com.fantechlabs.lailaa.models.updates.request_models.DocumentRequest;
+import com.fantechlabs.lailaa.models.updates.response_models.DocumentResponse;
 import com.fantechlabs.lailaa.network.NetworkUtils;
 import com.fantechlabs.lailaa.network.ServiceGenerator;
 import com.fantechlabs.lailaa.network.services.DocumentsService;
-import com.fantechlabs.lailaa.request_models.DocumentRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 
@@ -50,17 +49,19 @@ public class DocumentsViewModel
     //***********************************************************
     {
         val service = ServiceGenerator.createService(DocumentsService.class, true,
-                Constants.BASE_URL2);
+                Constants.BASE_URL_U);
         if (service == null) {
             mDocumentsListener.onFailed(
                     AndroidUtil.getString(R.string.internet_not_vailable));
             return;
         }
 
-        val userPrivateCode = Laila.instance().getMUser().getProfile().getUserPrivateCode();
+        val user_id = Laila.instance().getMUser_U().getData().getUser().getId().toString();
+        val token = Laila.instance().getMUser_U().getData().getUser().getToken();
 
         HashMap<String, String> document = new HashMap<>();
-        document.put(Constants.USER_PRIVATE_CODE, userPrivateCode);
+        document.put(Constants.USER_ID, user_id);
+        document.put(Constants.USER_TOKEN, token);
 
         val getDocumentsServices = service.getDocuments(document);
 
@@ -70,17 +71,18 @@ public class DocumentsViewModel
             public void onResponse(Call<DocumentResponse> call, Response<DocumentResponse> response) {
                 if (response.isSuccessful()) {
 
-                    if (response.body().getCode() == 200) {
+                    if (response.body().getStatus() == 200) {
                         mDocumentsListener.onSuccessfully(response.body());
                         return;
                     }
 
-                    mDocumentsListener.onFailed((TextUtils.isEmpty(response.body().getMsg()) ?
+                    mDocumentsListener.onFailed((TextUtils.isEmpty(response.body().getData().getMessage()) ?
                             AndroidUtil.getString(R.string.server_error) :
-                            response.body().getMsg()));
+                            response.body().getData().getMessage()));
                     return;
                 }
-                mDocumentsListener.onFailed(AndroidUtil.getString(R.string.server_error));
+                val error = NetworkUtils.errorResponse(response.errorBody());
+                mDocumentsListener.onFailed(error);
 
             }
 
@@ -97,7 +99,7 @@ public class DocumentsViewModel
     //***********************************************************
     {
         val service = ServiceGenerator.createService(DocumentsService.class, true,
-                Constants.BASE_URL2);
+                Constants.BASE_URL_U);
         if (service == null) {
             mDocumentsListener.onFailed(
                     AndroidUtil.getString(R.string.internet_not_vailable));
@@ -105,47 +107,52 @@ public class DocumentsViewModel
         }
 
         Log.d("api_request", documentRequest.toString());
-        val profile = documentRequest.getType().equals(Constants.DOCUMENT) ?
-                !TextUtils.isEmpty(documentRequest.getFile())
-                        ? NetworkUtils.getDocumentFileMultiPartForm(
-                        Uri.parse(documentRequest.getFile()),
-                        "file", mActivity)
-                        : null
-                :
-                !TextUtils.isEmpty(documentRequest.getFile())
-                        ? NetworkUtils.getFileMultiPartForm(
-                        Uri.parse(documentRequest.getFile()),
-                        "file", mActivity)
-                        : null;
 
-        val userPrivateCode = Laila.instance().getMUser().getProfile().getUserPrivateCode();
+        val profile =
+                documentRequest.getType().equals(Constants.DOCUMENT) ?
+                        !TextUtils.isEmpty(documentRequest.getFile())
+                                ? NetworkUtils.getDocumentFileMultiPartForm(
+                                Uri.parse(documentRequest.getFile()),
+                                "file", mActivity)
+                                : null
+                        :
+                        !TextUtils.isEmpty(documentRequest.getFile())
+                                ? NetworkUtils.getFileMultiPartForm(
+                                Uri.parse(documentRequest.getFile()),
+                                "file", mActivity)
+                                : null;
 
-        val addDocumentsService = service.addDocuments(
-                NetworkUtils.getMultiPartForm(String.valueOf(userPrivateCode)),
-                profile
-        );
+        val user_id = Laila.instance().getMUser_U().getData().getUser().getId();
+        val token = Laila.instance().getMUser_U().getData().getUser().getToken();
 
-        addDocumentsService.enqueue(new Callback<Document>() {
+        val addDocumentsService = service.addDocuments
+                (NetworkUtils.getMultiPartForm(String.valueOf(user_id)),
+                        NetworkUtils.getMultiPartForm(String.valueOf(token)),
+                        profile
+                );
+
+        addDocumentsService.enqueue(new Callback<DocumentResponse>() {
             @Override
-            public void onResponse(Call<Document> call, Response<Document> response) {
+            public void onResponse(Call<DocumentResponse> call, Response<DocumentResponse> response) {
                 if (response.isSuccessful()) {
 
-                    if (response.body().getCode() == 200) {
+                    if (response.body().getStatus() == 200) {
                         mDocumentsListener.onRecordAddedSuccessfully(response.body());
                         return;
                     }
 
-                    mDocumentsListener.onFailed((TextUtils.isEmpty(response.body().getMsg()) ?
+                    mDocumentsListener.onFailed((TextUtils.isEmpty(response.body().getData().getMessage()) ?
                             AndroidUtil.getString(R.string.server_error) :
-                            response.body().getMsg()));
+                            response.body().getData().getMessage()));
                     return;
                 }
-                mDocumentsListener.onFailed(AndroidUtil.getString(R.string.server_error));
+                val error = NetworkUtils.errorResponse(response.errorBody());
+                mDocumentsListener.onFailed(error);
 
             }
 
             @Override
-            public void onFailure(Call<Document> call, Throwable t) {
+            public void onFailure(Call<DocumentResponse> call, Throwable t) {
                 mDocumentsListener.onFailed(t.getLocalizedMessage());
             }
         });
@@ -157,18 +164,18 @@ public class DocumentsViewModel
     //***********************************************************
     {
         val service = ServiceGenerator.createService(DocumentsService.class, true,
-                Constants.BASE_URL2);
+                Constants.BASE_URL_U);
         if (service == null) {
             mDocumentsListener.onFailed(
                     AndroidUtil.getString(R.string.internet_not_vailable));
             return;
         }
 
-        val userPrivateCode = Laila.instance().getMUser().getProfile().getUserPrivateCode();
+        val token = Laila.instance().getMUser_U().getData().getUser().getToken();
 
         HashMap<String, Object> document = new HashMap<>();
-        document.put("record_id", documentID);
-        document.put(Constants.USER_PRIVATE_CODE, userPrivateCode);
+        document.put("document_id", documentID);
+        document.put(Constants.USER_TOKEN, token);
 
         val deleteDocumentsServices = service.deleteDocuments(document);
 
@@ -178,14 +185,14 @@ public class DocumentsViewModel
             public void onResponse(Call<DocumentResponse> call, Response<DocumentResponse> response) {
                 if (response.isSuccessful()) {
 
-                    if (response.body().getCode() == 200) {
-                        mDocumentsListener.onSuccessfullyDeleted(response.body().getMsg());
+                    if (response.body().getStatus() == 200) {
+                        mDocumentsListener.onSuccessfullyDeleted(response.body().getMessage());
                         return;
                     }
 
-                    mDocumentsListener.onFailed((TextUtils.isEmpty(response.body().getMsg()) ?
+                    mDocumentsListener.onFailed((TextUtils.isEmpty(response.body().getData().getMessage()) ?
                             AndroidUtil.getString(R.string.server_error) :
-                            response.body().getMsg()));
+                            response.body().getData().getMessage()));
                     return;
                 }
                 mDocumentsListener.onFailed(AndroidUtil.getString(R.string.server_error));
@@ -205,7 +212,7 @@ public class DocumentsViewModel
     {
         void onSuccessfully(@Nullable DocumentResponse userResponse);
 
-        void onRecordAddedSuccessfully(@Nullable Document response);
+        void onRecordAddedSuccessfully(@Nullable DocumentResponse response);
 
         void onSuccessfullyDeleted(@Nullable String msg);
 

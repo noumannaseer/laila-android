@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
-import com.fantechlabs.lailaa.models.response_models.MedicationResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.MedicationResponse;
 import com.fantechlabs.lailaa.network.ServiceGenerator;
 import com.fantechlabs.lailaa.network.services.MedicationService;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
@@ -38,22 +38,18 @@ public class DeleteMedicationViewModel
     //***********************************************************
     {
         val service = ServiceGenerator.createService(MedicationService.class, true,
-                Constants.BASE_URL);
+                Constants.BASE_URL_U);
         if (service == null) {
             mDeleteMedicationListener.onFailed(
                     AndroidUtil.getString(R.string.internet_not_vailable));
             return;
         }
-
+        val user_token = Laila.instance().getMUser_U().getData().getUser().getToken();
         HashMap<String, String> deleteMedication = new HashMap<String, String>();
-        deleteMedication.put("user_private_code", Laila.instance().getMUser().getProfile().getUserPrivateCode());
+        deleteMedication.put(Constants.USER_TOKEN, user_token);
         deleteMedication.put("id", id);
 
-
-        HashMap<String, Object> main = new HashMap<String, Object>();
-        main.put("medication", deleteMedication);
-
-        val medicationService = service.deleteMedication(main);
+        val medicationService = service.deleteMedication(deleteMedication);
 
         medicationService.enqueue(new Callback<MedicationResponse>() {
 
@@ -63,8 +59,8 @@ public class DeleteMedicationViewModel
             //***********************************************************
             {
                 if (response.isSuccessful()) {
-                    if (response.body().getError() != null) {
-                        mDeleteMedicationListener.onFailed(response.body().getError());
+                    if (response.body().getStatus() != 200) {
+                        mDeleteMedicationListener.onFailed(response.body().getData().getMessage());
                         return;
                     }
                     mDeleteMedicationListener.onSuccessfully(response.body());

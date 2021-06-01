@@ -16,12 +16,14 @@ import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.adapter.MedicationListAdapter;
 import com.fantechlabs.lailaa.databinding.ActivityMedicationBinding;
-import com.fantechlabs.lailaa.models.Medication;
 import com.fantechlabs.lailaa.models.response_models.DrugCheckResponse;
-import com.fantechlabs.lailaa.models.response_models.MedicationResponse;
+import com.fantechlabs.lailaa.models.updates.models.Medication;
+import com.fantechlabs.lailaa.models.updates.response_models.MedicationResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.MedicineInteractionResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.utils.SharedPreferencesUtils;
+import com.fantechlabs.lailaa.view_models.AddMedicationViewModel;
 import com.fantechlabs.lailaa.view_models.DeleteEventViewModel;
 import com.fantechlabs.lailaa.view_models.DeleteMedicationViewModel;
 import com.fantechlabs.lailaa.view_models.DrugCheckMedicationViewModel;
@@ -35,7 +37,8 @@ import lombok.val;
 public class MedicationActivity extends BaseActivity
         implements DeleteMedicationViewModel.DeleteMedicationListener,
         DrugCheckMedicationViewModel.DrugCheckMedicationListener,
-        DeleteEventViewModel.DeleteEventListener
+        DeleteEventViewModel.DeleteEventListener,
+        AddMedicationViewModel.AddMedicationListener
 //**********************************************************
 
 {
@@ -44,6 +47,7 @@ public class MedicationActivity extends BaseActivity
     private MedicationListAdapter mMedicationListAdapter;
     private DeleteMedicationViewModel mDeleteMedicationViewModel;
     private DrugCheckMedicationViewModel mDrugCheckMedicationViewModel;
+    private AddMedicationViewModel mAddMedicationViewModel;
     private DeleteEventViewModel mDeleteEventViewModel;
     private int mPosition, mEventPosition;
     private String mMedicineId;
@@ -79,11 +83,38 @@ public class MedicationActivity extends BaseActivity
     private void initControl()
     //**********************************************************
     {
+        initViewModels();
+        getMedications();
+        addMedications();
+
+    }
+
+    //**********************************************************
+    private void getMedications()
+    //**********************************************************
+    {
+        mMedicationList = new ArrayList<>();
+        if (Laila.instance().getMUser_U().getData() == null)
+            return;
+        mMedicationList = Laila.instance().getMUser_U().getData().getMedicationList();
+
+        if (mMedicationList == null || Laila.instance().from_update_medication) {
+            Laila.instance().from_update_medication = false;
+            showLoadingDialog();
+            mAddMedicationViewModel.getMedications();
+            return;
+        }
+        startRecyclerView();
+    }
+
+    //**********************************************************
+    private void initViewModels()
+    //**********************************************************
+    {
         mDeleteMedicationViewModel = new DeleteMedicationViewModel(this);
         mDrugCheckMedicationViewModel = new DrugCheckMedicationViewModel(this);
         mDeleteEventViewModel = new DeleteEventViewModel(this);
-
-        addMedications();
+        mAddMedicationViewModel = new AddMedicationViewModel(this);
     }
 
     //**********************************************************
@@ -111,35 +142,27 @@ public class MedicationActivity extends BaseActivity
     //***************************************************
     {
         super.onResume();
-        mMedicationList = new ArrayList<>();
+//        val medicationList = Laila.instance().getMUser_U().getData().getMedicationList();
+//        if (medicationList == null) {
+//            mBinding.noRecord.setVisibility(View.VISIBLE);
+//            mBinding.medicineRecyclerview.setVisibility(View.GONE);
+//            return;
+//        }
+//        mBinding.noRecord.setVisibility(View.GONE);
+//        mBinding.medicineRecyclerview.setVisibility(View.VISIBLE);
 
-        if (Laila.instance().getMUser() == null || Laila.instance().getMUser().getMedication() == null) {
-            mBinding.noRecord.setVisibility(View.VISIBLE);
-            mBinding.medicineRecyclerview.setVisibility(View.GONE);
-            return;
-        }
-
-        val medication = Laila.instance().getMUser().getMedication();
-        if (medication == null || medication.size() == 0)
-            return;
-
-        mBinding.noRecord.setVisibility(View.GONE);
-        mBinding.medicineRecyclerview.setVisibility(View.VISIBLE);
-
-        mMedicationList = Laila.instance().getMUser().getMedication();
-        startRecyclerView();
     }
 
     //*******************************************************************
     @Override
-    public void onDrugCheckSuccessfully(@Nullable DrugCheckResponse response)
+    public void onDrugCheckSuccessfully(@Nullable MedicineInteractionResponse response)
     //*******************************************************************
     {
         hideLoadingDialog();
         Laila.instance().is_medicine_added = false;
 
         AndroidUtil.displayAlertDialog(
-                response.getMsg(),
+                response.getData().getMessage(),
                 AndroidUtil.getString(R.string.alert),
                 this,
                 AndroidUtil.getString(
@@ -168,7 +191,6 @@ public class MedicationActivity extends BaseActivity
     private void startRecyclerView()
     //**************************************************************
     {
-
         mMedicationListAdapter = new MedicationListAdapter(mMedicationList, new MedicationListAdapter.ListClickListener() {
 
             //******************************************************************
@@ -279,18 +301,51 @@ public class MedicationActivity extends BaseActivity
     public void onSuccessfully(@Nullable MedicationResponse medicationResponse)
     //*******************************************************************
     {
-        if (!TextUtils.isEmpty(mMedicineId))
-            getMedicationEvent();
-        Laila.instance().getMUser().getMedication().remove(mPosition);
-        SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser());
+//        if (!TextUtils.isEmpty(mMedicineId))
+//            getMedicationEvent();
+        Laila.instance().getMUser_U().getData().getMedicationList().remove(mPosition);
+        SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser_U());
         startRecyclerView();
         hideLoadingDialog();
 
     }
 
+
     //*******************************************************************
     @Override
     public void onFailed(@NonNull String errorMessage)
+    //*******************************************************************
+    {
+        hideLoadingDialog();
+        AndroidUtil.displayAlertDialog(errorMessage, AndroidUtil.getString(R.string.error), this);
+    }
+
+    //*******************************************************************
+    @Override
+    public void onSuccessfullyGetMedications(@Nullable MedicationResponse medicationResponse)
+    //*******************************************************************
+    {
+        hideLoadingDialog();
+        val responseMedicationList = medicationResponse.getData().getMedicationList();
+
+        if (responseMedicationList == null) {
+            mBinding.noRecord.setVisibility(View.VISIBLE);
+            mBinding.medicineRecyclerview.setVisibility(View.GONE);
+            return;
+        }
+        mBinding.noRecord.setVisibility(View.GONE);
+        mBinding.medicineRecyclerview.setVisibility(View.VISIBLE);
+
+        mMedicationList = new ArrayList<>();
+        mMedicationList = responseMedicationList;
+        Laila.instance().getMUser_U().getData().setMedicationList(mMedicationList);
+        startRecyclerView();
+
+    }
+
+    //*******************************************************************
+    @Override
+    public void onFailedGetMedications(@NonNull String errorMessage)
     //*******************************************************************
     {
         hideLoadingDialog();

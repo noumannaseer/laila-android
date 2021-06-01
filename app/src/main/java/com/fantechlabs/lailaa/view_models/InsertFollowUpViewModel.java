@@ -28,8 +28,7 @@ public class InsertFollowUpViewModel
 
     private InsertFollowUpModelListener mInsertFollowUpViewModelListener;
 
-    public InsertFollowUpViewModel(InsertFollowUpModelListener viewModelListener)
-    {
+    public InsertFollowUpViewModel(InsertFollowUpModelListener viewModelListener) {
         this.mInsertFollowUpViewModelListener = viewModelListener;
     }
 
@@ -39,10 +38,9 @@ public class InsertFollowUpViewModel
     {
 
         val service = ServiceGenerator.createService(MedicationService.class,
-                                                     true,
-                                                     Constants.BASE_URL);
-        if (service == null)
-        {
+                true,
+                Constants.BASE_URL_U);
+        if (service == null) {
             mInsertFollowUpViewModelListener.onInsertFollowUpFailed(AndroidUtil.getString(R.string.internet_not_vailable));
             return;
         }
@@ -51,7 +49,7 @@ public class InsertFollowUpViewModel
 
         //**********************************************************
         placeServices.enqueue(new Callback<FollowUpResponse>()
-        //**********************************************************
+                //**********************************************************
         {
 
             //**********************************************************
@@ -59,14 +57,13 @@ public class InsertFollowUpViewModel
             public void onResponse(Call<FollowUpResponse> call, Response<FollowUpResponse> response)
             //**********************************************************
             {
-                if (response.isSuccessful())
-                {
-                    if (response.body().getStatus() == 200)
-                    {
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus() == 200) {
                         mInsertFollowUpViewModelListener.onInsertFollowUpSuccess(response.body());
                         return;
                     }
-                    mInsertFollowUpViewModelListener.onInsertFollowUpFailed((TextUtils.isEmpty(response.body().getMsg()) ? AndroidUtil.getString(R.string.server_error) : response.body().getMsg()));
+                    mInsertFollowUpViewModelListener.onInsertFollowUpFailed((TextUtils.isEmpty(response.body().getData().getMessage())
+                            ? AndroidUtil.getString(R.string.server_error) : response.body().getData().getMessage()));
                     return;
                 }
                 mInsertFollowUpViewModelListener.onInsertFollowUpFailed(AndroidUtil.getString(R.string.server_error));
@@ -86,7 +83,7 @@ public class InsertFollowUpViewModel
 
     //**********************************************************
     public interface InsertFollowUpModelListener
-    //**********************************************************
+            //**********************************************************
     {
         void onInsertFollowUpSuccess(@Nullable FollowUpResponse msg);
 

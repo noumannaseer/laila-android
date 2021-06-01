@@ -22,13 +22,15 @@ import com.facebook.login.LoginResult;
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.ActivitySigninBinding;
-import com.fantechlabs.lailaa.models.response_models.UserResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.ProfileResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.UserResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.utils.SharedPreferencesUtils;
 import com.fantechlabs.lailaa.utils.UIUtils;
 import com.fantechlabs.lailaa.view_models.LoginViewModel;
 import com.fantechlabs.lailaa.view_models.SocialLoginViewModel;
+import com.fantechlabs.lailaa.view_models.UpdateProfileViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -47,7 +49,8 @@ import static com.fantechlabs.lailaa.utils.AndroidUtil.getContext;
 //***********************************************************
 public class SignInActivity extends BaseActivity
         implements LoginViewModel.UserLoginListener,
-        SocialLoginViewModel.SocialLoginViewModelListener
+        SocialLoginViewModel.SocialLoginViewModelListener,
+        UpdateProfileViewModel.UpdateProfileListener
 //***********************************************************
 {
     private ActivitySigninBinding mBinding;
@@ -59,6 +62,7 @@ public class SignInActivity extends BaseActivity
     private CallbackManager mCallbackManager;
     private AccessTokenTracker accessTokenTracker;
     private SocialLoginViewModel mSocialLoginViewModel;
+    private UpdateProfileViewModel mUpdateProfileViewModel;
 
     //***********************************************************
     @Override
@@ -83,6 +87,7 @@ public class SignInActivity extends BaseActivity
     private void initControls()
     //***********************************************************
     {
+        mUpdateProfileViewModel = new UpdateProfileViewModel(this);
         mLoginViewModel = new LoginViewModel(this);
         mSocialLoginViewModel = new SocialLoginViewModel(this);
         mBinding.signinButton.setOnClickListener(v -> loginUser());
@@ -129,10 +134,10 @@ public class SignInActivity extends BaseActivity
             AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.password_required), AndroidUtil.getString(R.string.alert), this);
             return;
         }
-        if (password.length() < Constants.PASSWORD_LENGTH) {
-            AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.password_must_be__character), AndroidUtil.getString(R.string.alert), this);
-            return;
-        }
+//        if (password.length() < Constants.PASSWORD_LENGTH) {
+//            AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.password_must_be__character), AndroidUtil.getString(R.string.alert), this);
+//            return;
+//        }
 
         val userRequest = Laila.instance()
                 .getUserRequest().Builder();
@@ -181,12 +186,12 @@ public class SignInActivity extends BaseActivity
     //****************************************************************
     {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.google_console_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         mBinding.google.setOnClickListener(v -> signIn());
-
     }
 
     //****************************************************************
@@ -237,7 +242,7 @@ public class SignInActivity extends BaseActivity
             val id = account.getId();
             val email = account.getEmail();
 
-            mSocialLoginViewModel.socialLogin(email, id, 0);
+            mSocialLoginViewModel.socialLogin(email, id, "google");
         }
     }
 
@@ -327,7 +332,7 @@ public class SignInActivity extends BaseActivity
             return;
         }
         showLoadingDialog();
-        mSocialLoginViewModel.socialLogin(email, id, 1);
+        mSocialLoginViewModel.socialLogin(email, id, "facebook");
     }
 
     //******************************************************************
@@ -348,16 +353,23 @@ public class SignInActivity extends BaseActivity
             mBinding.rememberMe.setChecked(false);
         }
         if (userResponse != null) {
-            Laila.instance().setMUser(userResponse);
+            Laila.instance().setMUser_U(userResponse);
 
             if (remember)
                 SharedPreferencesUtils.setValue(Constants.REMEMBER, true);
 
             SharedPreferencesUtils.setValue(Constants.USER_DATA, userResponse);
             setUserInformation();
-            hideLoadingDialog();
-            gotoDashboardActivity();
+            getProfile();
         }
+    }
+
+    //*******************************************************************
+    private void getProfile()
+    //*******************************************************************
+    {
+        showLoadingDialog();
+        mUpdateProfileViewModel.getProfile();
     }
 
     //******************************************************************
@@ -376,16 +388,14 @@ public class SignInActivity extends BaseActivity
     //*******************************************************************
     {
         val remember = mBinding.rememberMe.isChecked();
-        if (response.getProfile() != null) {
-            Laila.instance().setMUser(response);
+        if (response.getData() != null) {
+            Laila.instance().setMUser_U(response);
             if (remember)
                 SharedPreferencesUtils.setValue(Constants.REMEMBER, true);
             SharedPreferencesUtils.setValue(Constants.USER_DATA, response);
         }
-
         setUserInformation();
-        hideLoadingDialog();
-        gotoDashboardActivity();
+        getProfile();
     }
 
     //*******************************************************************
@@ -395,5 +405,26 @@ public class SignInActivity extends BaseActivity
     {
         hideLoadingDialog();
         AndroidUtil.displayAlertDialog(Html.fromHtml(message).toString(), AndroidUtil.getString(R.string.error), this);
+    }
+
+    //*******************************************************************
+    @Override
+    public void onUpdateSuccessfully(@Nullable ProfileResponse response)
+    //*******************************************************************
+    {
+        hideLoadingDialog();
+        Laila.instance().getMUser_U().getData().setProfile(response.getData().getProfile());
+        SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser_U());
+        hideLoadingDialog();
+        gotoDashboardActivity();
+    }
+
+    //*******************************************************************
+    @Override
+    public void onUpdateFailed(@NonNull String errorMessage)
+    //*******************************************************************
+    {
+        hideLoadingDialog();
+        gotoDashboardActivity();
     }
 }

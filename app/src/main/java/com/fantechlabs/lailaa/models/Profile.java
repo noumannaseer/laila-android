@@ -130,7 +130,8 @@ public class Profile
     @Expose
     private String weight_unit;
 
-    public Profile(){}
+    public Profile() {
+    }
 
     protected Profile(Parcel in) {
         lastName = in.readString();
@@ -205,7 +206,9 @@ public class Profile
         return lastName;
     }
 
-    public void setLastName(String lastName) { this.lastName = lastName; }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public String getAddressPobox() {
         return addressPobox;
@@ -291,19 +294,25 @@ public class Profile
         return userPrivateCode;
     }
 
-    public void setUserPrivateCode(String userPrivateCode) { this.userPrivateCode = userPrivateCode; }
+    public void setUserPrivateCode(String userPrivateCode) {
+        this.userPrivateCode = userPrivateCode;
+    }
 
     public Integer getIsAssistantActive() {
         return isAssistantActive;
     }
 
-    public void setIsAssistantActive(Integer isAssistantActive) { this.isAssistantActive = isAssistantActive; }
+    public void setIsAssistantActive(Integer isAssistantActive) {
+        this.isAssistantActive = isAssistantActive;
+    }
 
     public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) { this.dateOfBirth = dateOfBirth; }
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 
     public String getBloodType() {
         return bloodType;
@@ -317,13 +326,17 @@ public class Profile
         return isNotifications;
     }
 
-    public void setIsNotifications(Integer isNotifications) { this.isNotifications = isNotifications; }
+    public void setIsNotifications(Integer isNotifications) {
+        this.isNotifications = isNotifications;
+    }
 
     public Object getFirebaseChatToken() {
         return firebaseChatToken;
     }
 
-    public void setFirebaseChatToken(Object firebaseChatToken) { this.firebaseChatToken = firebaseChatToken; }
+    public void setFirebaseChatToken(Object firebaseChatToken) {
+        this.firebaseChatToken = firebaseChatToken;
+    }
 
     public String getPhone() {
         return phone;
@@ -337,7 +350,9 @@ public class Profile
         return healthCardNumber;
     }
 
-    public void setHealthCardNumber(String healthCardNumber) { this.healthCardNumber = healthCardNumber; }
+    public void setHealthCardNumber(String healthCardNumber) {
+        this.healthCardNumber = healthCardNumber;
+    }
 
     public String getFacebook() {
         return facebook;
@@ -367,7 +382,9 @@ public class Profile
         return privateInsurance;
     }
 
-    public void setPrivateInsurance(String privateInsurance) { this.privateInsurance = privateInsurance; }
+    public void setPrivateInsurance(String privateInsurance) {
+        this.privateInsurance = privateInsurance;
+    }
 
     public String getAddressCity() {
         return addressCity;
@@ -405,7 +422,9 @@ public class Profile
         return privateInsuranceNumber;
     }
 
-    public void setPrivateInsuranceNumber(String privateInsuranceNumber) { this.privateInsuranceNumber = privateInsuranceNumber; }
+    public void setPrivateInsuranceNumber(String privateInsuranceNumber) {
+        this.privateInsuranceNumber = privateInsuranceNumber;
+    }
 
     public Integer getIsAudio() {
         return isAudio;
@@ -415,46 +434,85 @@ public class Profile
         this.isAudio = isAudio;
     }
 
-    public String getAddressProvince() { return addressProvince; }
+    public String getAddressProvince() {
+        return addressProvince;
+    }
 
-    public void setAddressProvince(String addressProvince) { this.addressProvince = addressProvince; }
+    public void setAddressProvince(String addressProvince) {
+        this.addressProvince = addressProvince;
+    }
 
-    public String getAllergies() { return allergies; }
+    public String getAllergies() {
+        return allergies;
+    }
 
-    public void setAllergies(String allergies) { this.allergies = allergies; }
+    public void setAllergies(String allergies) {
+        this.allergies = allergies;
+    }
 
-    public String getMedicalConditions() { return medicalConditions; }
+    public String getMedicalConditions() {
+        return medicalConditions;
+    }
 
-    public void setMedicalConditions(String medicalConditions) { this.medicalConditions = medicalConditions; }
+    public void setMedicalConditions(String medicalConditions) {
+        this.medicalConditions = medicalConditions;
+    }
 
-    public int getAd_visible() { return ad_visible; }
+    public int getAd_visible() {
+        return ad_visible;
+    }
 
-    public void setAd_visible(int ad_visible) { this.ad_visible = ad_visible; }
+    public void setAd_visible(int ad_visible) {
+        this.ad_visible = ad_visible;
+    }
 
-    public double getAd_amount() { return ad_amount; }
+    public double getAd_amount() {
+        return ad_amount;
+    }
 
-    public void setAd_amount(double ad_amount) { this.ad_amount = ad_amount; }
+    public void setAd_amount(double ad_amount) {
+        this.ad_amount = ad_amount;
+    }
 
-    public String getAd_currency() { return ad_currency; }
+    public String getAd_currency() {
+        return ad_currency;
+    }
 
-    public void setAd_currency(String ad_currency) { this.ad_currency = ad_currency; }
+    public void setAd_currency(String ad_currency) {
+        this.ad_currency = ad_currency;
+    }
 
-    public double getHeight() { return height; }
+    public double getHeight() {
+        return height;
+    }
 
-    public void setHeight(double height) { this.height = height; }
+    public void setHeight(double height) {
+        this.height = height;
+    }
 
-    public double getWeight() { return weight; }
+    public double getWeight() {
+        return weight;
+    }
 
-    public void setWeight(double weight) { this.weight = weight; }
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
 
-    public String getHeight_unit() { return height_unit; }
+    public String getHeight_unit() {
+        return height_unit;
+    }
 
-    public void setHeight_unit(String height_unit) { this.height_unit = height_unit; }
+    public void setHeight_unit(String height_unit) {
+        this.height_unit = height_unit;
+    }
 
-    public String getWeight_unit() { return weight_unit; }
+    public String getWeight_unit() {
+        return weight_unit;
+    }
 
-    public void setWeight_unit(String weight_unit) { this.weight_unit = weight_unit; }
-
+    public void setWeight_unit(String weight_unit) {
+        this.weight_unit = weight_unit;
+    }
 
     @Override
     public int describeContents() {

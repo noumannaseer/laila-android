@@ -17,6 +17,8 @@ import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.activities.AddMedicationActivity;
 import com.fantechlabs.lailaa.databinding.FragmentRxNumberBinding;
 import com.fantechlabs.lailaa.models.SearchMedicine;
+import com.fantechlabs.lailaa.models.updates.models.SearchMedication;
+import com.fantechlabs.lailaa.models.updates.response_models.SearchMedicationResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.view_models.SearchMedicationViewModel;
 import com.fantechlabs.lailaa.view_models.UPCViewModel;
@@ -41,7 +43,7 @@ public class RxNumberFragment
     private SearchMedicationViewModel mSearchMedicationViewModel;
     private UPCViewModel mUpcViewModel;
     private ArrayList<String> mSearchResult;
-    private List<SearchMedicine> mSearchMedication;
+    private List<SearchMedication> mSearchMedication;
     private Runnable mSearchRunnable;
 
 
@@ -79,9 +81,9 @@ public class RxNumberFragment
         mBinding.rxNumber.setOnItemClickListener((parent, view, position, id) ->
         {
             Laila.instance()
-                    .setMSearchMedicine(null);
+                    .setMSearchMedicine_U(null);
             Laila.instance()
-                    .setMSearchMedicine(
+                    .setMSearchMedicine_U(
                             mSearchMedication.get(position));
             goToAddMedication();
         });
@@ -89,7 +91,7 @@ public class RxNumberFragment
         mBinding.addManuallyButton.setOnClickListener(v ->
         {
             Laila.instance()
-                    .setMSearchMedicine(null);
+                    .setMSearchMedicine_U(null);
             goToAddMedication();
         });
     }
@@ -153,16 +155,16 @@ public class RxNumberFragment
 
     //*****************************************************************************
     @Override
-    public void onSearchSuccessfully(@Nullable List<SearchMedicine> searchMedicationResponse)
+    public void onSearchSuccessfully(@Nullable SearchMedicationResponse searchMedicationResponse)
     //*****************************************************************************
     {
         Laila.instance().mAutoCompleteLoadingBar.removeIndicator();
-        if (searchMedicationResponse == null || searchMedicationResponse.size() == 0)
+        if (searchMedicationResponse == null)
             return;
 
         mSearchResult = new ArrayList<>();
-        mSearchMedication = searchMedicationResponse;
-        for (SearchMedicine item : searchMedicationResponse) {
+        mSearchMedication = searchMedicationResponse.getData().getSearchMedications();
+        for (SearchMedication item : searchMedicationResponse.getData().getSearchMedications()) {
             mSearchResult.add(item.getBrandName() + "\n"
                     + AndroidUtil.getString(R.string.din_rx) + item.getDrugIdentificationNumber());
         }
@@ -222,16 +224,16 @@ public class RxNumberFragment
     {
         hideLoadingDialog();
 
-        if (response == null || response.size() == 0)
-            return;
-        mSearchResult = new ArrayList<>();
-        mSearchMedication = response;
-        for (SearchMedicine item : response) {
-            mSearchResult.add(item.getTitle() + "\n"
-                    + AndroidUtil.getString(R.string.din_rx) + item.getUpc());
-        }
-
-        startAutoCompleteView(mSearchResult.toArray(new String[0]));
+//        if (response == null || response.size() == 0)
+//            return;
+//        mSearchResult = new ArrayList<>();
+//        mSearchMedication = response;
+//        for (SearchMedicine item : response) {
+//            mSearchResult.add(item.getTitle() + "\n"
+//                    + AndroidUtil.getString(R.string.din_rx) + item.getUpc());
+//        }
+//
+//        startAutoCompleteView(mSearchResult.toArray(new String[0]));
     }
 
     //**************************************************************

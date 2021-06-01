@@ -19,12 +19,13 @@ import android.widget.TextView;
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.adapter.AllergiesListAdapter;
+import com.fantechlabs.lailaa.adapter.ResourcesListAdapter;
 import com.fantechlabs.lailaa.databinding.ActivityResourcesBinding;
 import com.fantechlabs.lailaa.models.Profile;
 import com.fantechlabs.lailaa.models.SearchMedicine;
 import com.fantechlabs.lailaa.models.allergie_models.AllergieListerner;
 import com.fantechlabs.lailaa.models.allergie_models.XmlParcer;
-import com.fantechlabs.lailaa.request_models.ProfileRequest;
+import com.fantechlabs.lailaa.models.updates.request_models.ProfileRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.view_models.SearchMedicationViewModel;
@@ -43,8 +44,8 @@ public class ResourcesActivity extends BaseActivity
     private ActivityResourcesBinding mBinding;
     private List<String> mAllergiesList;
     private List<String> mConditionList;
-    private AllergiesListAdapter mAllergiesListAdapter;
-    private Profile mUser;
+    private ResourcesListAdapter mResourcesListAdapter;
+    private ProfileRequest mUser;
 
     //*****************************************************
     @Override
@@ -115,32 +116,13 @@ public class ResourcesActivity extends BaseActivity
     private void startAllergiesRecyclerView()
     //**************************************************************
     {
-        mUser = Laila.instance().getMProfileRequest().getProfile();
+        mUser = Laila.instance().getMProfileRequest();
 
         if (mAllergiesList != null && mAllergiesList.size() > 0) {
             val allergy = AndroidUtil.stringJoin(mAllergiesList, ";");
             mUser.setAllergies(allergy);
         }
-        mAllergiesListAdapter = new AllergiesListAdapter(mAllergiesList, new AllergiesListAdapter.ListClickListener() {
-            @Override
-            public void onDelete(int position) {
-                AndroidUtil.displayAlertDialog(
-                        AndroidUtil.getString(
-                                R.string.delete_item),
-                        AndroidUtil.getString(
-                                R.string.delete),
-                        ResourcesActivity.this,
-                        AndroidUtil.getString(
-                                R.string.ok),
-                        AndroidUtil.getString(
-                                R.string.cancel),
-                        (dialog, which) -> {
-                            if (which == -1) {
-                                mAllergiesList.remove(position);
-                                startAllergiesRecyclerView();
-                            }
-                        });
-            }
+        mResourcesListAdapter = new ResourcesListAdapter(mAllergiesList, new ResourcesListAdapter.ListClickListener() {
 
             //***********************************************************
             @Override
@@ -173,40 +155,20 @@ public class ResourcesActivity extends BaseActivity
             }
         });
         mBinding.allergiesRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        mBinding.allergiesRecycleView.setAdapter(mAllergiesListAdapter);
+        mBinding.allergiesRecycleView.setAdapter(mResourcesListAdapter);
     }
 
     //**************************************************************
     private void startConditionRecyclerView()
     //**************************************************************
     {
-        mUser = Laila.instance().getMProfileRequest().getProfile();
+        mUser = Laila.instance().getMProfileRequest();
 
         if (mConditionList != null && mConditionList.size() > 0) {
             val condition = AndroidUtil.stringJoin(mConditionList, ";");
             mUser.setMedicalConditions(condition);
         }
-        mAllergiesListAdapter = new AllergiesListAdapter(mConditionList, new AllergiesListAdapter.ListClickListener() {
-            @Override
-            public void onDelete(int position) {
-                AndroidUtil.displayAlertDialog(
-                        AndroidUtil.getString(
-                                R.string.delete_item),
-                        AndroidUtil.getString(
-                                R.string.delete),
-                        ResourcesActivity.this,
-                        AndroidUtil.getString(
-                                R.string.ok),
-                        AndroidUtil.getString(
-                                R.string.cancel),
-                        (dialog, which) -> {
-                            if (which == -1) {
-                                mConditionList.remove(position);
-                                startConditionRecyclerView();
-                            }
-                        });
-            }
-
+        mResourcesListAdapter = new ResourcesListAdapter(mConditionList, new ResourcesListAdapter.ListClickListener() {
             @Override
             public void onClick(String title) {
                 showLoadingDialog();
@@ -236,7 +198,7 @@ public class ResourcesActivity extends BaseActivity
         });
 
         mBinding.conditionRecycleView.setLayoutManager(new LinearLayoutManager(this));
-        mBinding.conditionRecycleView.setAdapter(mAllergiesListAdapter);
+        mBinding.conditionRecycleView.setAdapter(mResourcesListAdapter);
     }
 
 
@@ -246,11 +208,11 @@ public class ResourcesActivity extends BaseActivity
     //*******************************************************************
     {
         super.onResume();
-        Laila.instance().setMProfileRequest(new ProfileRequest());
-        Laila.instance().getMProfileRequest().setProfile(new Profile());
-
-        if (Laila.instance().getMProfileRequest() == null || Laila.instance().getMProfileRequest().getProfile() == null)
-            return;
+//        Laila.instance().setMProfileRequest(new ProfileRequest());
+//        Laila.instance().getMProfileRequest().setProfile(new Profile());
+//
+//        if (Laila.instance().getMProfileRequest() == null || Laila.instance().getMProfileRequest().getProfile() == null)
+//            return;
         setAllergiesAndCondition();
     }
 

@@ -15,20 +15,24 @@ import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.adapter.AlarmsAdapter;
 import com.fantechlabs.lailaa.databinding.ActivityCalenderBinding;
-import com.fantechlabs.lailaa.databinding.ActivityMedicationBinding;
-import com.fantechlabs.lailaa.models.Events;
-import com.fantechlabs.lailaa.models.Medication;
 import com.fantechlabs.lailaa.models.response_models.RefillRemindersResponse;
+import com.fantechlabs.lailaa.models.updates.models.Medication;
+import com.fantechlabs.lailaa.models.updates.models.ResponseEvent;
+import com.fantechlabs.lailaa.models.updates.response_models.AddEventResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.GetEventsResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.RefillReminderResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.utils.DateUtils;
 import com.fantechlabs.lailaa.utils.SharedPreferencesUtils;
 import com.fantechlabs.lailaa.utils.UIUtils;
 import com.fantechlabs.lailaa.view_models.DeleteEventViewModel;
+import com.fantechlabs.lailaa.view_models.MedicineEventViewModel;
 import com.fantechlabs.lailaa.view_models.RefillRemindersViewModel;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import lombok.val;
@@ -36,17 +40,21 @@ import lombok.val;
 //******************************************************************
 public class CalenderActivity extends BaseActivity
         implements DeleteEventViewModel.DeleteEventListener,
-        RefillRemindersViewModel.RefillRemindersViewModelListener
+        RefillRemindersViewModel.RefillRemindersViewModelListener,
+        MedicineEventViewModel.MedicineEventCompleteListener
 //******************************************************************
 {
     private ActivityCalenderBinding mBinding;
     public List<EventDay> mCalenderEvent = new ArrayList<>();
-    private List<Events> mTodayEvents = new ArrayList<>();
+    private List<ResponseEvent> mTodayEvents = new ArrayList<>();
     private String mStartDate, mEndDate;
     private int mEventId, mPosition;
     private DeleteEventViewModel mDeleteEventViewModel;
+    private MedicineEventViewModel mMedicineEventViewModel;
     private List<Medication> mMedicationList;
     private RefillRemindersViewModel mRefillRemindersViewModel;
+    private List<ResponseEvent> mResponseEvents;
+
 
     //******************************************************************
     @Override
@@ -68,11 +76,21 @@ public class CalenderActivity extends BaseActivity
     {
         super.onResume();
         mRefillRemindersViewModel = new RefillRemindersViewModel(this);
+        mMedicineEventViewModel = new MedicineEventViewModel(this);
+        getEvents();
         getRefillReminders();
     }
 
     //*********************************************************
-    private void showAlarmOnRecyclerView(List<Events> events)
+    private void getEvents()
+    //*********************************************************
+    {
+        showLoadingDialog();
+        mMedicineEventViewModel.getEvents();
+    }
+
+    //*********************************************************
+    private void showAlarmOnRecyclerView(List<ResponseEvent> events)
     //*********************************************************
     {
         AlarmsAdapter alarmsAdapter = new AlarmsAdapter();
@@ -93,16 +111,16 @@ public class CalenderActivity extends BaseActivity
                                         R.string.cancel),
                                 (dialog, which) -> {
                                     if (which == -1) {
-                                        val events1 = Laila.instance().getMUser().getEvents();
-                                        if (events1 == null || events1.size() == 0)
+//                                        val events1 = RXCare.instance().getMUser_U().getData().getResponseEvents();
+                                        if (mResponseEvents == null || mResponseEvents.size() == 0)
                                             return;
-                                        for (int i = 0; i < events1.size(); i++) {
-                                            if (events1.get(i).getId().equals(id)) {
+                                        for (int i = 0; i < mResponseEvents.size(); i++) {
+                                            if (mResponseEvents.get(i).getId().equals(id)) {
                                                 mEventId = id;
                                                 mPosition = i;
                                             }
                                         }
-                                        CalenderActivity.this.showLoadingDialog();
+                                        showLoadingDialog();
                                         mDeleteEventViewModel.deleteEvent(mEventId);
                                     }
                                 });
@@ -119,30 +137,33 @@ public class CalenderActivity extends BaseActivity
     private void addMedicineOnCalender()
     //***********************************************************
     {
-        if (Laila.instance().getMUser() == null || Laila.instance().getMUser().getEvents() == null)
+        if (Laila.instance().getMUser_U() == null || mResponseEvents == null)
             return;
-        val alarms = Laila.instance().getMUser().getEvents();
+//        val alarms = RXCare.instance().getMUser_U().getData().getResponseEvents();
 
         if (mTodayEvents.size() == 0) {
             mBinding.calendarView.setEvents(null);
             mCalenderEvent.clear();
         }
 
-        for (val alarm : alarms) {
+        for (val alarm : mResponseEvents) {
             Calendar calendar = Calendar.getInstance();
 
-            splitDateTime(alarm.getStartDate(), alarm.getEndDate());
+            val start = DateUtils.getDateFromTimeStamp(alarm.getStartDate(), "dd-MMM-yyyy");
+            val end = DateUtils.getDateFromTimeStamp(alarm.getEndDate(), "dd-MMM-yyyy");
+
+            splitDateTime(start, end);
             val days = DateUtils.getNumberOfDays(mStartDate, mEndDate);
+            calendar.setTimeInMillis(alarm.getStartDate() * 1000);
 
-            calendar.setTimeInMillis(DateUtils.getDateFromStringFormat(mStartDate, "dd-MMM-yyyy").getTime());
-
-            for (int i = 0; i <= days; i++) {
+            for (int i = 0; i <= days - 1; i++) {
                 Calendar finalCalender = Calendar.getInstance();
                 finalCalender.setTimeInMillis(calendar.getTimeInMillis());
                 mCalenderEvent.add(
-                        new EventDay(finalCalender, R.drawable.record));
+                        new EventDay(finalCalender, R.drawable.record, Color.parseColor("#228B22")));
                 calendar.add(Calendar.HOUR, 24);
             }
+
         }
         mBinding.calendarView.setEvents(mCalenderEvent);
     }
@@ -151,6 +172,7 @@ public class CalenderActivity extends BaseActivity
     @Override
     protected boolean showStatusBar()
     //****************************************************************
+
     {
         return false;
     }
@@ -159,11 +181,12 @@ public class CalenderActivity extends BaseActivity
     private void initControl()
     //****************************************
     {
+        mResponseEvents = new ArrayList<>();
         mDeleteEventViewModel = new DeleteEventViewModel(this);
         mBinding.addBtn.setOnClickListener(v -> {
             startActivity(new Intent(this, AddAlarmActivity.class));
         });
-        mBinding.calendarView.setOnDayClickListener(eventDay -> CalenderActivity.this.filterCalenderRecord(eventDay));
+        mBinding.calendarView.setOnDayClickListener(eventDay -> filterCalenderRecord(eventDay));
     }
 
     //***********************************************************
@@ -171,17 +194,16 @@ public class CalenderActivity extends BaseActivity
     //***********************************************************
     {
         showLoadingDialog();
-        if (Laila.instance().getMUser() == null || Laila.instance().getMUser().getProfile() == null)
+        if (Laila.instance().getMUser_U() == null)
             return;
         showLoadingDialog();
-        mRefillRemindersViewModel.getRefillReminders(Laila.instance().getMUser().getProfile().getUserPrivateCode());
+        mRefillRemindersViewModel.getRefillReminders();
     }
 
     //***********************************************************
     private void filterCalenderRecord(EventDay eventDay)
     //***********************************************************
     {
-
         Calendar clickedDayCalendar;
         clickedDayCalendar = eventDay == null ? Calendar.getInstance() : eventDay.getCalendar();
 
@@ -193,26 +215,27 @@ public class CalenderActivity extends BaseActivity
         clickedDayCalendar.set(Calendar.MINUTE, 59);
         clickedDayCalendar.set(Calendar.SECOND, 0);
 
-        val events = Laila.instance().getMUser().getEvents();
-        val user = Laila.instance().getMUser();
+//        val events = RXCare.instance().getMUser_U().getData().getResponseEvents();
+        val user = Laila.instance().getMUser_U();
 
         if (user == null) {
-            if (events == null) {
+            if (mResponseEvents == null) {
                 mBinding.alarm.setAdapter(null);
             }
             return;
         }
-        if (events == null || events.size() == 0) {
+        if (mResponseEvents == null || mResponseEvents.size() == 0) {
             mBinding.alarm.setAdapter(null);
             return;
         }
 
         mTodayEvents = new ArrayList<>();
 
-        for (Events event : events) {
-            val startDate = DateUtils.getDateFromString(event.getStartDate(), "dd-MMM-yyyy hh:mma");
-            val endDate = DateUtils.addOneDayToDate(event.getEndDate(), "dd-MMM-yyyy hh:mma");
-            if (clickedDayCalendar.getTime().before(endDate) && clickedDayCalendar.getTime().after(startDate))
+        for (ResponseEvent event : mResponseEvents) {
+            val startDate = new Date(event.getStartDate() * 1000);
+            val endDate = new Date(event.getEndDate() * 1000);
+            val clickedDate = clickedDayCalendar.getTime();
+            if (clickedDate.before(endDate) && clickedDate.after(startDate))
                 mTodayEvents.add(event);
         }
 
@@ -239,20 +262,7 @@ public class CalenderActivity extends BaseActivity
     public void onSuccessfullyDeleteEvent(@Nullable String result)
     //*************************************************************
     {
-
-        val events1 = Laila.instance().getMUser().getEvents();
-
-        if (events1 == null || events1.size() == 0)
-            return;
-        Laila.instance().getMUser().getEvents().remove(mPosition);
-        mTodayEvents.remove(mPosition);
-
-        val user = Laila.instance().getMUser();
-        SharedPreferencesUtils.setValue(Constants.USER_DATA, user);
-
-        filterCalenderRecord(null);
-        addMedicineOnCalender();
-        hideLoadingDialog();
+        getEvents();
         AndroidUtil.displayAlertDialog(result, AndroidUtil.getString(R.string.success_delete_alarm), this);
     }
 
@@ -267,20 +277,20 @@ public class CalenderActivity extends BaseActivity
 
     //*************************************************************
     @Override
-    public void onSuccessGetRefillReminders(@Nullable RefillRemindersResponse response)
+    public void onSuccessGetRefillReminders(@Nullable RefillReminderResponse response)
     //*************************************************************
     {
         hideLoadingDialog();
-        val user = Laila.instance().getMUser();
-        if (user != null && user.getMedication() != null) {
+        val user = Laila.instance().getMUser_U();
+        if (user != null && user.getData().getMedicationList() != null) {
             mMedicationList = new ArrayList<>();
-            if (response.getIds() != null || response.getIds().size() != 0) {
-                val ids = response.getIds();
-                val medicineList = user.getMedication();
+            if (response.getData().getIds() != null) {
+                val ids = response.getData().getIds();
+                val medicineList = user.getData().getMedicationList();
 
                 for (Integer id : ids) {
                     for (Medication medicine : medicineList) {
-                        if (medicine.getId() == id && medicine.getPrescribed() == 1)
+                        if (medicine.getId().equals(id) && medicine.getPrescribed() == 1)
                             mMedicationList.add(medicine);
                     }
                 }
@@ -305,6 +315,36 @@ public class CalenderActivity extends BaseActivity
         hideLoadingDialog();
         setCalenderEvents();
         AndroidUtil.displayAlertDialog(message, AndroidUtil.getString(R.string.error), this);
+    }
+
+    //*************************************************************
+    @Override
+    public void onSuccessfullyAddEvent(@Nullable AddEventResponse response)
+    //*************************************************************
+    {
+
+    }
+
+    //*************************************************************
+    @Override
+    public void onSuccessfullyGetEvents(@Nullable GetEventsResponse response)
+    //*************************************************************
+    {
+        hideLoadingDialog();
+        if (response.getData().getEventsList() == null)
+            return;
+        mResponseEvents = response.getData().getEventsList();
+        Laila.instance().getMUser_U().getData().setEventsList(mResponseEvents);
+        SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser_U());
+        setCalenderEvents();
+    }
+
+    //*************************************************************
+    @Override
+    public void onFailedEvents(@NonNull String errorMessage)
+    //*************************************************************
+    {
+        hideLoadingDialog();
     }
 
 }

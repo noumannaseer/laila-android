@@ -5,8 +5,11 @@ import android.text.TextUtils;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 
+import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
+import com.fantechlabs.lailaa.bodyreading.repository.network.utils.NetworkUtils;
 import com.fantechlabs.lailaa.models.response_models.RefillRemindersResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.RefillReminderResponse;
 import com.fantechlabs.lailaa.network.ServiceGenerator;
 import com.fantechlabs.lailaa.network.services.MedicationService;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
@@ -29,56 +32,54 @@ public class RefillRemindersViewModel
 
     private RefillRemindersViewModelListener mRefillRemindersViewModelListener;
 
-    public RefillRemindersViewModel(RefillRemindersViewModelListener viewModelListener)
-    {
+    public RefillRemindersViewModel(RefillRemindersViewModelListener viewModelListener) {
         this.mRefillRemindersViewModelListener = viewModelListener;
     }
 
     //**********************************************************
-    public void getRefillReminders(String userPrivateCode)
+    public void getRefillReminders()
     //**********************************************************
     {
 
         val service = ServiceGenerator.createService(MedicationService.class,
-                                                     true,
-                                                     Constants.HEALTH_CARE_URL);
-        if (service == null)
-        {
+                true,
+                Constants.BASE_URL_U);
+        if (service == null) {
             mRefillRemindersViewModelListener.onFailedGetRefillReminders(AndroidUtil.getString(R.string.internet_not_vailable));
             return;
         }
 
-        HashMap<String, String> request = new HashMap<String, String>();
-        request.put(Constants.USER_PRIVATE_CODE, userPrivateCode);
+        HashMap<String, String> refillRemindersRequest = new HashMap<String, String>();
+        refillRemindersRequest.put(Constants.USER_ID, Laila.instance().getMUser_U().getData().getUser().getId().toString());
+        refillRemindersRequest.put(Constants.USER_TOKEN, Laila.instance().getMUser_U().getData().getUser().getToken());
 
-        val placeServices = service.getRefillReminders(request);
+        val placeServices = service.getRefillReminders(refillRemindersRequest);
 
         //**********************************************************
-        placeServices.enqueue(new Callback<RefillRemindersResponse>()
-        //**********************************************************
+        placeServices.enqueue(new Callback<RefillReminderResponse>()
+                //**********************************************************
         {
 
             //**********************************************************
             @Override
-            public void onResponse(Call<RefillRemindersResponse> call, Response<RefillRemindersResponse> response)
+            public void onResponse(Call<RefillReminderResponse> call, Response<RefillReminderResponse> response)
             //**********************************************************
             {
-                if (response.isSuccessful())
-                {
-                    if (response.body().getCode().equals("200"))
-                    {
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus() == 200) {
                         mRefillRemindersViewModelListener.onSuccessGetRefillReminders(response.body());
                         return;
                     }
-                    mRefillRemindersViewModelListener.onFailedGetRefillReminders((TextUtils.isEmpty(response.body().getMsg()) ? AndroidUtil.getString(R.string.server_error) : response.body().getMsg()));
+                    mRefillRemindersViewModelListener.onFailedGetRefillReminders((TextUtils.isEmpty(response.body().getData().getMessage()) ? AndroidUtil.getString(R.string.server_error) : response.body().getData().getMessage()));
                     return;
                 }
-                mRefillRemindersViewModelListener.onFailedGetRefillReminders(AndroidUtil.getString(R.string.server_error));
+                val error = NetworkUtils.responseError(response);
+                mRefillRemindersViewModelListener.onFailedGetRefillReminders(error);
             }
 
             //**********************************************************
             @Override
-            public void onFailure(Call<RefillRemindersResponse> call, Throwable t)
+            public void onFailure(Call<RefillReminderResponse> call, Throwable t)
             //**********************************************************
             {
                 if (mRefillRemindersViewModelListener != null)
@@ -90,9 +91,9 @@ public class RefillRemindersViewModel
 
     //**********************************************************
     public interface RefillRemindersViewModelListener
-    //**********************************************************
+            //**********************************************************
     {
-        void onSuccessGetRefillReminders(@Nullable RefillRemindersResponse response);
+        void onSuccessGetRefillReminders(@Nullable RefillReminderResponse response);
 
         void onFailedGetRefillReminders(@NonNull String message);
     }

@@ -1,35 +1,39 @@
 package com.fantechlabs.lailaa.request_models;
 
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 //******************************************************
 public class FollowUpRequest
 //******************************************************
 {
 
-    private String user_private_code;
-    private String medication_id;
-    private String log_DateTime;
+    @SerializedName("user_id")
+    @Expose
+    private String userId;
+    @SerializedName("token")
+    @Expose
+    private String token;
+    @SerializedName("medication_id")
+    @Expose
+    private String medicationId;
+    @SerializedName("log_DateTime")
+    @Expose
+    private String logDateTime;
+    @SerializedName("status")
+    @Expose
     private String status;
-
 
     //******************************************************
     public static FollowUpRequest Builder()
     //******************************************************
-    { return new  FollowUpRequest(); }
-
-    public void setUser_private_code(String user_private_code) {
-        this.user_private_code = user_private_code;
-    }
-
-    public void setMedication_id(String medication_id) {
-        this.medication_id = medication_id;
-    }
-
-    public void setLog_DateTime(String log_DateTime) {
-        this.log_DateTime = log_DateTime;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    {
+        return new FollowUpRequest();
     }
 }

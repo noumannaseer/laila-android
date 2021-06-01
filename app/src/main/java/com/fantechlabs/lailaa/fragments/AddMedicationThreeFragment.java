@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,14 +23,23 @@ import com.fantechlabs.lailaa.activities.AddPharmacyActivity;
 import com.fantechlabs.lailaa.activities.MedicationActivity;
 import com.fantechlabs.lailaa.databinding.FragmentAddMedicationThreeBinding;
 import com.fantechlabs.lailaa.models.Events;
-import com.fantechlabs.lailaa.models.response_models.MedicationResponse;
 import com.fantechlabs.lailaa.models.response_models.MedicineEventResponse;
+import com.fantechlabs.lailaa.models.updates.models.Event;
+import com.fantechlabs.lailaa.models.updates.models.Medication;
+import com.fantechlabs.lailaa.models.updates.models.ResponseEvent;
+import com.fantechlabs.lailaa.models.updates.response_models.AddEventResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.GetEventsResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.MedicationResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.PharmacyResponse;
 import com.fantechlabs.lailaa.request_models.AddEventRequest;
 import com.fantechlabs.lailaa.request_models.AddMedicineEventRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
+import com.fantechlabs.lailaa.utils.DateUtils;
 import com.fantechlabs.lailaa.utils.SharedPreferencesUtils;
 import com.fantechlabs.lailaa.view_models.AddMedicationViewModel;
+import com.fantechlabs.lailaa.view_models.AddPharmacyViewModel;
+import com.fantechlabs.lailaa.view_models.DocumentsViewModel;
 import com.fantechlabs.lailaa.view_models.MedicineEventViewModel;
 
 import java.text.SimpleDateFormat;
@@ -40,6 +50,7 @@ import java.util.List;
 
 import lombok.SneakyThrows;
 import lombok.val;
+import rx.internal.util.LinkedArrayList;
 
 import static com.fantechlabs.lailaa.utils.Constants.SELECT_PHARMACY;
 
@@ -48,7 +59,8 @@ public class AddMedicationThreeFragment
         extends BaseFragment
         implements AddMedicationViewModel.AddMedicationListener,
         MedicineEventViewModel.MedicineEventCompleteListener,
-        View.OnClickListener
+        View.OnClickListener,
+        AddPharmacyViewModel.AddPharmacyListener
 //***********************************************************
 {
 
@@ -62,6 +74,7 @@ public class AddMedicationThreeFragment
     private boolean mUpdateMedicine;
     private MedicineEventViewModel mMedicineEventViewModel;
     private boolean mDeliveryType;
+    private AddPharmacyViewModel mAddPharmacyViewModel;
 
 
     //***********************************************************
@@ -88,13 +101,67 @@ public class AddMedicationThreeFragment
     private void initControl()
     //***********************************************************
     {
+        initViewModels();
         infoClickListener();
+        saveMedications();
+//        getPharmacies();
+        addPharmacy();
+        loadPharmacies();
+        backToPreviousScreen();
+    }
+
+    //***********************************************************
+    private void loadPharmacies()
+    //***********************************************************
+    {
+        val pharmacies = Laila.instance().getMUser_U().getData().getStringPharmacyList();
+        if (pharmacies != null)
+            pharmacyDropDown(pharmacies);
+
+    }
+
+    //*************************************************************
+    private void pharmacyDropDown(List<String> pharmacyNameList)
+    //*************************************************************
+    {
+        ArrayAdapter<String> pharmacyListAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, pharmacyNameList);
+        pharmacyListAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mBinding.pharmacy.setAdapter(pharmacyListAdapter);
+    }
+
+    //***********************************************************
+    private void initViewModels()
+    //***********************************************************
+    {
         mAddMedicationViewModel = new AddMedicationViewModel(this);
         mMedicineEventViewModel = new MedicineEventViewModel(this);
+        mAddPharmacyViewModel = new AddPharmacyViewModel(this);
+    }
+
+    //***********************************************************
+    private void backToPreviousScreen()
+    //***********************************************************
+    {
+        mBinding.navigateBack.setOnClickListener(v ->
+        {
+            if (AndroidUtil.mTooltip != null)
+                AndroidUtil.mTooltip.dismiss();
+            Laila.instance().from_third_screen = true;
+            ((AddMedicationActivity) getActivity()).navigateToScreen(1);
+        });
+    }
+
+    //***********************************************************
+    private void saveMedications()
+    //***********************************************************
+    {
         mBinding.saveBtn.setOnClickListener(v -> validation());
+    }
 
-        setDeliveryType();
-
+    //***********************************************************
+    private void addPharmacy()
+    //***********************************************************
+    {
         mBinding.addPharmacy.setOnClickListener(v ->
         {
             if (AndroidUtil.mTooltip != null)
@@ -105,12 +172,19 @@ public class AddMedicationThreeFragment
                     AddPharmacyActivity.class);
             startActivity(pharmacyIntent);
         });
-        mBinding.navigateBack.setOnClickListener(v ->
-        {
-            if (AndroidUtil.mTooltip != null)
-                AndroidUtil.mTooltip.dismiss();
-            ((AddMedicationActivity) getActivity()).navigateToScreen(1);
-        });
+    }
+
+    //***********************************************************
+    private void getPharmacies()
+    //***********************************************************
+    {
+        mPharmacyList = new ArrayList<>();
+        mPharmacyList = (ArrayList<String>) Laila.instance().getMUser_U().getData().getStringPharmacyList();
+
+        if (mPharmacyList == null) {
+            showLoadingDialog();
+            mAddPharmacyViewModel.getPharmacies();
+        }
 
     }
 
@@ -120,6 +194,19 @@ public class AddMedicationThreeFragment
     {
         mBinding.refillDateInfo.setOnClickListener(this);
         mBinding.addMedicationThreeMainView.setOnClickListener(this);
+    }
+
+    //***************************************************************
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser)
+    //***************************************************************
+    {
+        if (isVisibleToUser) {
+            getPharmacies();
+            refillDate();
+        }
+
+        super.setUserVisibleHint(isVisibleToUser);
     }
 
     //*************************************************************
@@ -152,10 +239,11 @@ public class AddMedicationThreeFragment
             //*************************************************************
             {
                 val itemPosition = mBinding.pharmacy.getSelectedItemPosition();
-                if (Laila.instance()
-                        .getMUser() == null || Laila.instance()
-                        .getMUser()
-                        .getContacts() == null)
+                val user = Laila.instance().getMUser_U();
+                if (user == null)
+                    return;
+                val pharmacyList = user.getData().getPharmacyList();
+                if (pharmacyList == null)
                     return;
                 if (itemPosition == 0)
                     return;
@@ -187,12 +275,8 @@ public class AddMedicationThreeFragment
         mUpdateMedicine = Laila.instance().on_update_medicine;
         mItemPosition = Laila.instance()
                 .getMMedicationPosition();
-        if (Laila.instance()
-                .getMUser()
-                .getMedication() == null || Laila.instance()
-                .getMUser()
-                .getMedication()
-                .size() == 0)
+        val medicationList = Laila.instance().getMUser_U().getData().getMedicationList();
+        if (medicationList == null || medicationList.size() == 0)
             return;
 
         val medication = Laila.instance().getMUpdateMedication();
@@ -204,8 +288,8 @@ public class AddMedicationThreeFragment
             if (medication == null)
                 return;
 
-            val pharmacy = medication.getPharmacy();
-            val deliverType = medication.getDelivery_type();
+            val pharmacy = medication.getPharmacyId();
+            val deliverType = medication.getPrescribed();
 
             mBinding.pickup.setChecked(deliverType == 1 ? false : true);
             mBinding.delivery.setChecked(deliverType == 1 ? true : false);
@@ -220,14 +304,14 @@ public class AddMedicationThreeFragment
         ArrayList<String> pharmacyNameList = new ArrayList<>();
         String name = "";
 
-        if (Laila.instance().getMUser() == null || Laila.instance().getMUser().getContacts() == null)
+        if (Laila.instance().getMUser_U() == null || Laila.instance().getMUser_U().getData().getPharmacyList() == null)
             return;
-        val pharmacyList = Laila.instance().getMUser().getContacts();
+        val pharmacyList = Laila.instance().getMUser_U().getData().getPharmacyList();
         pharmacyNameList.add(SELECT_PHARMACY);
         for (val pharmacy : pharmacyList) {
             if (pharmacy.getId().equals(id))
-                name = pharmacy.getFirstName();
-            pharmacyNameList.add(pharmacy.getFirstName());
+                name = pharmacy.getName();
+            pharmacyNameList.add(pharmacy.getName());
         }
         if (TextUtils.isEmpty(name) && id == 0) {
             setPharmacySpinner();
@@ -246,7 +330,7 @@ public class AddMedicationThreeFragment
         val addMedicationRequest = Laila.instance().getMAddMedicationRequest();
         val prescribed = addMedicationRequest.getPrescribed();
 
-        val deliveryType = mBinding.pickup.isChecked();
+//        val deliveryType = mBinding.pickup.isChecked();
 
         val refillDate = mBinding.refillDate.getText().toString();
         String pharmacyId = "";
@@ -259,55 +343,62 @@ public class AddMedicationThreeFragment
                 return;
             }
 
-        if (Laila.instance()
-                .getMUser() == null || Laila.instance()
-                .getMUser()
-                .getContacts() == null)
+        val user = Laila.instance()
+                .getMUser_U();
+        if (user == null)
             return;
+        val pharmacyList = user.getData().getPharmacyList();
+        if (pharmacyList == null)
+            return;
+
         if (position > 0) {
-            pharmacyId = Laila.instance()
-                    .getMUser()
-                    .getContacts()
+            pharmacyId = pharmacyList
                     .get(position - 1)
                     .getId()
                     .toString();
         }
 
-        addMedicationRequest.setPharmacy(pharmacyId);
+        addMedicationRequest.setPharmacyId(Integer.parseInt(pharmacyId));
         addMedicationRequest.setRefillDate(refillDate);
-
-        if (mDeliveryType)
-            addMedicationRequest.setDeliveryType(deliveryType ? 0 : 1);
 
         val onUpdateMedicine = Laila.instance().on_update_medicine;
         if (onUpdateMedicine) {
+
             val medication = Laila.instance().getMUpdateMedication();
+            val longRefillDate = DateUtils.getDateFromStringFormat(refillDate, Constants.DATE_FORMAT).getTime();
+
             if (!TextUtils.isEmpty(pharmacyId))
-                medication.setPharmacy(Integer.valueOf(pharmacyId));
-            medication.setRefillDate(refillDate);
+                medication.setPharmacyId(Integer.valueOf(pharmacyId));
+            medication.setRefillDate(longRefillDate);
         }
 
         if (mUpdateMedicine) {
             if (Laila.instance()
-                    .getMUser()
-                    .getMedication() == null || Laila.instance()
-                    .getMUser()
-                    .getMedication()
+                    .getMUser_U()
+                    .getData()
+                    .getMedicationList() == null || Laila.instance()
+                    .getMUser_U()
+                    .getData()
+                    .getMedicationList()
                     .size() == 0)
                 return;
             val medication = Laila.instance()
-                    .getMUser()
-                    .getMedication()
+                    .getMUser_U()
+                    .getData()
+                    .getMedicationList()
                     .get(mItemPosition);
             mUpdateMedicineId = medication.getId();
             addMedicationRequest.setId(mUpdateMedicineId);
+            Laila.instance()
+                    .setMAddMedicationRequest(addMedicationRequest);
+            showLoadingDialog();
+            mAddMedicationViewModel.updateMedication(addMedicationRequest);
+            return;
         }
 
         Laila.instance()
                 .setMAddMedicationRequest(addMedicationRequest);
-
         showLoadingDialog();
-
         mAddMedicationViewModel.addMedication(addMedicationRequest);
     }
 
@@ -321,16 +412,40 @@ public class AddMedicationThreeFragment
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         refillDate();
-
         if (Laila.instance().is_pharmacy_added)
             Laila.instance().is_pharmacy_added = false;
 
-        val onUpdateMedicine = Laila.instance().on_update_medicine;
-        if (onUpdateMedicine) {
-            onUpdate();
-            return;
+        if (Laila.instance().from_pharmacy_added) {
+            setUpdatedPharmacy();
+            Laila.instance().from_pharmacy_added = false;
         }
-        setPharmacySpinner();
+        val onUpdateMedicine = Laila.instance().on_update_medicine;
+        if (onUpdateMedicine)
+            onUpdate();
+    }
+
+    //*************************************************************
+    private void setUpdatedPharmacy()
+    //*************************************************************
+    {
+        mPharmacyList = new ArrayList<>();
+        mPharmacyList.add(SELECT_PHARMACY);
+        val pharmacyList = Laila.instance().getMUser_U().getData().getPharmacyList();
+
+        if (pharmacyList != null)
+            for (val i : pharmacyList) {
+                if (!TextUtils.isEmpty(i.getName()))
+                    mPharmacyList.add(i.getName());
+            }
+        Laila.instance()
+                .getMUser_U()
+                .getData()
+                .setStringPharmacyList(mPharmacyList);
+
+        ArrayAdapter<String> pharmacyAdapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                mPharmacyList);
+        mBinding.pharmacy.setAdapter(pharmacyAdapter);
     }
 
     //*************************************************************
@@ -339,14 +454,6 @@ public class AddMedicationThreeFragment
     {
         mPharmacyList = new ArrayList<>();
         mPharmacyList.add(SELECT_PHARMACY);
-
-        if (Laila.instance().getMUser() != null && Laila.instance().getMUser().getContacts() != null)
-            for (val i : Laila.instance()
-                    .getMUser()
-                    .getContacts()) {
-                if (!TextUtils.isEmpty(i.getFirstName()))
-                    mPharmacyList.add(i.getFirstName());
-            }
 
         ArrayAdapter<String> pharmacyAdapter = new ArrayAdapter<String>(getContext(),
                 android.R.layout.simple_spinner_dropdown_item,
@@ -374,9 +481,8 @@ public class AddMedicationThreeFragment
 
         if (addMedicationRequest == null || addMedicationRequest.getDispensedDate() == null || addMedicationRequest.getDispensedDate().length() == 0)
             return;
-
         val dispensedDate = addMedicationRequest.getDispensedDate();
-        val dosage = stringToInteger(addMedicationRequest.getNumber_of_pills());
+        val dosage = addMedicationRequest.getDosage();
         val dispensedAmount = stringToInteger(addMedicationRequest.getDispensedAmount());
         val frequency = stringToInteger(addMedicationRequest.getFrequency());
 
@@ -421,36 +527,33 @@ public class AddMedicationThreeFragment
     public void onSuccessfully(@Nullable MedicationResponse response)
     //*************************************************************
     {
-        if (response.getMedication() == null) {
-            hideLoadingDialog();
+        if (response.getData() == null)
             return;
-        }
-
         mMedicationResponses = response;
         if (Laila.instance()
-                .getMUser()
-                .getMedication() == null)
+                .getMUser_U()
+                .getData().getMedicationList() == null)
             Laila.instance()
-                    .getMUser()
-                    .setMedication(new ArrayList<>());
-
-        if (mUpdateMedicine && mUpdateMedicineId == mMedicationResponses.getMedication().getId()) {
-            Laila.instance().getMUser().getMedication().set(Laila.instance().getMMedicationPosition(), mMedicationResponses.getMedication());
-            Laila.instance().on_update_medicine = false;
-        } else {
-            Laila.instance()
-                    .getMUser()
-                    .getMedication()
-                    .add(0, mMedicationResponses.getMedication());
+                    .getMUser_U()
+                    .getData()
+                    .setMedicationList(new ArrayList<>());
+        if (mUpdateMedicine) {
+            addMedicineEvents();
+            Laila.instance().from_update_events = true;
+            addMedicineEvents();
+            return;
         }
-
         Laila.instance()
-                .setMMedicationId(response.getMedication()
+                .getMUser_U()
+                .getData()
+                .getMedicationList()
+                .add(mMedicationResponses.getData().getMedication());
+        Laila.instance()
+                .setMMedicationId(response.getData().getMedication()
                         .getId());
 
-        SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser());
+        SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser_U());
         Laila.instance().is_medicine_added = true;
-
         addMedicineEvents();
     }
 
@@ -458,65 +561,80 @@ public class AddMedicationThreeFragment
     private void addMedicineEvents()
     //*************************************************************
     {
-        val medication = mMedicationResponses.getMedication();
-        if (medication == null)
-            return;
+        Medication medication = null;
+        if (mUpdateMedicine) {
+            Laila.instance().on_update_medicine = false;
+            Laila.instance().from_update_medication = true;
+            medication = Laila.instance().getMUpdateMedication();
+        } else
+            medication = mMedicationResponses.getData().getMedication();
 
         val addMedicationRequest = Laila.instance()
                 .getMAddMedicationRequest();
+        if (addMedicationRequest == null)
+            return;
         val intakeTimeList = addMedicationRequest.getIntakeTimeList();
-
-        val userPrivateCode = Laila.instance().getMUser().getProfile().getUserPrivateCode();
-        val type = Constants.ALARM_TYPE;
+        val userId = Laila.instance().getMUser_U().getData().getUser().getId().toString();
+        val token = Laila.instance().getMUser_U().getData().getUser().getToken();
+        val type = Constants.MEDICINE_REMINDER;
         val eventTitle = medication.getMedicationName();
-        val startDate = medication.getStartDate();
-        val endDate = medication.getRefillDate();
-        int frequency = Integer.parseInt(medication.getFrequency2());
+
+        String startDate = "";
+        String endDate = "";
+        if (Laila.instance().from_update_events) {
+            startDate = DateUtils.getDate(medication.getDispensedDate(), "yyyy-MMM-dd");
+            endDate = DateUtils.getDate(medication.getRefillDate(), "yyyy-MMM-dd");
+        } else {
+            startDate = DateUtils.getDateFromTimeStamp(medication.getDispensedDate(), "yyyy-MMM-dd");
+            endDate = DateUtils.getDateFromTimeStamp(medication.getRefillDate(), "yyyy-MMM-dd");
+        }
+        int frequency = Integer.parseInt(medication.getFrequency());
         val medicationId = medication.getId();
         if (intakeTimeList == null || intakeTimeList.size() == 0)
             return;
 
-        AddMedicineEventRequest eventRequest = new AddMedicineEventRequest();
+        val eventRequest = Laila.instance().getMAddEventRequest().Builder();
 
-        List<Events> eventsList = new ArrayList<>();
-
-        Events events = new Events();
-
-
+        List<Event> eventsList = new ArrayList<>();
+        Event event = new Event();
         for (int i = 0; i < frequency; i++) {
-            events = new Events();
-            events.setType(type);
-            events.setEventTitle(eventTitle);
-            events.setMedicationId(medicationId);
-            events.setStartDate(startDate + " 8:00AM");
-            events.setEndDate(endDate + " 11:59PM");
-            events.setAlarmType("alarm1");
+            event = new Event();
+            event.setType(type);
+            event.setEventTitle(eventTitle);
+            event.setMedicationId(Integer.toString(medicationId));
+            event.setContactId("1");
+            event.setDeliveryType("1");
+            event.setStartDate(startDate + " 8:00AM");
+            event.setEndDate(endDate + " 11:59PM");
             switch (i) {
                 case 0:
-                    events.setFrequency("1");
-                    events.setTimeSchedule(intakeTimeList.get(0));
-                    eventsList.add(events);
+                    event.setFrequency(1);
+                    event.setTimeSchedule(intakeTimeList.get(0));
+                    eventsList.add(event);
                     break;
                 case 1:
-                    events.setFrequency("2");
-                    events.setTimeSchedule(intakeTimeList.get(1));
-                    eventsList.add(events);
+                    event.setFrequency(2);
+                    event.setTimeSchedule(intakeTimeList.get(1));
+                    eventsList.add(event);
                     break;
                 case 2:
-                    events.setFrequency("3");
-                    events.setTimeSchedule(intakeTimeList.get(2));
-                    eventsList.add(events);
+                    event.setFrequency(3);
+                    event.setTimeSchedule(intakeTimeList.get(2));
+                    eventsList.add(event);
                     break;
                 case 3:
-                    events.setFrequency("4");
-                    events.setTimeSchedule(intakeTimeList.get(3));
-                    eventsList.add(events);
+                    event.setFrequency(4);
+                    event.setTimeSchedule(intakeTimeList.get(3));
+                    eventsList.add(event);
                     break;
             }
 
         }
+        eventRequest.setUserId(Integer.parseInt(userId));
+        eventRequest.setToken(token);
+        eventRequest.setEvents(eventsList);
 
-        eventRequest.setEvents(new AddEventRequest(userPrivateCode, eventsList));
+        Laila.instance().setMUpdateMedication(null);
 
         mMedicineEventViewModel.medicineEvent(eventRequest);
 
@@ -528,29 +646,49 @@ public class AddMedicationThreeFragment
     //*************************************************************
     {
         hideLoadingDialog();
-        Log.d("SessionToken", "onFailed: " + errorMessage);
-        AndroidUtil.displayAlertDialog(errorMessage, "Error", getActivity());
+//        Log.d("SessionToken", "onFailed: " + errorMessage);
+//        AndroidUtil.displayAlertDialog(errorMessage, "Error", getActivity());
+//        goToHome();
+    }
+
+    @Override
+    public void onSuccessfullyGetMedications(@Nullable MedicationResponse medicationResponse) {
+
+    }
+
+    @Override
+    public void onFailedGetMedications(@NonNull String errorMessage) {
+
     }
 
     //*************************************************************
     @Override
-    public void onSuccessfullyAddEvent(@Nullable MedicineEventResponse response)
+    public void onSuccessfullyAddEvent(@Nullable AddEventResponse response)
     //*************************************************************
     {
-        if (response.getEvents() != null) {
-            Laila.instance().addMedicineAlarm(response.getEvents(), 0);
-            if (Laila.instance().getMUser().getEvents() == null)
-                Laila.instance().getMUser().setEvents(new ArrayList<>());
-            for (val event : response.getEvents())
-                Laila.instance().getMUser().getEvents().add(event);
-            SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser());
+        if (response.getData().getResponseEvents() != null) {
+            Laila.instance().addMedicineAlarm(response.getData().getResponseEvents(), 0);
+            if (Laila.instance().getMUser_U().getData().getResponseEvents() == null)
+                Laila.instance().getMUser_U().getData().setResponseEvents(new ArrayList<>());
+
+            val responseEvents = response.getData().getResponseEvents();
+            for (ResponseEvent event : responseEvents)
+                Laila.instance().getMUser_U().getData().getResponseEvents().add(event);
+
+            Laila.instance().getMUser_U().getData().setEventsList(response.getData().getResponseEvents());
+            SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser_U());
         }
         goToHome();
     }
 
+    @Override
+    public void onSuccessfullyGetEvents(@Nullable GetEventsResponse response) {
+        hideLoadingDialog();
+    }
+
     //*************************************************************
     @Override
-    public void onFailedToAddEvent(@NonNull String errorMessage)
+    public void onFailedEvents(@NonNull String errorMessage)
     //*************************************************************
     {
         hideLoadingDialog();
@@ -568,4 +706,58 @@ public class AddMedicationThreeFragment
         getActivity().finish();
     }
 
+    //*************************************************************
+    @Override
+    public void onPharmacySuccessfullyAdded(@Nullable PharmacyResponse Response)
+    //*************************************************************
+    {
+
+    }
+
+    //*************************************************************
+    @Override
+    public void onPharmacyFailedToAdded(@NonNull String errorMessage)
+    //*************************************************************
+    {
+
+    }
+
+    //*************************************************************
+    @Override
+    public void onSuccessfullyGet(@Nullable PharmacyResponse response)
+    //*************************************************************
+    {
+        hideLoadingDialog();
+        mPharmacyList = new ArrayList<>();
+        mPharmacyList.add(SELECT_PHARMACY);
+        if (response.getData() == null || response.getData().getPharmacyList() == null)
+            return;
+        if (response.getData().getPharmacyList() != null)
+            for (val i : response.getData().getPharmacyList()) {
+                if (!TextUtils.isEmpty(i.getName()))
+                    mPharmacyList.add(i.getName());
+            }
+        Laila.instance()
+                .getMUser_U()
+                .getData()
+                .setStringPharmacyList(mPharmacyList);
+        Laila.instance()
+                .getMUser_U()
+                .getData()
+                .setPharmacyList(response.getData().getPharmacyList());
+        SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser_U());
+
+        ArrayAdapter<String> pharmacyAdapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                mPharmacyList);
+        mBinding.pharmacy.setAdapter(pharmacyAdapter);
+    }
+
+    //*************************************************************
+    @Override
+    public void onFailedGet(@NonNull String errorMessage)
+    //*************************************************************
+    {
+        hideLoadingDialog();
+    }
 }

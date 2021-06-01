@@ -40,7 +40,7 @@ public class UpdateFollowUpViewModel
 
         val service = ServiceGenerator.createService(MedicationService.class,
                                                      true,
-                                                     Constants.BASE_URL);
+                                                     Constants.BASE_URL_U);
         if (service == null)
         {
             mUpdateFollowUpViewModelListener.onUpdateFollowUpFailed(AndroidUtil.getString(R.string.internet_not_vailable));
@@ -63,10 +63,10 @@ public class UpdateFollowUpViewModel
                 {
                     if (response.body().getStatus() == 200)
                     {
-                        mUpdateFollowUpViewModelListener.onUpdateFollowUpSuccess(response.body().getMsg());
+                        mUpdateFollowUpViewModelListener.onUpdateFollowUpSuccess(response.body().getData().getMessage());
                         return;
                     }
-                    mUpdateFollowUpViewModelListener.onUpdateFollowUpFailed((TextUtils.isEmpty(response.body().getMsg()) ? AndroidUtil.getString(R.string.server_error) : response.body().getMsg()));
+                    mUpdateFollowUpViewModelListener.onUpdateFollowUpFailed((TextUtils.isEmpty(response.body().getData().getMessage()) ? AndroidUtil.getString(R.string.server_error) : response.body().getData().getMessage()));
                     return;
                 }
                 mUpdateFollowUpViewModelListener.onUpdateFollowUpFailed(AndroidUtil.getString(R.string.server_error));

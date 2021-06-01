@@ -10,6 +10,7 @@ import com.fantechlabs.lailaa.adapter.MedicineInteractionsAdapter;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.ActivityMedicineInteractionBinding;
 import com.fantechlabs.lailaa.models.response_models.DrugCheckResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.MedicineInteractionResponse;
 
 
 //****************************************************************
@@ -19,7 +20,7 @@ public class MedicineInteractionActivity extends BaseActivity
 
     private ActivityMedicineInteractionBinding mBinding;
     public static final String INTERACTION = "INTERACTION";
-    private DrugCheckResponse mDrugCheckResponse;
+    private MedicineInteractionResponse mDrugCheckResponse;
     private MedicineInteractionsAdapter mMedicineInteractionsAdapter;
 
 
@@ -49,7 +50,7 @@ public class MedicineInteractionActivity extends BaseActivity
     //*************************************
     {
         getParcelable();
-        mBinding.interactionNo.setText(mDrugCheckResponse.getMsg());
+        mBinding.interactionNo.setText(mDrugCheckResponse.getData().getMessage());
         startRecyclerView();
     }
 
@@ -57,10 +58,10 @@ public class MedicineInteractionActivity extends BaseActivity
     private void startRecyclerView()
     //**************************************************************
     {
-        if (mDrugCheckResponse.getInteractionMsgs() == null || mDrugCheckResponse.getInteractionMsgs().size() == 0)
+        if (mDrugCheckResponse.getData().getInteractionMsgs() == null || mDrugCheckResponse.getData().getInteractionMsgs().size() == 0)
             return;
 
-        mMedicineInteractionsAdapter = new MedicineInteractionsAdapter(mDrugCheckResponse.getInteractionMsgs(), this);
+        mMedicineInteractionsAdapter = new MedicineInteractionsAdapter(mDrugCheckResponse.getData().getInteractionMsgs(),this);
         mBinding.interactionRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         mBinding.interactionRecyclerview.setAdapter(mMedicineInteractionsAdapter);
     }

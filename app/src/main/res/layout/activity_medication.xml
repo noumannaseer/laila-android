@@ -60,7 +60,6 @@
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
-
         <LinearLayout
             android:id="@+id/no_record"
             android:layout_width="match_parent"

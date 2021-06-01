@@ -16,7 +16,8 @@ import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.activities.AddMedicationActivity;
 import com.fantechlabs.lailaa.databinding.FragmentAddMedicationBinding;
-import com.fantechlabs.lailaa.models.SearchMedicine;
+import com.fantechlabs.lailaa.models.updates.models.SearchMedication;
+import com.fantechlabs.lailaa.models.updates.response_models.SearchMedicationResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.view_models.SearchMedicationViewModel;
 
@@ -34,12 +35,11 @@ public class AddMedicationFragment
 //***********************************************************
 
 {
-
     private FragmentAddMedicationBinding mBinding;
     private View mRootView;
     private SearchMedicationViewModel mSearchMedicationViewModel;
     private ArrayList<String> mSearchResult;
-    private List<SearchMedicine> mSearchMedication;
+    private List<SearchMedication> mSearchMedication;
     private Runnable mSearchRunnable;
 
     //***********************************************************
@@ -67,22 +67,28 @@ public class AddMedicationFragment
     private void initControls()
     //**********************************************************
     {
+        mSearchMedication = new ArrayList<>();
         searchMedicine();
+        addMedication();
+    }
+
+    //***************************************************************
+    private void addMedication()
+    //***************************************************************
+    {
         Laila.instance().mAutoCompleteLoadingBar.setLoadingIndicator(mBinding.loadingIndicator);
         mBinding.searchMedication.setOnItemClickListener((parent, view, position, id) ->
         {
             Laila.instance()
-                    .setMSearchMedicine(null);
-            Laila.instance()
-                    .setMSearchMedicine(
-                            mSearchMedication.get(
-                                    position));
+                    .setMSearchMedicine_U(null);
+            Laila.instance().setMSearchMedicine_U(mSearchMedication.get(position));
             goToAddMedication();
+
         });
         mBinding.addManuallyButton.setOnClickListener(v ->
         {
             Laila.instance()
-                    .setMSearchMedicine(null);
+                    .setMSearchMedicine_U(null);
             goToAddMedication();
         });
     }
@@ -124,13 +130,15 @@ public class AddMedicationFragment
             //*****************************************************************************
             {
                 AndroidUtil.handler.removeCallbacks(mSearchRunnable);
-                if (s.length() > 1) {
-                    mSearchRunnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            Laila.instance().mAutoCompleteLoadingBar.dispayIndicator();
-                            mSearchMedicationViewModel.searchMedication(s.toString());
+                if (s.length() > 3) {
+                    mSearchRunnable = () -> {
+                        Laila.instance().mAutoCompleteLoadingBar.dispayIndicator();
+                        if (Laila.instance().from_image_din) {
+                            mSearchMedicationViewModel.searchDin(s.toString());
+                            Laila.instance().from_image_din = false;
+                            return;
                         }
+                        mSearchMedicationViewModel.searchMedication(s.toString());
                     };
 
                     AndroidUtil.handler.postDelayed(mSearchRunnable, 100);
@@ -148,16 +156,18 @@ public class AddMedicationFragment
 
     //*****************************************************************************
     @Override
-    public void onSearchSuccessfully(@Nullable List<SearchMedicine> searchMedicationResponse)
+    public void onSearchSuccessfully(@Nullable SearchMedicationResponse searchMedicationResponse)
     //*****************************************************************************
     {
         Laila.instance().mAutoCompleteLoadingBar.removeIndicator();
-        if (searchMedicationResponse == null || searchMedicationResponse.size() == 0)
+        if (searchMedicationResponse == null || searchMedicationResponse.getData().getSearchMedications().size() == 0) {
+            AndroidUtil.displayAlertDialog(AndroidUtil.getString(R.string.there_is_not_any_rx_din), AndroidUtil.getString(R.string.alert), getContext());
             return;
+        }
 
         mSearchResult = new ArrayList<>();
-        mSearchMedication = searchMedicationResponse;
-        for (SearchMedicine item : searchMedicationResponse) {
+        mSearchMedication = searchMedicationResponse.getData().getSearchMedications();
+        for (SearchMedication item : mSearchMedication) {
             if (item.getClassName().equals(HUMAN))
                 mSearchResult.add(item.getBrandName() + "\n"
                         + AndroidUtil.getString(R.string.din_rx) + item.getDrugIdentificationNumber()
@@ -170,9 +180,7 @@ public class AddMedicationFragment
 
     //*****************************************************************************
     @Override
-    public void onSearchFailed(@NonNull String errorMessage)
-    //*****************************************************************************
-    {
+    public void onSearchFailed(@NonNull String errorMessage) {
         Laila.instance().mAutoCompleteLoadingBar.removeIndicator();
         AndroidUtil.toast(false, errorMessage);
     }
@@ -192,12 +200,14 @@ public class AddMedicationFragment
         mBinding.searchMedication.setThreshold(1);
         mBinding.searchMedication.setAdapter(adapter);
         mBinding.searchMedication.showDropDown();
+        mSearchResult.clear();
     }
 
     //**************************************************************
     private void goToAddMedication()
     //**************************************************************
     {
+        mSearchMedication.clear();
         Intent addMedicationIntent = new Intent(getContext(), AddMedicationActivity.class);
         getContext().startActivity(addMedicationIntent);
     }

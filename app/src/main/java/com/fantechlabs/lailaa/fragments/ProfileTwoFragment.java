@@ -17,8 +17,9 @@ import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.FragmentProfileTwoBinding;
 import com.fantechlabs.lailaa.models.Country;
-import com.fantechlabs.lailaa.models.Profile;
 import com.fantechlabs.lailaa.models.State;
+import com.fantechlabs.lailaa.models.updates.models.Profile;
+import com.fantechlabs.lailaa.models.updates.request_models.ProfileRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.UIUtils;
 import com.google.gson.Gson;
@@ -35,16 +36,15 @@ import lombok.val;
 public class ProfileTwoFragment extends BaseFragment
 //***********************************************************
 {
-
     private FragmentProfileTwoBinding mBinding;
     private View mRootView;
-    private Profile mUserData;
+    private ProfileRequest mProfileRequest;
     private ArrayList<String> mCountries = new ArrayList<String>();
     private List<Country> mCountryList;
     public static int mCounter = 0;
     private String mCurrentCountry;
     private int mCurrentSelection;
-
+    private Profile mProfile;
 
     //***********************************************************
     public ProfileTwoFragment()
@@ -72,23 +72,29 @@ public class ProfileTwoFragment extends BaseFragment
     private void initControls()
     //*********************************************************
     {
-        mUserData = Laila.instance().getMProfileRequest().getProfile();
-        if (Laila.instance().Edit_Profile)
-            edit();
-
-        mCurrentCountry = AndroidUtil.getDeviceCountryCode(getContext());
+        edit();
+        initStates();
         getCountryList();
         editTextWatcher();
         setCountryAndStateToDropdownList();
     }
 
     //******************************************************
+    private void initStates()
+    //******************************************************
+    {
+        mCurrentCountry = AndroidUtil.getDeviceCountryCode(getContext());
+        if (mCurrentCountry.equals("us"))
+            mBinding.stateTitle.setText(R.string.state);
+    }
+
+    //******************************************************
     private void setCountryAndStateToDropdownList()
     //******************************************************
     {
-        if (Laila.instance().getMUser() == null || Laila.instance().getMUser().getProfile() == null)
+        if (Laila.instance().getMUser_U().getData() == null || Laila.instance().getMUser_U().getData().getProfile() == null)
             return;
-        val userDetail = Laila.instance().getMUser().getProfile();
+        val userDetail = Laila.instance().getMUser_U().getData().getProfile();
         val countryName = userDetail.getAddressCountry();
         val stateName = userDetail.getAddressProvince();
 
@@ -108,7 +114,6 @@ public class ProfileTwoFragment extends BaseFragment
         setDropDownItems(mBinding.country, countries, TextUtils.isEmpty(countryName) ? AndroidUtil.getCountryFullName(mCurrentCountry) : countryName);
         if (!TextUtils.isEmpty(stateName))
             setDropDownItems(mBinding.state, states, stateName);
-
     }
 
     //******************************************************
@@ -123,28 +128,25 @@ public class ProfileTwoFragment extends BaseFragment
         mBinding.address2.setEnabled(true);
         mBinding.phone.setEnabled(true);
         mBinding.state.setEnabled(true);
-        mBinding.country.setEnabled(true);
-        mBinding.state.setEnabled(true);
     }
 
     //******************************************************
     private void editTextWatcher()
     //******************************************************
     {
-        mCurrentSelection = mBinding.country.getSelectedItemPosition();
+        mProfileRequest = Laila.instance().getMProfileRequest();
+        if (mProfileRequest == null)
+            mProfileRequest = new ProfileRequest();
 
+        mCurrentSelection = mBinding.country.getSelectedItemPosition();
         mBinding.country.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                if (mCurrentSelection != position)
-//                {
-                mUserData.setAddressCountry(parent.getSelectedItem().toString());
-                if (Laila.instance().getMUser() == null || Laila.instance().getMUser().getProfile() == null)
-                    return;
-                val userDetail = Laila.instance().getMUser().getProfile();
-                val country = userDetail.getAddressCountry();
-                val province = userDetail.getAddressProvince();
+
+                mProfileRequest.setAddressCountry(parent.getSelectedItem().toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
+
                 val itemPosition = parent.getSelectedItemPosition();
 
                 ArrayList<String> statesList = new ArrayList<>();
@@ -156,16 +158,13 @@ public class ProfileTwoFragment extends BaseFragment
                 for (State state : states) {
                     statesList.add(state.getName());
                 }
-                if (TextUtils.isEmpty(country))
-                    setCountryAndStateList(mBinding.state, statesList);
-                mCounter++;
-                if (mCounter <= 2)
-                    return;
-                if (Laila.instance().Edit_Profile)
-                    setCountryAndStateList(mBinding.state, statesList);
-//                }
-                mCurrentSelection = position;
 
+                val stateName = mProfile.getAddressProvince();
+                if (!stateName.isEmpty())
+                    setDropDownItems(mBinding.state, statesList, stateName);
+                else
+                    setCountryAndStateList(mBinding.state, statesList);
+                mCurrentSelection = position;
             }
 
             @Override
@@ -176,7 +175,8 @@ public class ProfileTwoFragment extends BaseFragment
         mBinding.state.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mUserData.setAddressProvince(parent.getSelectedItem().toString());
+                mProfileRequest.setAddressProvince(parent.getSelectedItem().toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
 
             @Override
@@ -197,7 +197,8 @@ public class ProfileTwoFragment extends BaseFragment
 
             @Override
             public void afterTextChanged(Editable s) {
-                mUserData.setAddressCity(s.toString());
+                mProfileRequest.setAddressCity(s.toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
         });
         mBinding.zipCode.addTextChangedListener(new TextWatcher() {
@@ -213,7 +214,8 @@ public class ProfileTwoFragment extends BaseFragment
 
             @Override
             public void afterTextChanged(Editable s) {
-                mUserData.setAddressPobox(s.toString());
+                mProfileRequest.setAddressPobox(s.toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
         });
         mBinding.address1.addTextChangedListener(new TextWatcher() {
@@ -229,7 +231,8 @@ public class ProfileTwoFragment extends BaseFragment
 
             @Override
             public void afterTextChanged(Editable s) {
-                mUserData.setAddressLine1(s.toString());
+                mProfileRequest.setAddressLine1(s.toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
         });
         mBinding.address2.addTextChangedListener(new TextWatcher() {
@@ -245,7 +248,8 @@ public class ProfileTwoFragment extends BaseFragment
 
             @Override
             public void afterTextChanged(Editable s) {
-                mUserData.setAddressLine2(s.toString());
+                mProfileRequest.setAddressLine2(s.toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
         });
         mBinding.phone.addTextChangedListener(new TextWatcher() {
@@ -261,7 +265,8 @@ public class ProfileTwoFragment extends BaseFragment
 
             @Override
             public void afterTextChanged(Editable s) {
-                mUserData.setPhone(s.toString());
+                mProfileRequest.setPhone(s.toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
         });
     }
@@ -274,11 +279,11 @@ public class ProfileTwoFragment extends BaseFragment
 
         val countriesList = UIUtils.readFileFroRawFolder(R.raw.countries_states);
         mCountryList = getReceiverObj(countriesList);
-
         for (Country country : mCountryList) {
             countries.add(country.getName());
         }
         setCountryAndStateList(mBinding.country, countries);
+
     }
 
     //*********************************************************************************************
@@ -296,28 +301,47 @@ public class ProfileTwoFragment extends BaseFragment
     //*******************************************************************
     {
         super.onResume();
+        setData();
+    }
 
-        val check = Laila.instance().Edit_Profile;
-        if (!check) {
-            mBinding.address1.setEnabled(false);
-            mBinding.address2.setEnabled(false);
-            mBinding.zipCode.setEnabled(false);
-            mBinding.state.setEnabled(false);
-            mBinding.country.setEnabled(false);
-            mBinding.city.setEnabled(false);
-            mBinding.phone.setEnabled(false);
+    //*************************************************************
+    private void setData()
+    //*************************************************************
+    {
+        mProfile = Laila.instance().getMUser_U().getData().getProfile();
+        if (mProfile == null)
+            mProfile = new Profile();
 
-        }
-
-        if (Laila.instance().getMProfileRequest() == null || Laila.instance().getMProfileRequest().getProfile() == null)
+        mProfileRequest = Laila.instance().getMProfileRequest();
+        if (mProfileRequest.getHeight() != null || mProfileRequest.getWeight() != null) {
+            requestProfile();
             return;
-        val userDetail = Laila.instance().getMProfileRequest().getProfile();
+        }
+        getProfileDate();
+    }
 
-        mBinding.zipCode.setText(userDetail.getAddressPobox());
-        mBinding.city.setText(userDetail.getAddressCity());
-        mBinding.phone.setText(userDetail.getPhone());
-        mBinding.address1.setText(userDetail.getAddressLine1());
-        mBinding.address2.setText(userDetail.getAddressLine2());
+    //*************************************************************
+    private void requestProfile()
+    //*************************************************************
+    {
+        mBinding.zipCode.setText(mProfileRequest.getAddressPobox());
+        mBinding.city.setText(mProfileRequest.getAddressCity());
+        mBinding.phone.setText(mProfileRequest.getPhone());
+        mBinding.address1.setText(mProfileRequest.getAddressLine1());
+        mBinding.address2.setText(mProfileRequest.getAddressLine2());
+    }
+
+    //*************************************************************
+    private void getProfileDate()
+    //*************************************************************
+    {
+        mBinding.zipCode.setText(mProfile.getAddressPobox());
+        mBinding.city.setText(mProfile.getAddressCity());
+        mBinding.phone.setText(mProfile.getPhone());
+        mBinding.address1.setText(mProfile.getAddressLine1());
+        mBinding.address2.setText(mProfile.getAddressLine2());
+        setCountryAndStateToDropdownList();
+
     }
 
     //*************************************************************
@@ -341,5 +365,4 @@ public class ProfileTwoFragment extends BaseFragment
         int spinnerPosition = countryListAdapter.getPosition(name);
         spinner.setSelection(spinnerPosition);
     }
-
 }

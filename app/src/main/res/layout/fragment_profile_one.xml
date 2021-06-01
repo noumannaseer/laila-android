@@ -142,15 +142,13 @@
                         android:textColor="@color/text_blue"
                         android:textSize="16sp" />
 
-                    <com.google.android.material.textfield.TextInputEditText
+                    <TextView
                         android:id="@+id/dob"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@color/profile_background"
-                        android:maxLines="1"
-                        android:minLines="1"
                         android:padding="2dp"
-                        android:singleLine="true"
+                        android:text="@string/set_dob"
                         android:textSize="16sp" />
 
                     <View
@@ -270,7 +268,7 @@
                         android:textSize="16sp" />
 
                     <Spinner
-                        android:id="@+id/organ_donar_group"
+                        android:id="@+id/organ_donar"
                         android:layout_width="match_parent"
                         android:layout_height="24dp"
                         android:entries="@array/organ_donar"
