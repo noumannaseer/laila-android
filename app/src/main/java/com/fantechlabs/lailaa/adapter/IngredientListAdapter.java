@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.IngredientListBinding;
 import com.fantechlabs.lailaa.models.Ingredient;
+import com.fantechlabs.lailaa.models.updates.models.ActiveIngredient;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class IngredientListAdapter
 //*******************************************************************
 {
 
-    private List<Ingredient> mIngredientList;
+    private List<ActiveIngredient> mIngredientList;
     private Activity mActivity;
     private ListClickListener mListClickListener;
 
@@ -44,7 +45,7 @@ public class IngredientListAdapter
     }
 
     //********************************************************************************************
-    public IngredientListAdapter(List<Ingredient> mFilterList, Activity activity)
+    public IngredientListAdapter(List<ActiveIngredient> mFilterList, Activity activity)
     //********************************************************************************************
     {
         this.mIngredientList = mFilterList;
@@ -65,11 +66,10 @@ public class IngredientListAdapter
 
         holder.IngredientListBindingViewBinding.name.setText(item.getIngredientName());
         holder.IngredientListBindingViewBinding.strength.setText(item.getStrength());
-        holder.IngredientListBindingViewBinding.strengthUnit.setText(item.getStrengthUnit());
-        if (!TextUtils.isEmpty(item.getDosageUnit()))
-        {
+        holder.IngredientListBindingViewBinding.strengthUnit.setText(item.getStrengthUnit().toString());
+        if (item.getDosageUnit() != null) {
             holder.IngredientListBindingViewBinding.dosageUnitView.setVisibility(View.VISIBLE);
-            holder.IngredientListBindingViewBinding.dosageUnit.setText(item.getDosageUnit());
+            holder.IngredientListBindingViewBinding.dosageUnit.setText(item.getDosageUnit().toString());
         }
     }
 
@@ -84,7 +84,7 @@ public class IngredientListAdapter
     //*******************************************************************
     public class IngredientListViewHolder
             extends RecyclerView.ViewHolder
-    //*******************************************************************
+            //*******************************************************************
     {
 
         IngredientListBinding IngredientListBindingViewBinding;
@@ -100,7 +100,7 @@ public class IngredientListAdapter
 
     //*******************************************************************
     public interface ListClickListener
-    //*******************************************************************
+            //*******************************************************************
     {
         void onUpdate(int position);
     }

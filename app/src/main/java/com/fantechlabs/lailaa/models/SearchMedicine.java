@@ -3,8 +3,7 @@ package com.fantechlabs.lailaa.models;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SearchMedicine
-{
+public class SearchMedicine {
     @SerializedName("drug_code")
     @Expose
     private Integer drugCode;
@@ -114,15 +113,27 @@ public class SearchMedicine
         this.lastUpdateDate = lastUpdateDate;
     }
 
-    public String getError() { return error; }
+    public String getError() {
+        return error;
+    }
 
-    public void setError(String error) { this.error = error; }
+    public void setError(String error) {
+        this.error = error;
+    }
 
-    public String getTitle() { return title; }
+    public String getTitle() {
+        return title;
+    }
 
-    public void setTitle(String title) { this.title = title; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public String getUpc() { return upc; }
+    public String getUpc() {
+        return upc;
+    }
 
-    public void setUpc(String upc) { this.upc = upc; }
+    public void setUpc(String upc) {
+        this.upc = upc;
+    }
 }

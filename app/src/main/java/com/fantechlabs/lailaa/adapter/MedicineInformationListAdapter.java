@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.MedicineDetailInfoListBinding;
 import com.fantechlabs.lailaa.models.response_models.MedicineInformationResponse;
+import com.fantechlabs.lailaa.models.updates.models.MedicationInformation;
+import com.fantechlabs.lailaa.models.updates.response_models.MedicineInfoResponse;
 
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class MedicineInformationListAdapter
 //*******************************************************************
 {
 
-    private List<MedicineInformationResponse> mMedicineList;
+    private List<MedicationInformation> mMedicineList;
     private Activity mActivity;
     private ListClickListener mListClickListener;
 
@@ -43,7 +45,7 @@ public class MedicineInformationListAdapter
     }
 
     //********************************************************************************************
-    public MedicineInformationListAdapter(List<MedicineInformationResponse> mFilterList, Activity activity)
+    public MedicineInformationListAdapter(List<MedicationInformation> mFilterList, Activity activity)
     //********************************************************************************************
     {
         this.mMedicineList = mFilterList;
@@ -63,12 +65,13 @@ public class MedicineInformationListAdapter
             return;
         holder.mBinding.companyName.setText(item.getCompanyName());
         holder.mBinding.className.setText(item.getClassName());
-        holder.mBinding.noOfAis.setText(item.getNumberOfAis());
-        holder.mBinding.drugCode.setText(String.valueOf(item.getDrugCode()));
+        holder.mBinding.noOfAis.setText(item.getNumberOfAis().toString());
+        holder.mBinding.drugCode.setText(item.getDrugCode().toString());
         holder.mBinding.brandName.setText(item.getBrandName());
-        holder.mBinding.aiGrpNo.setText(item.getAiGroupNo());
+        holder.mBinding.aiGrpNo.setText(item.getAiGroupNo().toString());
         holder.mBinding.drugIdentificationNo.setText(item.getDrugIdentificationNumber());
-        holder.mBinding.lastUpdateDate.setText(item.getLastUpdateDate());
+        holder.mBinding.lastUpdateDate.setText(item.getLastUpdateDate().toString());
+
 
         if (TextUtils.isEmpty(item.getDescriptor()))
         {

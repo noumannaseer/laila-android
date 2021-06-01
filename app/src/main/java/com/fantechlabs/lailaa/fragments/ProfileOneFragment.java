@@ -1,6 +1,7 @@
 package com.fantechlabs.lailaa.fragments;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -10,23 +11,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.VirtualLayout;
 import androidx.core.content.ContextCompat;
 
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.databinding.FragmentProfileOneBinding;
-import com.fantechlabs.lailaa.models.Profile;
+import com.fantechlabs.lailaa.databinding.LayoutAlergyConditionDialogBindingImpl;
+import com.fantechlabs.lailaa.models.updates.models.Profile;
+import com.fantechlabs.lailaa.models.updates.request_models.ProfileRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.DateUtils;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
 import lombok.val;
+import rx.internal.util.LinkedArrayList;
 
 
 //***********************************************************
@@ -36,8 +43,9 @@ public class ProfileOneFragment extends BaseFragment
     private FragmentProfileOneBinding mBinding;
     private View mRootView;
     private Date mSelectedDate;
-    private Profile mUser;
+    private ProfileRequest mProfileRequest;
     private ArrayList<String> mLocalLanguages = new ArrayList<String>();
+    private Profile mProfile;
 
     //***********************************************************
     public ProfileOneFragment()
@@ -64,29 +72,30 @@ public class ProfileOneFragment extends BaseFragment
     private void initControls()
     //******************************************************
     {
+        setUserIdAndToken();
         editTextWatcher();
+        setDob();
+        edit();
+    }
+
+    //******************************************************
+    private void setDob()
+    //******************************************************
+    {
+        val defaultDob = DateUtils.getCurrentDate("dd-MMM-yyyy");
+        mBinding.dob.setText(defaultDob);
         mBinding.dob.setOnClickListener(v -> datePicker());
-        if (Laila.instance().Edit_Profile)
-            edit();
     }
 
     //******************************************************
     private void editTextWatcher()
     //******************************************************
     {
-        mUser = Laila.instance().getMProfileRequest().getProfile();
-        val check = Laila.instance().Edit_Profile;
-
-        mUser.setUserPrivateCode(Laila.instance().getMUser().getProfile().getUserPrivateCode());
-        mUser.setUserType(1);
-        mUser.setFavMusic("music");
-        mUser.setIsNotifications(1);
-        mUser.setIsAudio(1);
-
         mBinding.gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mUser.setGender(parent.getSelectedItem().toString());
+                mProfileRequest.setGender(parent.getSelectedItem().toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
 
             @Override
@@ -97,7 +106,8 @@ public class ProfileOneFragment extends BaseFragment
         mBinding.bloodGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mUser.setBloodType(parent.getSelectedItem().toString());
+                mProfileRequest.setBloodType(parent.getSelectedItem().toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
 
             @Override
@@ -108,7 +118,8 @@ public class ProfileOneFragment extends BaseFragment
         mBinding.language.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mUser.setPrefLang(parent.getSelectedItem().toString());
+                mProfileRequest.setPrefLang(parent.getSelectedItem().toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
 
             @Override
@@ -120,7 +131,7 @@ public class ProfileOneFragment extends BaseFragment
         mBinding.firstName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                Laila.instance().is_edit_profile_fields = true;
             }
 
             @Override
@@ -130,13 +141,14 @@ public class ProfileOneFragment extends BaseFragment
 
             @Override
             public void afterTextChanged(Editable s) {
-                mUser.setFirstName(s.toString());
+                mProfileRequest.setFirstName(s.toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
         });
         mBinding.lastName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                Laila.instance().is_edit_profile_fields = true;
             }
 
             @Override
@@ -146,13 +158,14 @@ public class ProfileOneFragment extends BaseFragment
 
             @Override
             public void afterTextChanged(Editable s) {
-                mUser.setLastName(s.toString());
+                mProfileRequest.setLastName(s.toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
         });
         mBinding.dob.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                Laila.instance().is_edit_profile_fields = true;
             }
 
             @Override
@@ -162,21 +175,17 @@ public class ProfileOneFragment extends BaseFragment
 
             @Override
             public void afterTextChanged(Editable s) {
-                mUser.setDateOfBirth(s.toString());
+                mProfileRequest.setDateOfBirth(s.toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
         });
 
-        mBinding.organDonarGroup.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mBinding.organDonar.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                switch (i) {
-                    case 0:
-                        mUser.setOrganDonor("Y");
-                        break;
-                    case 1:
-                        mUser.setOrganDonor("N");
-                        break;
-                }
+                mProfileRequest.setOrganDonor(adapterView.getSelectedItem().toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
+
             }
 
             @Override
@@ -187,6 +196,23 @@ public class ProfileOneFragment extends BaseFragment
     }
 
     //******************************************************
+    private void setUserIdAndToken()
+    //******************************************************
+    {
+        val user = Laila.instance().getMUser_U().getData().getUser();
+        val user_id = user.getId();
+        val user_token = user.getToken();
+
+        mProfileRequest = Laila.instance().getMProfileRequest();
+        if (mProfileRequest == null)
+            mProfileRequest = new ProfileRequest();
+        mProfileRequest.setUserId(user_id);
+        mProfileRequest.setToken(user_token);
+        Laila.instance().setMProfileRequest(mProfileRequest);
+
+    }
+
+    //******************************************************
     private void edit()
     //******************************************************
     {
@@ -194,12 +220,11 @@ public class ProfileOneFragment extends BaseFragment
         mBinding.firstName.setEnabled(true);
         mBinding.lastName.setEnabled(true);
         mBinding.language.setEnabled(true);
-        mBinding.organDonarGroup.setEnabled(true);
-        mBinding.email.setEnabled(true);
+        mBinding.organDonar.setEnabled(true);
+        mBinding.email.setEnabled(false);
         mBinding.dob.setEnabled(true);
         mBinding.bloodGroup.setEnabled(true);
         mBinding.gender.setEnabled(true);
-        mBinding.language.setEnabled(true);
     }
 
     //*******************************************************************
@@ -208,43 +233,90 @@ public class ProfileOneFragment extends BaseFragment
     //*******************************************************************
     {
         super.onResume();
-        mLocalLanguages = AndroidUtil.getLanguagesList();
-        setLanguages(mBinding.language, mLocalLanguages);
-        if (Laila.instance().getMProfileRequest() == null || Laila.instance().getMProfileRequest().getProfile() == null)
-            return;
-        val userDetail = Laila.instance().getMProfileRequest().getProfile();
-        val check = Laila.instance().Edit_Profile;
-        if (!check) {
-            mBinding.firstName.setEnabled(false);
-            mBinding.lastName.setEnabled(false);
-            mBinding.email.setEnabled(false);
-            mBinding.dob.setEnabled(false);
-            mBinding.organDonarGroup.setEnabled(false);
-            mBinding.bloodGroup.setEnabled(false);
-            mBinding.gender.setEnabled(false);
-            mBinding.language.setEnabled(false);
-        }
-        mBinding.firstName.setText(userDetail.getFirstName());
-        mBinding.lastName.setText(userDetail.getLastName());
-        mBinding.email.setText(userDetail.getEmail());
-        mBinding.dob.setText(userDetail.getDateOfBirth());
-        dropDownItems(mBinding.gender, R.array.gender, userDetail.getGender());
-        setLanguagesDropDownItems(mBinding.language, mLocalLanguages, userDetail.getPrefLang());
-        dropDownItems(mBinding.bloodGroup, R.array.blood, userDetail.getBloodType());
-
-        val checkOrgan = TextUtils.equals(userDetail.getOrganDonor(), "Y");
-
-        if (checkOrgan) {
-            mUser.setOrganDonor("Y");
-            return;
-        }
-        mUser.setOrganDonor("N");
-
+        setUserLanguage();
+        setData();
     }
 
-    //*********************************************************************************************
+    //*****************************************
+    @SuppressLint("SetTextI18n")
+    private void setData()
+    //*****************************************
+    {
+        mProfile = Laila.instance().getMUser_U().getData().getProfile();
+        if (mProfile == null)
+            mProfile = new Profile();
+
+        mProfileRequest = Laila.instance().getMProfileRequest();
+        if (mProfileRequest.getHeight() != null || mProfileRequest.getWeight() != null) {
+            requestProfile();
+            return;
+        }
+        getProfileDate();
+    }
+
+    //*****************************************
+    private void requestProfile()
+    //*****************************************
+    {
+        val user_email = Laila.instance().getMUser_U().getData().getUser().getEmail();
+        mBinding.firstName.setText(mProfileRequest.getFirstName());
+        mBinding.lastName.setText(mProfileRequest.getLastName());
+        mBinding.email.setText(user_email);
+
+        setDropDownItemsWithRequest(mProfileRequest);
+    }
+
+    //*****************************************
+    private void getProfileDate()
+    //*****************************************
+    {
+        val user_email = Laila.instance().getMUser_U().getData().getUser().getEmail();
+        mBinding.firstName.setText(mProfile.getFirstName());
+        mBinding.lastName.setText(mProfile.getLastName());
+        mBinding.email.setText(user_email);
+
+
+        if (mProfile.getDateOfBirth() != 0) {
+            val dob = DateUtils.getGivenDate(mProfile.getDateOfBirth(), "dd-MMM-yyyy");
+            mBinding.dob.setText(dob);
+        }
+        setDropDownItemsWithProfile(mProfile);
+        getOrganDonars();
+    }
+
+    //*****************************************
+    private void getOrganDonars()
+    //*****************************************
+    {
+        if (mProfile.getOrganDonor().equals("Y")) {
+//            organYes();
+            return;
+        }
+//        organNo();
+    }
+
+
+    //*****************************************
+    private void setUserLanguage()
+    //*****************************************
+    {
+        mLocalLanguages = AndroidUtil.getLanguagesList();
+        setLanguages(mBinding.language, mLocalLanguages);
+    }
+
+    //*****************************************
+    private void setDropDownItems(Profile profile)
+    //*****************************************
+    {
+        dropDownItems(mBinding.gender, R.array.gender, profile.getGender());
+        setLanguagesDropDownItems(mBinding.language, mLocalLanguages, profile.getPrefLang());
+        dropDownItems(mBinding.bloodGroup, R.array.blood, profile.getBloodType());
+        dropDownItems(mBinding.organDonar, R.array.organ_donar, profile.getOrganDonor());
+    }
+
+    //*****************************************
     private void setLanguages(Spinner spinner, ArrayList<String> languages)
-    //*********************************************************************************************
+    //*****************************************
     {
         ArrayAdapter<String> countryAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, languages);
         countryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -271,6 +343,29 @@ public class ProfileOneFragment extends BaseFragment
                                     "dd-MMM-yyyy"));
                 })
                 .display();
+    }
+
+    //*****************************************
+    private void setDropDownItemsWithProfile(Profile profile)
+    //*****************************************
+    {
+        dropDownItems(mBinding.gender, R.array.gender, profile.getGender());
+        if (profile.getFirstName() == null)
+            return;
+        if (profile.getFirstName().isEmpty())
+            setLanguagesDropDownItems(mBinding.language, mLocalLanguages, AndroidUtil.getCurrentDeviceLanguage());
+        else
+            setLanguagesDropDownItems(mBinding.language, mLocalLanguages, profile.getPrefLang());
+        dropDownItems(mBinding.bloodGroup, R.array.blood, profile.getBloodType());
+    }
+
+    //*****************************************
+    private void setDropDownItemsWithRequest(ProfileRequest profileRequest)
+    //*****************************************
+    {
+        dropDownItems(mBinding.gender, R.array.gender, profileRequest.getGender());
+        setLanguagesDropDownItems(mBinding.language, mLocalLanguages, profileRequest.getPrefLang());
+        dropDownItems(mBinding.bloodGroup, R.array.blood, profileRequest.getBloodType());
     }
 
     //*************************************************************

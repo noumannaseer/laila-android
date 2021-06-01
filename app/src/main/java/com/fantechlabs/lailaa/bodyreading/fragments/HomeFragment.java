@@ -24,6 +24,9 @@ import com.fantechlabs.lailaa.bodyreading.utils.LineLegendRenderer;
 import com.fantechlabs.lailaa.bodyreading.viewmodels.ReadHealthDataViewModel;
 import com.fantechlabs.lailaa.databinding.FragmentHomeBodyReadingBinding;
 import com.fantechlabs.lailaa.fragments.BaseFragment;
+import com.fantechlabs.lailaa.models.updates.models.BodyVital;
+import com.fantechlabs.lailaa.models.updates.models.HealthAverages;
+import com.fantechlabs.lailaa.models.updates.response_models.ReadHealthDataResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.utils.DateUtils;
@@ -68,12 +71,11 @@ public class HomeFragment extends BaseFragment
     private View mRootView;
     private ReadHealthDataViewModel mReadHealthDataViewModel;
     private int mdays = 7, mAvgDays = 7;
-    private ArrayList<Health> mHealthList;
-    private Averages mAverages;
-    private HealthData mHealthData;
+    private ArrayList<BodyVital> mHealthList;
+    private HealthAverages mAverages;
+    //    private HealthData mHealthData;
     private String mDateOfBirth;
     public static final String TAG = HomeFragment.class.getCanonicalName();
-
 
     //*********************************************************
     public HomeFragment()
@@ -101,7 +103,7 @@ public class HomeFragment extends BaseFragment
     private void initControls()
     //*********************************************************
     {
-        mHealthData = getHealthData();
+//        mHealthData = getHealthData();
         mBinding.yourReading.bringToFront();
         mBinding.healthReading.bringToFront();
 
@@ -109,8 +111,8 @@ public class HomeFragment extends BaseFragment
         mBinding.heartRate.setOnClickListener(v -> getHeartRate());
         mBinding.sugar.setOnClickListener(v -> getSugar());
         mBinding.bloodPressure.setOnClickListener(v -> getBloodPressure());
-        if (Laila.instance().Change_Data)
-            requestUserStats(Constants.SEVEN_DAYS, Constants.SEVEN_DAYS);
+//        if (Laila.instance().Change_Data)
+//            requestUserStats(Constants.SEVEN_DAYS, Constants.SEVEN_DAYS);
     }
 
     //*********************************************************
@@ -137,7 +139,7 @@ public class HomeFragment extends BaseFragment
                         mdays = Constants.YEAR;
                         break;
                 }
-                requestUserStats(mdays, mAvgDays);
+                requestUserStats(String.valueOf(mdays), String.valueOf(mAvgDays));
             }
 
             @Override
@@ -165,7 +167,7 @@ public class HomeFragment extends BaseFragment
                         mAvgDays = Constants.YEAR;
                         break;
                 }
-                requestUserStats(mdays, mAvgDays);
+                requestUserStats(String.valueOf(mdays), String.valueOf(mAvgDays));
             }
 
             @Override
@@ -205,10 +207,10 @@ public class HomeFragment extends BaseFragment
     }
 
     //*********************************************************
-    private void requestUserStats(@NonNull int days, @NonNull int avgDays)
+    private void requestUserStats(@NonNull String days, @NonNull String avgDays)
     //*********************************************************
     {
-        if (Laila.instance().getCurrentUserProfile() == null) {
+        if (Laila.instance().getMUser_U().getData().getUser() == null) {
             Log.e(TAG, "readData: no user information");
             AndroidUtil.toast(false, getString(R.string.user_not_logged_in));
             getActivity().finish();
@@ -216,13 +218,14 @@ public class HomeFragment extends BaseFragment
         }
         showLoadingDialog();
 
-        val userProfile = Laila.instance().getCurrentUserProfile();
-
+        val userProfile = Laila.instance().getMUser_U().getData().getUser();
+        val user_token = userProfile.getToken();
         val readHealthDataRequest = Laila.instance()
-                .getMReadHealthDataRequest().Builder();
-        readHealthDataRequest.setUserPrivateCode(userProfile.getUserPrivateCode());
+                .getMReadHealthDataRequest_U().Builder();
+        readHealthDataRequest.setUserId(userProfile.getId().toString());
         readHealthDataRequest.setDays(days);
-        readHealthDataRequest.setAvg_days(avgDays);
+        readHealthDataRequest.setAvgDays(avgDays);
+        readHealthDataRequest.setToken(user_token);
         mReadHealthDataViewModel.readHealthData(readHealthDataRequest);
     }
 
@@ -346,10 +349,9 @@ public class HomeFragment extends BaseFragment
         val averageValues = mAverages;
         int maxValue = 0, minValue = 0;
 
-
         ArrayList<Entry> values = new ArrayList<>();
         int counter = 0;
-        List<Health> list = new ArrayList<>();
+        List<BodyVital> list = new ArrayList<>();
         List<Integer> minMax = new ArrayList<>();
         List<String> recordDateList = new ArrayList<>();
 
@@ -361,7 +363,7 @@ public class HomeFragment extends BaseFragment
                                 .getBpSystolic()));
                         list.add(medicalHistoryList.get(i));
                         minMax.add(medicalHistoryList.get(i).getBpSystolic());
-                        val date = DateUtils.getDate(medicalHistoryList.get(i).getCreated(), "dd/MM/yy");
+                        val date = DateUtils.getDate(medicalHistoryList.get(i).getCreatedAt() * 1000, "dd/MM/yy");
                         recordDateList.add(date);
                     }
                 }
@@ -372,11 +374,11 @@ public class HomeFragment extends BaseFragment
                     bpSysMin = Collections.min(minMax);
                     bpSysMax = Collections.max(minMax);
                 }
-                if (mHealthData != null)
-                    if (mHealthData.getMaxBpSystolic() != 0 && mHealthData.getMinBpSystolic() != 0) {
-                        maxValue = mHealthData.getMaxBpSystolic();
-                        minValue = mHealthData.getMinBpSystolic();
-                    }
+//                if (mHealthData != null)
+//                    if (mHealthData.getMaxBpSystolic() != 0 && mHealthData.getMinBpSystolic() != 0) {
+//                        maxValue = mHealthData.getMaxBpSystolic();
+//                        minValue = mHealthData.getMinBpSystolic();
+//                    }
                 setLineCharProperties(averageValues.getBpSystolic(), bpSysMin == 0 ? 0 : bpSysMin < minValue ? bpSysMin : minValue,
                         bpSysMax == 0 ? 0 : bpSysMax > maxValue ? bpSysMax : maxValue, recordDateList);
                 break;
@@ -387,7 +389,7 @@ public class HomeFragment extends BaseFragment
                                 .getBpDiastolic()));
                         list.add(medicalHistoryList.get(i));
                         minMax.add(medicalHistoryList.get(i).getBpDiastolic());
-                        val date = DateUtils.getDate(medicalHistoryList.get(i).getCreated(), "dd/MM/yy");
+                        val date = DateUtils.getDate(medicalHistoryList.get(i).getCreatedAt() * 1000, "dd/MM/yy");
                         recordDateList.add(date);
                     }
                 }
@@ -398,11 +400,11 @@ public class HomeFragment extends BaseFragment
                     bpDiaMin = Collections.min(minMax);
                     bpDiaMax = Collections.max(minMax);
                 }
-                if (mHealthData != null)
-                    if (mHealthData.getMaxBpDiastolic() != 0 && mHealthData.getMinBpDiastolic() != 0) {
-                        maxValue = mHealthData.getMaxBpDiastolic();
-                        minValue = mHealthData.getMinBpDiastolic();
-                    }
+//                if (mHealthData != null)
+//                    if (mHealthData.getMaxBpDiastolic() != 0 && mHealthData.getMinBpDiastolic() != 0) {
+//                        maxValue = mHealthData.getMaxBpDiastolic();
+//                        minValue = mHealthData.getMinBpDiastolic();
+//                    }
                 setLineCharProperties(averageValues.getBpDiastolic(), bpDiaMin == 0 ? 0 : bpDiaMin < minValue ? bpDiaMin : minValue,
                         bpDiaMax == 0 ? 0 : bpDiaMax > maxValue ? bpDiaMax : maxValue, recordDateList);
                 break;
@@ -413,7 +415,7 @@ public class HomeFragment extends BaseFragment
                                 .getHeartRate()));
                         list.add(medicalHistoryList.get(i));
                         minMax.add(medicalHistoryList.get(i).getHeartRate());
-                        val date = DateUtils.getDate(medicalHistoryList.get(i).getCreated(), "dd/MM/yy");
+                        val date = DateUtils.getDate(medicalHistoryList.get(i).getCreatedAt() * 1000, "dd/MM/yy");
                         recordDateList.add(date);
                     }
                 }
@@ -424,11 +426,11 @@ public class HomeFragment extends BaseFragment
                     heartRateMax = Collections.max(minMax);
                 }
 
-                if (mHealthData != null)
-                    if (mHealthData.getMaxHeartRate() != 0 && mHealthData.getMinHeartRate() != 0) {
-                        maxValue = mHealthData.getMaxHeartRate();
-                        minValue = mHealthData.getMinHeartRate();
-                    }
+//                if (mHealthData != null)
+//                    if (mHealthData.getMaxHeartRate() != 0 && mHealthData.getMinHeartRate() != 0) {
+//                        maxValue = mHealthData.getMaxHeartRate();
+//                        minValue = mHealthData.getMinHeartRate();
+//                    }
                 setLineCharProperties(averageValues.getHeartRate(), heartRateMin == 0 ? 0 : heartRateMin < minValue ? heartRateMin : minValue,
                         heartRateMax == 0 ? 0 : heartRateMax > maxValue ? heartRateMax : maxValue, recordDateList);
                 break;
@@ -439,7 +441,7 @@ public class HomeFragment extends BaseFragment
                                 .getBloodSugar()));
                         list.add(medicalHistoryList.get(i));
                         minMax.add(medicalHistoryList.get(i).getBloodSugar());
-                        val date = DateUtils.getDate(medicalHistoryList.get(i).getCreated(), "dd/MM/yy");
+                        val date = DateUtils.getDate(medicalHistoryList.get(i).getCreatedAt() * 1000, "dd/MM/yy");
                         recordDateList.add(date);
                     }
                 }
@@ -450,11 +452,11 @@ public class HomeFragment extends BaseFragment
                     bloodSugarMax = Collections.max(minMax);
                 }
 
-                if (mHealthData != null)
-                    if (mHealthData.getMaxGlucose() != 0 && mHealthData.getMinGlucose() != 0) {
-                        maxValue = mHealthData.getMaxGlucose();
-                        minValue = mHealthData.getMinGlucose();
-                    }
+//                if (mHealthData != null)
+//                    if (mHealthData.getMaxGlucose() != 0 && mHealthData.getMinGlucose() != 0) {
+//                        maxValue = mHealthData.getMaxGlucose();
+//                        minValue = mHealthData.getMinGlucose();
+//                    }
                 setLineCharProperties(averageValues.getBloodSugar(), bloodSugarMin == 0 ? 0 : bloodSugarMin < minValue ? bloodSugarMin : minValue,
                         bloodSugarMax == 0 ? 0 : bloodSugarMax > maxValue ? bloodSugarMax : maxValue, recordDateList);
                 break;
@@ -612,7 +614,8 @@ public class HomeFragment extends BaseFragment
             age--;
         }
 
-        return age;
+//        return age;
+        return 40;
     }
 
     //*************************************************************
@@ -627,17 +630,17 @@ public class HomeFragment extends BaseFragment
 
     //*********************************************************
     @Override
-    public void onReadHealthDataSuccessfully(@Nullable HealthDataReadingResponse response)
+    public void onReadHealthDataSuccessfully(@Nullable ReadHealthDataResponse response)
     //*********************************************************
     {
         hideLoadingDialog();
-        if (response.getSuccess().getResult() == null || response.getSuccess().getResult().size() == 0) {
+        if (response.getData() == null || response.getData().getBodyVitalReadings() == null || response.getData().getBodyVitalReadings().size() == 0) {
             noDataFound();
             return;
         }
         mHealthList = new ArrayList<>();
-        mHealthList = response.getSuccess().getResult();
-        mAverages = response.getSuccess().getAverages();
+        mHealthList = response.getData().getBodyVitalReadings();
+        mAverages = response.getData().getAverages();
         Laila.instance().Change_Data = false;
         checkSegmentButton();
     }

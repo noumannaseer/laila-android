@@ -20,10 +20,9 @@ import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.adapter.DocumentsListAdapter;
 import com.fantechlabs.lailaa.databinding.ActivityMedicalRecordsBinding;
-import com.fantechlabs.lailaa.models.Document;
-import com.fantechlabs.lailaa.models.response_models.DocumentResponse;
-import com.fantechlabs.lailaa.request_models.DocumentRequest;
-import com.fantechlabs.lailaa.utils.AddDocumentDialog;
+import com.fantechlabs.lailaa.models.updates.models.Document;
+import com.fantechlabs.lailaa.models.updates.request_models.DocumentRequest;
+import com.fantechlabs.lailaa.models.updates.response_models.DocumentResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.permissions.Permission;
 import com.fantechlabs.lailaa.view_models.DocumentsViewModel;
@@ -54,7 +53,6 @@ public class MedicalRecordsActivity extends BaseActivity
     private AlertDialog.Builder mBuilder;
     private boolean isCalled = false;
     private Uri mUri;
-
 
     //******************************************************************************
     @Override
@@ -133,7 +131,7 @@ public class MedicalRecordsActivity extends BaseActivity
     @SneakyThrows
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
-    //**********************************************
+    //********************************************************************
     {
         if (data != null) {
             switch (requestCode) {
@@ -154,21 +152,17 @@ public class MedicalRecordsActivity extends BaseActivity
     }
 
     //*********************************************************************
-    private void uploadDocument(DocumentRequest request)
-    //*********************************************************************
-    {
-        showLoadingDialog();
-        mDocumentsViewModel.addDocument(request);
-    }
-
-    //*********************************************************************
     private void addDocuments(@NonNull String url, @NonNull String type)
     //*********************************************************************
     {
+        val user_id = Laila.instance().getMUser_U().getData().getUser().getId();
+        val token = Laila.instance().getMUser_U().getData().getUser().getToken();
+
         DocumentRequest documentRequest = new DocumentRequest();
         documentRequest.setFile(url);
         documentRequest.setType(type);
-        documentRequest.setUser_private_code(Laila.instance().getMUser().getProfile().getUserPrivateCode());
+        documentRequest.setUser_id(user_id);
+        documentRequest.setToken(token);
         showLoadingDialog();
         mDocumentsViewModel.addDocument(documentRequest);
     }
@@ -192,20 +186,20 @@ public class MedicalRecordsActivity extends BaseActivity
         hideLoadingDialog();
 
         mDocumentList = new ArrayList<>();
-        mDocumentList = response.getDocumentList();
+        mDocumentList = response.getData().getDocumentsList();
         startRecyclerView();
 
     }
 
     //**************************************************************
     @Override
-    public void onRecordAddedSuccessfully(@Nullable Document response)
+    public void onRecordAddedSuccessfully(@Nullable DocumentResponse response)
     //**************************************************************
     {
         hideLoadingDialog();
         if (response == null)
             return;
-        mDocumentList.add(0, response);
+        mDocumentList.add(0, response.getData().getDocument());
         startRecyclerView();
     }
 
@@ -283,13 +277,16 @@ public class MedicalRecordsActivity extends BaseActivity
             public void openBrowserActivity(String title, String url, String type)
             //******************************************************************
             {
-                if (type.equals("JPEG") || type.equals("PNG") || type.equals("JPG") || type.equals("GIF")) {
-                    Intent specialIntent = new Intent(MedicalRecordsActivity.this, DocumentDetailsActivity.class);
-                    specialIntent.putExtra(DocumentDetailsActivity.IMAGE_URL, url);
-                    startActivity(specialIntent);
-                    return;
-                }
-                goToBrowser(title, "http://drive.google.com/viewerng/viewer?embedded=true&url=" + url);
+//                if (type.equals("JPEG") || type.equals("PNG") || type.equals("JPG") || type.equals("GIF")) {
+//                    Intent specialIntent = new Intent(MedicalRecordsActivity.this, DocumentDetailsActivity.class);
+//                    specialIntent.putExtra(DocumentDetailsActivity.IMAGE_URL, url);
+//                    startActivity(specialIntent);
+//                    return;
+//                }
+//                goToBrowser(title, url);
+                Intent specialIntent = new Intent(MedicalRecordsActivity.this, DocumentDetailsActivity.class);
+                specialIntent.putExtra(DocumentDetailsActivity.IMAGE_URL, url);
+                startActivity(specialIntent);
             }
 
         }, this);
@@ -307,7 +304,6 @@ public class MedicalRecordsActivity extends BaseActivity
                 && AndroidUtil.checkPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 & !isCalled) {
             isCalled = true;
-//            showAddDocumentDialog();
             selectDocumentsOrImage();
         }
     }

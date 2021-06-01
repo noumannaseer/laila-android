@@ -2,6 +2,7 @@ package com.fantechlabs.lailaa.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
@@ -41,6 +42,13 @@ public class SettingActivity extends BaseActivity
     private void intiControls()
     //****************************************************************
     {
+        navigateToScreens();
+    }
+
+    //********************************************
+    private void navigateToScreens()
+    //********************************************
+    {
         mBinding.termsCondition.setOnClickListener(
                 v -> moveToBrowserActivity(getString(R.string.settings_terms_and_conditions),
                         getString(R.string.terms_conditions_url)));
@@ -58,6 +66,7 @@ public class SettingActivity extends BaseActivity
         });
         mBinding.editProfile.setOnClickListener(view -> editProfile());
         mBinding.logout.setOnClickListener(v -> logout());
+        mBinding.changePassword.setOnClickListener(view -> startActivity(new Intent(SettingActivity.this, UpdatePasswordActivity.class)));
     }
 
     //********************************************
@@ -83,10 +92,8 @@ public class SettingActivity extends BaseActivity
     {
 
         val rememberMe = SharedPreferencesUtils.getBoolean(Constants.REMEMBER);
-        if (rememberMe) {
-            SharedPreferencesUtils.setValue(Constants.EMAIL, Laila.instance().getCurrentUserProfile().getEmail());
-            SharedPreferencesUtils.setValue(Constants.PASSWORD, Laila.instance().getCurrentUserProfile().getPassword());
-        }
+        if (rememberMe)
+            SharedPreferencesUtils.setValue(Constants.EMAIL, Laila.instance().getMUser_U().getData().getUser().getEmail());
 
         UIUtils.displayAlertDialog(
                 AndroidUtil.getString(R.string.logout),

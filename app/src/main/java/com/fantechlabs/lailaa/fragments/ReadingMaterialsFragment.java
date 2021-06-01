@@ -14,12 +14,12 @@ import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.activities.AlergieResourceDetails;
 import com.fantechlabs.lailaa.activities.ResourcesActivity;
 import com.fantechlabs.lailaa.adapter.AllergiesListAdapter;
-import com.fantechlabs.lailaa.databinding.FragmentProfileOneBinding;
+import com.fantechlabs.lailaa.adapter.ResourcesListAdapter;
 import com.fantechlabs.lailaa.databinding.FragmentReadingMaterialsBinding;
 import com.fantechlabs.lailaa.models.Profile;
 import com.fantechlabs.lailaa.models.allergie_models.AllergieListerner;
 import com.fantechlabs.lailaa.models.allergie_models.XmlParcer;
-import com.fantechlabs.lailaa.request_models.ProfileRequest;
+import com.fantechlabs.lailaa.models.updates.request_models.ProfileRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 
@@ -35,8 +35,8 @@ public class ReadingMaterialsFragment extends BaseFragment
 {
     private FragmentReadingMaterialsBinding mBinding;
     private List<String> mAllergiesList;
-    private AllergiesListAdapter mAllergiesListAdapter;
-    private Profile mUser;
+    private ResourcesListAdapter mResourcesListAdapter;
+    private ProfileRequest mUser;
 
     //*****************************************************************************
     @Override
@@ -69,10 +69,9 @@ public class ReadingMaterialsFragment extends BaseFragment
     @Override
     public void onResume() {
         super.onResume();
-        Laila.instance().setMProfileRequest(new ProfileRequest());
-        Laila.instance().getMProfileRequest().setProfile(new Profile());
-
-        if (Laila.instance().getMProfileRequest() == null || Laila.instance().getMProfileRequest().getProfile() == null)
+        val user = Laila.instance().getMUser_U().getData();
+        val profile = Laila.instance().getMUser_U().getData().getProfile();
+        if (user == null || profile == null)
             return;
         setAllergies();
     }
@@ -81,9 +80,7 @@ public class ReadingMaterialsFragment extends BaseFragment
     private void setAllergies()
     //*************************************************************
     {
-        if (Laila.instance().getMUser() == null || Laila.instance().getMUser().getProfile() == null)
-            return;
-        val userProfile = Laila.instance().getMUser().getProfile();
+        val userProfile = Laila.instance().getMUser_U().getData().getProfile();
         val allergies = userProfile.getAllergies();
 
         if (!TextUtils.isEmpty(allergies)) {
@@ -106,32 +103,13 @@ public class ReadingMaterialsFragment extends BaseFragment
     private void startAllergiesRecyclerView()
     //**************************************************************
     {
-        mUser = Laila.instance().getMProfileRequest().getProfile();
+//        mUser = Laila.instance().getMProfileRequest();
 
-        if (mAllergiesList != null && mAllergiesList.size() > 0) {
-            val allergy = AndroidUtil.stringJoin(mAllergiesList, ";");
-            mUser.setAllergies(allergy);
-        }
-        mAllergiesListAdapter = new AllergiesListAdapter(mAllergiesList, new AllergiesListAdapter.ListClickListener() {
-            @Override
-            public void onDelete(int position) {
-                AndroidUtil.displayAlertDialog(
-                        AndroidUtil.getString(
-                                R.string.delete_item),
-                        AndroidUtil.getString(
-                                R.string.delete),
-                        getContext(),
-                        AndroidUtil.getString(
-                                R.string.ok),
-                        AndroidUtil.getString(
-                                R.string.cancel),
-                        (dialog, which) -> {
-                            if (which == -1) {
-                                mAllergiesList.remove(position);
-                                startAllergiesRecyclerView();
-                            }
-                        });
-            }
+//        if (mAllergiesList != null && mAllergiesList.size() > 0) {
+//            val allergy = AndroidUtil.stringJoin(mAllergiesList, ";");
+//            mUser.setAllergies(allergy);
+//        }
+        mResourcesListAdapter = new ResourcesListAdapter(mAllergiesList, new ResourcesListAdapter.ListClickListener() {
 
             //***********************************************************
             @Override
@@ -164,7 +142,7 @@ public class ReadingMaterialsFragment extends BaseFragment
             }
         });
         mBinding.allergiesRecycleView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mBinding.allergiesRecycleView.setAdapter(mAllergiesListAdapter);
+        mBinding.allergiesRecycleView.setAdapter(mResourcesListAdapter);
     }
 
 }

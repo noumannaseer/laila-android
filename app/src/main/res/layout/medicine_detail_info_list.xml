@@ -33,7 +33,7 @@
                         android:lineSpacingExtra="3sp"
                         android:text="@string/company_name"
                         android:textColor="@color/darkBlue"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/company_name"
@@ -43,7 +43,7 @@
                         android:letterSpacing="0.02"
                         android:lineSpacingExtra="3sp"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         tools:text="ER6 Medical " />
 
                     <View
@@ -68,7 +68,7 @@
                         android:lineSpacingExtra="3sp"
                         android:text="@string/class_name"
                         android:textColor="@color/darkBlue"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/class_name"
@@ -78,7 +78,7 @@
                         android:letterSpacing="0.02"
                         android:lineSpacingExtra="3sp"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         tools:text="ER6" />
 
                     <View
@@ -103,7 +103,7 @@
                         android:lineSpacingExtra="3sp"
                         android:text="@string/brand_name"
                         android:textColor="@color/darkBlue"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/brand_name"
@@ -113,7 +113,7 @@
                         android:letterSpacing="0.02"
                         android:lineSpacingExtra="3sp"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:visibility="visible"
                         tools:text="ER6 Medical " />
 
@@ -138,7 +138,7 @@
                         android:lineSpacingExtra="3sp"
                         android:text="@string/drug_code"
                         android:textColor="@color/darkBlue"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/drug_code"
@@ -148,7 +148,7 @@
                         android:letterSpacing="0.02"
                         android:lineSpacingExtra="3sp"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:visibility="visible"
                         tools:text="ER6 Medical " />
 
@@ -173,7 +173,7 @@
                         android:lineSpacingExtra="3sp"
                         android:text="@string/descriptor"
                         android:textColor="@color/darkBlue"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/descriptor_no"
@@ -183,7 +183,7 @@
                         android:letterSpacing="0.02"
                         android:lineSpacingExtra="3sp"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         tools:text="ER6 Medical " />
 
                     <View
@@ -208,7 +208,7 @@
                         android:lineSpacingExtra="3sp"
                         android:text="@string/no_of_ais"
                         android:textColor="@color/darkBlue"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/no_of_ais"
@@ -218,7 +218,7 @@
                         android:letterSpacing="0.02"
                         android:lineSpacingExtra="3sp"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         tools:text="ER6 Medical " />
 
                     <View
@@ -243,7 +243,7 @@
                         android:lineSpacingExtra="3sp"
                         android:text="@string/ai_group_no"
                         android:textColor="@color/darkBlue"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/ai_grp_no"
@@ -253,7 +253,7 @@
                         android:letterSpacing="0.02"
                         android:lineSpacingExtra="3sp"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         tools:text="ER6 Medical " />
 
                     <View
@@ -278,7 +278,7 @@
                         android:lineSpacingExtra="3sp"
                         android:text="@string/Drug_identification_no"
                         android:textColor="@color/darkBlue"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/drug_identification_no"
@@ -288,7 +288,7 @@
                         android:letterSpacing="0.02"
                         android:lineSpacingExtra="3sp"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         tools:text="ER6 Medical " />
 
                     <View
@@ -313,7 +313,7 @@
                         android:lineSpacingExtra="3sp"
                         android:text="@string/last_update_date"
                         android:textColor="@color/darkBlue"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/last_update_date"
@@ -323,7 +323,7 @@
                         android:letterSpacing="0.02"
                         android:lineSpacingExtra="3sp"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         tools:text="ER6 Medical " />
 
                     <View

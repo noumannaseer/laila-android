@@ -9,6 +9,8 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
@@ -24,7 +26,9 @@ import com.fantechlabs.lailaa.models.pharmact_places.AddressComponent;
 import com.fantechlabs.lailaa.models.pharmact_places.GoogleAddress;
 import com.fantechlabs.lailaa.models.pharmact_places.NearByPlaces;
 import com.fantechlabs.lailaa.models.pharmact_places.Result;
-import com.fantechlabs.lailaa.models.response_models.PharmacyResponse;
+import com.fantechlabs.lailaa.models.updates.models.Pharmacy;
+import com.fantechlabs.lailaa.models.updates.response_models.PharmacyResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.PrefferedPharmacyResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.utils.LocationUtils;
@@ -47,8 +51,10 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import lombok.val;
 
@@ -63,6 +69,7 @@ public class AddPharmacyActivity extends BaseActivity
         GoogleAddressViewModel.GoogleAddressViewModelListener,
         PreferredPharmaciesViewModel.PreferredPharmaciesViewModelListener
 //***********************************************************
+
 {
     private ActivityAddPharmacyBinding mBinding;
     private GoogleMap mGoogleMap;
@@ -88,6 +95,13 @@ public class AddPharmacyActivity extends BaseActivity
     private ArrayList<String> mPreferredPharmaciesIds;
     private PreferredPharmaciesViewModel mPreferredPharmaciesViewModel;
     private boolean mIsFirstTime = true;
+    private String lat;
+    private String lng;
+    private String mCity;
+    private String postalCode;
+    private String country;
+    private String province;
+    private List<String> mAddedPharmacyList;
 
     //***********************************************************
     @Override
@@ -110,9 +124,9 @@ public class AddPharmacyActivity extends BaseActivity
     private void initControls()
     //***************************************************************
     {
+        mAddedPharmacyList = new ArrayList<>();
         mAddPharmacyViewModel = new AddPharmacyViewModel(this);
         mBinding.saveBtn.setOnClickListener(v -> validation());
-
     }
 
     //******************************************************************
@@ -228,7 +242,6 @@ public class AddPharmacyActivity extends BaseActivity
         });
     }
 
-
     //******************************************************************
     private void searchNearByPharmacy(@NonNull double lat, @NonNull double log)
     //******************************************************************
@@ -239,6 +252,8 @@ public class AddPharmacyActivity extends BaseActivity
                 log,
                 "",
                 0);
+        if (!this.getWindow().getDecorView().getRootView().isShown())
+            return;
         showLoadingDialog();
         mPlacesViewModel.getNearByPharmacy(
                 lat + "," + log,
@@ -383,6 +398,7 @@ public class AddPharmacyActivity extends BaseActivity
     public void onInfoWindowClick(Marker marker)
     //***************************************************
     {
+
     }
 
     //*************************************************************
@@ -411,20 +427,31 @@ public class AddPharmacyActivity extends BaseActivity
             mBinding.pharmacyAddress1.requestFocus();
             return;
         }
+        val user_email = Laila.instance().getMUser_U().getData().getUser().getEmail();
+        val token = Laila.instance().getMUser_U().getData().getUser().getToken();
 
         val addPharmacyRequest = Laila.instance()
                 .getMAddPharmacyRequest()
                 .Builder();
 
-        addPharmacyRequest.setFirst_name(name);
-        addPharmacyRequest.setPhone(phone);
-        addPharmacyRequest.setAddress_city(city);
-        addPharmacyRequest.setAddress_line1(address);
-        addPharmacyRequest.setAddress_line2(address2);
-        addPharmacyRequest.setIs_preferred(mPreferredId);
-        addPharmacyRequest.setContact_type(PHARMACY);
-        addPharmacyRequest.setUser_private_code(Laila.instance().getMUser().getProfile().getUserPrivateCode());
-        addPharmacyRequest.setUser_name(Laila.instance().getMUser().getProfile().getFirstName() + Laila.instance().getMUser().getProfile().getLastName());
+        addPharmacyRequest.setName(name);
+        addPharmacyRequest.setContactNo(phone);
+        addPharmacyRequest.setCity(mCity);
+        addPharmacyRequest.setAddress(address);
+        addPharmacyRequest.setAddress2(address2);
+        addPharmacyRequest.setCountry(country);
+        addPharmacyRequest.setProvince(province);
+        addPharmacyRequest.setZipCode(postalCode);
+        addPharmacyRequest.setIsPreferred(mPreferredId);
+//        if (!mPreferredId.isEmpty())
+//            addPharmacyRequest.setIsPreferred(1);
+//        else
+//            addPharmacyRequest.setIsPreferred(0);
+//        addPharmacyRequest.setIsPreferred(Integer.parseInt(mPreferredId));
+
+        addPharmacyRequest.setContactType(PHARMACY);
+        addPharmacyRequest.setToken(token);
+        addPharmacyRequest.setEmail(user_email);
 
         showLoadingDialog();
         mAddPharmacyViewModel.addPharmacy(addPharmacyRequest);
@@ -437,23 +464,25 @@ public class AddPharmacyActivity extends BaseActivity
     //*******************************************************************************************
     {
         hideLoadingDialog();
-        val contact = Response.getContact();
+        val pharmacy = Response.getData().getPharmacy();
         if (Laila.instance()
-                .getMUser() == null || contact == null)
+                .getMUser_U() == null || pharmacy == null)
             return;
 
-        ArrayList<Contact> contactList = Laila.instance()
-                .getMUser()
-                .getContacts();
-        if (contactList == null)
-            contactList = new ArrayList<>();
-        contactList.add(contact);
+        List<Pharmacy> pharmacyList = Laila.instance().getMUser_U().getData().getPharmacyList();
+        if (pharmacyList == null)
+            pharmacyList = new ArrayList<>();
+        pharmacyList.add(pharmacy);
         Laila.instance()
-                .getMUser()
-                .setContacts(contactList);
+                .getMUser_U()
+                .getData().setPharmacyList(pharmacyList);
+
+        mAddedPharmacyList.add(pharmacy.getName());
+        Laila.instance().getMUser_U().getData().setStringPharmacyList(mAddedPharmacyList);
         SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance()
-                .getMUser());
+                .getMUser_U());
         Laila.instance().is_pharmacy_added = true;
+        Laila.instance().from_pharmacy_added = true;
         finish();
     }
 
@@ -468,6 +497,22 @@ public class AddPharmacyActivity extends BaseActivity
 
     //*********************************************************************
     @Override
+    public void onSuccessfullyGet(@Nullable PharmacyResponse userResponse)
+    //*********************************************************************
+    {
+
+    }
+
+    //*********************************************************************
+    @Override
+    public void onFailedGet(@NonNull String errorMessage)
+    //*********************************************************************
+    {
+
+    }
+
+    //*********************************************************************
+    @Override
     public void onSuccessFullyCalled(NearByPlaces nearByPlaces)
     //*********************************************************************
     {
@@ -477,9 +522,12 @@ public class AddPharmacyActivity extends BaseActivity
             mPlaceIds += place.getPlace_id() + ";";
             index++;
         }
-
+        if (!this.getWindow().getDecorView().getRootView().isShown())
+            return;
         showLoadingDialog();
-        mPreferredPharmaciesViewModel.getPreferredPharmacies(mPlaceIds);
+        val userToken = Laila.instance().getMUser_U().getData().getUser().getToken();
+
+        mPreferredPharmaciesViewModel.getPreferredPharmacies(userToken);
 
     }
 
@@ -499,18 +547,25 @@ public class AddPharmacyActivity extends BaseActivity
             mAddressComponents.add(address);
         }
 
-        val city = getAddressParameters("administrative_area_level_2");
-        val postalCode = getAddressParameters("postal_code");
+        mCity = getAddressParameters("administrative_area_level_2");
         val name = response.getResult().getName();
         val address = response.getResult().getFormattedAddress();
         val phone = response.getResult().getFormattedPhoneNumber();
+        lat = response.getResult().getGeometry().getLocation().getLat().toString();
+        lng = response.getResult().getGeometry().getLocation().getLng().toString();
+        country = getAddressParameters("country");
+        province = getAddressParameters("administrative_area_level_1");
+        postalCode = getAddressParameters("postal_code");
 
+        if (postalCode == null || postalCode.isEmpty())
+            postalCode = country;
 
         mBinding.pharmacyName.setText(name);
         mBinding.pharmacyAddress1.setText(address);
-        mBinding.pharmacyCity.setText(city);
+        mBinding.pharmacyCity.setText(mCity);
         mBinding.pharmacyAddress2.setText(address);
         mBinding.phone.setText(phone);
+
         Log.d(TAG, "" + response.getResult());
     }
 
@@ -529,19 +584,20 @@ public class AddPharmacyActivity extends BaseActivity
 
     //*********************************************************************
     @Override
-    public void onSuccessFullyGetPreferredPharmacies(PreferredPharmacies response)
+    public void onSuccessFullyGetPreferredPharmacies(PrefferedPharmacyResponse response)
     //*********************************************************************
     {
+        if (!this.getWindow().getDecorView().getRootView().isShown())
+            return;
         hideLoadingDialog();
-        if (response == null || response.getPreferredIds() == null)
+        if (response == null || response.getData().getPreferredIds() == null)
             return;
         mPreferredPharmaciesIds = new ArrayList<>();
 
-        for (val ids : response.getPreferredIds())
+        for (val ids : response.getData().getPreferredIds())
             mPreferredPharmaciesIds.add(ids);
 
         int index = 0;
-
 
         for (val place : mPlacesResult) {
             addMarkerToMap(place.getName(),
@@ -575,5 +631,4 @@ public class AddPharmacyActivity extends BaseActivity
     {
         return false;
     }
-
 }

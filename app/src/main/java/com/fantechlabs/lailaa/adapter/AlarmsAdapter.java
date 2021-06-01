@@ -13,9 +13,10 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fantechlabs.lailaa.R;
-import com.fantechlabs.lailaa.models.Events;
-import com.fantechlabs.lailaa.models.Medication;
+import com.fantechlabs.lailaa.models.updates.models.Medication;
+import com.fantechlabs.lailaa.models.updates.models.ResponseEvent;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
+import com.fantechlabs.lailaa.utils.DateUtils;
 import com.google.android.material.button.MaterialButton;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public final class AlarmsAdapter
 //**************************************************************************
 {
 
-    private List<Events> mEvents;
+    private List<ResponseEvent> mEvents;
     private String[] mDays;
     private int mAccentColor = -1;
     private ListClickListener mListClickListener;
@@ -53,7 +54,6 @@ public final class AlarmsAdapter
     public void onBindViewHolder(ViewHolder holder, int position)
     //**************************************************************************
     {
-
         final Context c = holder.itemView.getContext();
         if (mAccentColor == -1) {
             mAccentColor = ContextCompat.getColor(c, R.color.darkBlue);
@@ -62,9 +62,13 @@ public final class AlarmsAdapter
             mDays = c.getResources()
                     .getStringArray(R.array.days_abbreviated);
         }
-        final Events event = mEvents.get(position);
-        val startDate = event.getStartDate().split(" ")[0];
-        val endDate = event.getEndDate().split(" ")[0];
+        final ResponseEvent event = mEvents.get(position);
+//        val startDate = event.getStartDate().split(" ")[0];
+//        val endDate = event.getEndDate().split(" ")[0];
+
+        val startDate = DateUtils.getDateFromTimeStamp(event.getStartDate(), "dd-MMM-yyyy");
+        val endDate = DateUtils.getDateFromTimeStamp(event.getEndDate(), "dd-MMM-yyyy");
+        DateUtils.getGivenDate(event.getStartDate());
         holder.dateTime.setText(startDate + " - " + endDate);
         holder.label.setText(event.getEventTitle());
         holder.intakeTime.setText(event.getTimeSchedule());
@@ -79,7 +83,7 @@ public final class AlarmsAdapter
         if (mMedicineList == null || mMedicineList.size() == 0)
             return;
         for (val id : mMedicineList) {
-            if (event.getMedicationId() == id.getId()) {
+            if (Integer.parseInt(event.getMedicationId()) == id.getId()) {
                 holder.refillReminder.setVisibility(View.VISIBLE);
                 return;
             }
@@ -97,7 +101,7 @@ public final class AlarmsAdapter
     }
 
     //**************************************************************************
-    public void setAlarms(List<Events> events, List<Medication> medicineList, ListClickListener listClickListener, Activity activity)
+    public void setAlarms(List<ResponseEvent> events, List<Medication> medicineList, ListClickListener listClickListener, Activity activity)
     //**************************************************************************
     {
         this.mEvents = events;

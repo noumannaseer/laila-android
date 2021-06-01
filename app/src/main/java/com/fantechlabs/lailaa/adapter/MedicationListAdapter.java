@@ -12,8 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.MedicationListViewBinding;
-import com.fantechlabs.lailaa.models.Medication;
+import com.fantechlabs.lailaa.models.updates.models.Medication;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.val;
@@ -25,7 +26,7 @@ public class MedicationListAdapter
 //*******************************************************************
 {
 
-    private List<Medication> mMedicationList;
+    private ArrayList<Medication> mMedicationList;
     private Activity mActivity;
     private int mPosition;
     private ListClickListener mListClickListener;
@@ -45,7 +46,7 @@ public class MedicationListAdapter
     }
 
     //********************************************************************************************
-    public MedicationListAdapter(List<Medication> mFilterList, ListClickListener listClickListener, Activity activity)
+    public MedicationListAdapter(ArrayList<Medication> mFilterList, ListClickListener listClickListener, Activity activity)
     //********************************************************************************************
     {
         this.mMedicationList = mFilterList;
@@ -66,7 +67,7 @@ public class MedicationListAdapter
             return;
         holder.MedicationViewBinding.medicationName.setText(item.getMedicationName());
         holder.MedicationViewBinding.medicationStrength.setText(item.getStrength() + item.getStrengthUom());
-        holder.MedicationViewBinding.medicationDosage.setText("" + item.getNumberOfPills());
+        holder.MedicationViewBinding.medicationDosage.setText("" + item.getDosage());
 
         val medicineName = item.getMedecineForm();
 
@@ -123,7 +124,7 @@ public class MedicationListAdapter
                     break;
                 case "Info":
                     if (mListClickListener != null)
-                        mListClickListener.onInformation(item.getDinRxNumber());
+                        mListClickListener.onInformation(item.getDinRxNumber().toString());
                     break;
                 case "Check Interactions":
                     if (mListClickListener != null)

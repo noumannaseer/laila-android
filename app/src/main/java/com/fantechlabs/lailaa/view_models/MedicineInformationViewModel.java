@@ -4,13 +4,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 
+import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.models.response_models.MedicineInformationResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.MedicineInfoResponse;
 import com.fantechlabs.lailaa.network.ServiceGenerator;
 import com.fantechlabs.lailaa.network.services.MedicationService;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 
+import java.util.HashMap;
 import java.util.List;
 
 import lombok.val;
@@ -39,18 +42,25 @@ public class MedicineInformationViewModel
     //***********************************************************
     {
         val service = ServiceGenerator.createService(MedicationService.class, true,
-                Constants.MEDICINE_INFO_URL);
+                Constants.BASE_URL_U);
         if (service == null) {
             mMedicineInformationListener.onFailed(
                     AndroidUtil.getString(R.string.internet_not_vailable));
             return;
         }
+        val userResponse = Laila.instance().getMUser_U();
+        if (userResponse.getData() == null)
+            return;
+        val token = Laila.instance().getMUser_U().getData().getUser().getToken();
+        HashMap<String, String> medicationInfo = new HashMap<>();
+        medicationInfo.put("din_number", medicineCode);
+        medicationInfo.put(Constants.USER_TOKEN, token);
 
-        val medicationInformationService = service.getMedicineInformation(medicineCode);
+        val medicationInformationService = service.getMedicineInformation(medicationInfo);
 
-        medicationInformationService.enqueue(new Callback<List<MedicineInformationResponse>>() {
+        medicationInformationService.enqueue(new Callback<MedicineInfoResponse>() {
             @Override
-            public void onResponse(Call<List<MedicineInformationResponse>> call, Response<List<MedicineInformationResponse>> response) {
+            public void onResponse(Call<MedicineInfoResponse> call, Response<MedicineInfoResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body() != null) {
                         mMedicineInformationListener.onSuccessfully(response.body());
@@ -61,20 +71,17 @@ public class MedicineInformationViewModel
             }
 
             @Override
-            public void onFailure(Call<List<MedicineInformationResponse>> call, Throwable t) {
+            public void onFailure(Call<MedicineInfoResponse> call, Throwable t) {
                 mMedicineInformationListener.onFailed(t.getLocalizedMessage());
-
             }
         });
-
-
     }
 
     //***********************************************************
     public interface MedicineInformationListener
             //***********************************************************
     {
-        void onSuccessfully(@Nullable List<MedicineInformationResponse> response);
+        void onSuccessfully(@Nullable MedicineInfoResponse response);
 
         void onFailed(@NonNull String errorMessage);
     }

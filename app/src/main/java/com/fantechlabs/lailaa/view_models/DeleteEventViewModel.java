@@ -8,7 +8,9 @@ import androidx.lifecycle.ViewModel;
 
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
+import com.fantechlabs.lailaa.bodyreading.repository.network.utils.NetworkUtils;
 import com.fantechlabs.lailaa.models.Events;
+import com.fantechlabs.lailaa.models.response_models.EventResponse;
 import com.fantechlabs.lailaa.network.ServiceGenerator;
 import com.fantechlabs.lailaa.network.services.EventsService;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
@@ -40,29 +42,28 @@ public class DeleteEventViewModel
     //***********************************************************
     {
         val service = ServiceGenerator.createService(EventsService.class, true,
-                Constants.BASE_URL);
+                Constants.BASE_URL_U);
         if (service == null) {
             mDeleteEventListener.onFailedToDeleteEvent(
                     AndroidUtil.getString(R.string.internet_not_vailable));
             return;
         }
 
-        HashMap<String, Object> item = new HashMap<String, Object>();
-        item.put(Constants.USER_PRIVATE_CODE, Laila.instance().getMUser().getProfile().getUserPrivateCode());
-        item.put(Constants.ID, eventId);
 
-        HashMap<String, Object> deleteItem = new HashMap<>();
-        deleteItem.put("event", item);
+        HashMap<String, Object> deleteEvent = new HashMap<String, Object>();
+        deleteEvent.put(Constants.USER_ID, Laila.instance().getMUser_U().getData().getUser().getId().toString());
+        deleteEvent.put(Constants.USER_TOKEN, Laila.instance().getMUser_U().getData().getUser().getToken());
+        deleteEvent.put(Constants.EVENT_ID, eventId);
 
-        val paymentService = service.deleteEvent(deleteItem);
+        val eventService = service.deleteEvent(deleteEvent);
 
 
         //***********************************************************
-        paymentService.enqueue(new Callback<Events>()
+        eventService.enqueue(new Callback<EventResponse>()
                 //***********************************************************
         {
             @Override
-            public void onResponse(Call<Events> call, Response<Events> response) {
+            public void onResponse(Call<EventResponse> call, Response<EventResponse> response) {
                 if (response.isSuccessful()) {
                     if (response.body() == null) {
                         mDeleteEventListener.onFailedToDeleteEvent((TextUtils.isEmpty(response.body().getError()) ?
@@ -70,15 +71,15 @@ public class DeleteEventViewModel
                                 response.body().getError()));
                         return;
                     }
-                    mDeleteEventListener.onSuccessfullyDeleteEvent(response.body().getResult());
+                    mDeleteEventListener.onSuccessfullyDeleteEvent("Successfully deleted event");
                     return;
                 }
-
-                mDeleteEventListener.onFailedToDeleteEvent(AndroidUtil.getString(R.string.server_error));
+                val error = NetworkUtils.responseError(response);
+                mDeleteEventListener.onFailedToDeleteEvent(error);
             }
 
             @Override
-            public void onFailure(Call<Events> call, Throwable t) {
+            public void onFailure(Call<EventResponse> call, Throwable t) {
                 mDeleteEventListener.onFailedToDeleteEvent(t.getLocalizedMessage());
             }
         });

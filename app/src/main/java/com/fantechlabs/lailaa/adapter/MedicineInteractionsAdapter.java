@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.MedicineInteractionLayoutBinding;
-import com.fantechlabs.lailaa.models.InteractionMsg;
+import com.fantechlabs.lailaa.models.updates.models.InteractionMsg;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 
 import java.util.List;

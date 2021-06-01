@@ -1,5 +1,6 @@
 package com.fantechlabs.lailaa.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -22,6 +23,8 @@ import com.fantechlabs.lailaa.adapter.AllergiesListAdapter;
 import com.fantechlabs.lailaa.databinding.FragmentProfileThreeBinding;
 import com.fantechlabs.lailaa.models.allergie_models.RetrieveXmlParcer;
 import com.fantechlabs.lailaa.models.allergie_models.XmlParcer;
+import com.fantechlabs.lailaa.models.updates.models.Profile;
+import com.fantechlabs.lailaa.models.updates.request_models.ProfileRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 
@@ -37,7 +40,6 @@ import lombok.val;
 public class ProfileThreeFragment extends BaseFragment
 //***********************************************************
 {
-
     private FragmentProfileThreeBinding mBinding;
     private View mRootView;
     private List<String> mAllergiesList;
@@ -45,7 +47,9 @@ public class ProfileThreeFragment extends BaseFragment
     private AllergiesListAdapter mAllergiesListAdapter;
     private TextView mAllergyTitle, mAllergyName;
     private EditText mAllergy;
-    private RetrieveXmlParcer mRetrieveXmlParcer;
+    private ProfileRequest mProfileRequest;
+    private Profile mProfile;
+    private List<String> mHeightUnits, mWeightUnits;
 
     //***********************************************************
     public ProfileThreeFragment()
@@ -72,8 +76,25 @@ public class ProfileThreeFragment extends BaseFragment
     private void initControls()
     //***********************************************************
     {
+        initViews();
         addAlergiesAndConditions();
         editTextWatcher();
+    }
+
+    //******************************************************
+    private void initViews()
+    //******************************************************
+    {
+        mProfileRequest = Laila.instance().getMProfileRequest();
+        if (mProfileRequest == null)
+            mProfileRequest = new ProfileRequest();
+        mHeightUnits = new ArrayList<>();
+        mWeightUnits = new ArrayList<>();
+        mHeightUnits.add("CM");
+        mHeightUnits.add("Inche");
+
+        mWeightUnits.add("Kg");
+        mWeightUnits.add("Lbs");
     }
 
     //******************************************************
@@ -131,12 +152,11 @@ public class ProfileThreeFragment extends BaseFragment
     private void startAllergiesRecyclerView()
     //**************************************************************
     {
-        val mUser = Laila.instance().getMProfileRequest().getProfile();
-        String allergiesList;
 
         if (mAllergiesList != null && mAllergiesList.size() > 0) {
             val allergy = AndroidUtil.stringJoin(mAllergiesList, ";");
-            mUser.setAllergies(allergy);
+            mProfileRequest.setAllergies(allergy);
+            Laila.instance().setMProfileRequest(mProfileRequest);
         }
         mAllergiesListAdapter = new AllergiesListAdapter(mAllergiesList, new AllergiesListAdapter.ListClickListener() {
             @Override
@@ -171,11 +191,10 @@ public class ProfileThreeFragment extends BaseFragment
     private void startConditionRecyclerView()
     //**************************************************************
     {
-        val mUser = Laila.instance().getMProfileRequest().getProfile();
-
         if (mConditionList != null && mConditionList.size() > 0) {
             val condition = AndroidUtil.stringJoin(mConditionList, ";");
-            mUser.setMedicalConditions(condition);
+            mProfileRequest.setMedicalConditions(condition);
+            Laila.instance().setMProfileRequest(mProfileRequest);
         }
         mAllergiesListAdapter = new AllergiesListAdapter(mConditionList, new AllergiesListAdapter.ListClickListener() {
             @Override
@@ -226,7 +245,6 @@ public class ProfileThreeFragment extends BaseFragment
     private void editTextWatcher()
     //******************************************************
     {
-        val mUser = Laila.instance().getMProfileRequest().getProfile();
 
         mBinding.healthCardNo.addTextChangedListener(new TextWatcher() {
             @Override
@@ -241,7 +259,9 @@ public class ProfileThreeFragment extends BaseFragment
 
             @Override
             public void afterTextChanged(Editable s) {
-                mUser.setHealthCardNumber(s.toString());
+                mProfileRequest.setHealthCardNumber(s.toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
+
             }
         });
         mBinding.insuranceName.addTextChangedListener(new TextWatcher() {
@@ -257,7 +277,8 @@ public class ProfileThreeFragment extends BaseFragment
 
             @Override
             public void afterTextChanged(Editable s) {
-                mUser.setPrivateInsurance(s.toString());
+                mProfileRequest.setPrivateInsurance(s.toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
         });
         mBinding.insuranceNumber.addTextChangedListener(new TextWatcher() {
@@ -273,7 +294,9 @@ public class ProfileThreeFragment extends BaseFragment
 
             @Override
             public void afterTextChanged(Editable s) {
-                mUser.setPrivateInsuranceNumber(s.toString());
+                mProfileRequest.setPrivateInsuranceNumber(s.toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
+
             }
         });
         mBinding.height.addTextChangedListener(new TextWatcher() {
@@ -290,10 +313,12 @@ public class ProfileThreeFragment extends BaseFragment
             @Override
             public void afterTextChanged(Editable s) {
                 if (TextUtils.isEmpty(s)) {
-                    mUser.setHeight(0);
+                    mProfileRequest.setHeight("");
+                    Laila.instance().setMProfileRequest(mProfileRequest);
                     return;
                 }
-                mUser.setHeight(Double.parseDouble(s.toString()));
+                mProfileRequest.setHeight(s.toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
         });
         mBinding.weight.addTextChangedListener(new TextWatcher() {
@@ -310,14 +335,17 @@ public class ProfileThreeFragment extends BaseFragment
             @Override
             public void afterTextChanged(Editable s) {
                 if (TextUtils.isEmpty(s)) {
-                    mUser.setWeight(0);
+                    mProfileRequest.setWeight("");
+                    Laila.instance().setMProfileRequest(mProfileRequest);
                     return;
                 }
-                mUser.setWeight(Double.parseDouble(s.toString()));
+                mProfileRequest.setWeight(s.toString());
+                Laila.instance().setMProfileRequest(mProfileRequest);
             }
         });
-        mUser.setWeight_unit("Kg");
-        mUser.setHeight_unit("Feet");
+        mProfileRequest.setWeightUnit("Kg");
+        mProfileRequest.setHeightUnit("CM");
+        Laila.instance().setMProfileRequest(mProfileRequest);
     }
 
     //*******************************************************************
@@ -326,55 +354,90 @@ public class ProfileThreeFragment extends BaseFragment
     //*******************************************************************
     {
         super.onResume();
-        val check = Laila.instance().Edit_Profile;
-        if (!check) {
-            mBinding.weight.setEnabled(false);
-            mBinding.height.setEnabled(false);
-            mBinding.healthCardNo.setEnabled(false);
-            mBinding.insuranceName.setEnabled(false);
-            mBinding.insuranceNumber.setEnabled(false);
-            mBinding.addAllergies.setEnabled(false);
-            mBinding.addCondition.setEnabled(false);
-        }
-        if (Laila.instance().Edit_Profile)
-            edit();
-        if (Laila.instance().getMProfileRequest() == null || Laila.instance().getMProfileRequest().getProfile() == null)
-            return;
-        val userDetail = Laila.instance().getMProfileRequest().getProfile();
-
-        mBinding.healthCardNo.setText(userDetail.getHealthCardNumber());
-        mBinding.insuranceName.setText(userDetail.getPrivateInsurance());
-        mBinding.insuranceNumber.setText(userDetail.getPrivateInsuranceNumber());
+        edit();
         setData();
         setAllergiesAndCondition();
     }
 
     //*************************************************************
+    @SuppressLint("SetTextI18n")
     private void setData()
     //*************************************************************
     {
-        val user = Laila.instance().getCurrentUserProfile();
-        if (user.getHeight() != 0) {
-            String userHeight = String.valueOf(user.getHeight());
-            if (!TextUtils.isEmpty(userHeight))
-                mBinding.height.setText(userHeight);
+        mProfile = Laila.instance().getMUser_U().getData().getProfile();
+        if (mProfile == null)
+            mProfile = new Profile();
+
+        mProfileRequest = Laila.instance().getMProfileRequest();
+        if (mProfileRequest.getHeight() != null || mProfileRequest.getWeight() != null) {
+            requestProfile();
+            return;
+        }
+        getProfileDate();
+    }
+
+    //*************************************************************
+    private void requestProfile()
+    //*************************************************************
+    {
+        mBinding.healthCardNo.setText(mProfileRequest.getHealthCardNumber());
+        mBinding.insuranceName.setText(mProfileRequest.getPrivateInsurance());
+        mBinding.insuranceNumber.setText(mProfileRequest.getPrivateInsuranceNumber());
+        mBinding.height.setText(mProfileRequest.getHeight());
+        mBinding.weight.setText(mProfileRequest.getWeight());
+    }
+
+    //*************************************************************
+    @SuppressLint("SetTextI18n")
+    private void getProfileDate()
+    //*************************************************************
+    {
+        val height = mProfile.getHeight();
+        val weight = mProfile.getWeight();
+        val healthCardNo = mProfile.getHealthCardNumber();
+        val insuranceName = mProfile.getPrivateInsurance();
+        val insuranceNumber = mProfile.getPrivateInsuranceNumber();
+        val heightUnit = mProfile.getHeightUnit();
+        val weightUnit = mProfile.getWeightUnit();
+        val allergies = mProfile.getAllergies();
+        val medicalCondition = mProfile.getMedicalConditions();
+
+        mBinding.healthCardNo.setText(healthCardNo);
+        mBinding.insuranceName.setText(insuranceName);
+        mBinding.insuranceNumber.setText(insuranceNumber);
+        mBinding.height.setText(String.valueOf(height));
+        mBinding.weight.setText(String.valueOf(weight));
+
+        if (!TextUtils.isEmpty(allergies)) {
+            mAllergiesList = new ArrayList<>();
+            String[] allergiesList = allergies.split(";");
+            for (val allergy : allergiesList) {
+                if (!TextUtils.isEmpty(allergy))
+                    mAllergiesList.add(allergy);
+            }
+
+            startAllergiesRecyclerView();
         }
 
-        if (user.getWeight() != 0) {
-            String userWeight = String.valueOf(user.getWeight());
-            if (!TextUtils.isEmpty(userWeight))
-                mBinding.weight.setText(userWeight);
-        }
+        if (!TextUtils.isEmpty(medicalCondition)) {
+            mConditionList = new ArrayList<>();
+            String[] conditionList = medicalCondition.split(";");
+            for (val condition : conditionList) {
+                if (!TextUtils.isEmpty(condition))
+                    mConditionList.add(condition);
+            }
 
+            startConditionRecyclerView();
+        }
     }
 
     //*************************************************************
     private void setAllergiesAndCondition()
     //*************************************************************
     {
-        if (Laila.instance().getMUser() == null || Laila.instance().getMUser().getProfile() == null)
+        if (Laila.instance().getMUser_U().getData() == null || Laila.instance().getMUser_U().getData().getProfile() == null)
             return;
-        val userProfile = Laila.instance().getMUser().getProfile();
+        val userProfile = Laila.instance().getMUser_U().getData().getProfile();
         val allergies = userProfile.getAllergies();
         val medicalCondition = userProfile.getMedicalConditions();
 

@@ -5,7 +5,8 @@ import android.text.TextUtils;
 import androidx.lifecycle.ViewModel;
 
 import com.fantechlabs.lailaa.R;
-import com.fantechlabs.lailaa.models.response_models.UserResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.UserResponse;
+import com.fantechlabs.lailaa.network.NetworkUtils;
 import com.fantechlabs.lailaa.network.ServiceGenerator;
 import com.fantechlabs.lailaa.network.services.OnboardingService;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
@@ -13,6 +14,7 @@ import com.fantechlabs.lailaa.utils.Constants;
 
 import java.util.HashMap;
 
+import io.reactivex.CompletableOnSubscribe;
 import lombok.NonNull;
 import lombok.val;
 import retrofit2.Call;
@@ -25,7 +27,6 @@ public class SocialLoginViewModel
 //**********************************************************
 
 {
-
     private SocialLoginViewModelListener mSocialLoginViewModelListener;
 
     public SocialLoginViewModel(SocialLoginViewModelListener viewModelListener) {
@@ -33,60 +34,49 @@ public class SocialLoginViewModel
     }
 
     //**********************************************************
-    public void socialLogin(String email, String token, int isFacebook)
+    public void socialLogin(String email, String token, String socialType)
     //**********************************************************
     {
 
         val service = ServiceGenerator.createService(OnboardingService.class,
                 true,
-                Constants.BASE_URL);
+                Constants.BASE_URL_U);
         if (service == null) {
             mSocialLoginViewModelListener.onFailedSocialLogin(AndroidUtil.getString(R.string.internet_not_vailable));
             return;
         }
 
-        HashMap<String, String> login = new HashMap<String, String>();
-        login.put("email", email);
+        HashMap<String, String> login = new HashMap<>();
+        login.put(Constants.EMAIL, email);
+        login.put(Constants.SOCIAL_TYPE, socialType);
+        login.put("user_type", "laila");
 
-        switch (isFacebook) {
-            case 1:
-                login.put("facebook", token);
-                break;
-            case 0:
-                login.put("gmail", token);
-                break;
-        }
-
-        val placeServices = service.socialLogin(login);
-
-
-        //**********************************************************
-        placeServices.enqueue(new Callback<UserResponse>()
-                //**********************************************************
-        {
-
-            //**********************************************************
+        val loginServices = service.socialLogin(login);
+        loginServices.enqueue(new Callback<UserResponse>() {
+            //*****************************************************
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response)
-            //**********************************************************
+            //*****************************************************
             {
                 if (response.isSuccessful()) {
-                    if (response.body().getError() != null) {
-                        mSocialLoginViewModelListener.onFailedSocialLogin((TextUtils.isEmpty(response.body().getError()) ?
+                    if (response.body().getStatus() != 200) {
+                        mSocialLoginViewModelListener.onFailedSocialLogin((TextUtils.isEmpty(response.body().getData().getMessage()) ?
                                 AndroidUtil.getString(R.string.server_error) :
-                                response.body().getError()));
+                                response.body().getData().getMessage()));
                         return;
                     }
                     mSocialLoginViewModelListener.onSuccessSocialLogin(response.body());
                     return;
                 }
-                mSocialLoginViewModelListener.onFailedSocialLogin(AndroidUtil.getString(R.string.server_error));
+                val error = NetworkUtils.errorResponse(response.errorBody());
+                mSocialLoginViewModelListener.onFailedSocialLogin(error);
+
             }
 
-            //**********************************************************
+            //*****************************************************
             @Override
             public void onFailure(Call<UserResponse> call, Throwable t)
-            //**********************************************************
+            //*****************************************************
             {
                 if (mSocialLoginViewModelListener != null)
                     mSocialLoginViewModelListener.onFailedSocialLogin(t.getLocalizedMessage());

@@ -7,7 +7,8 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 
 import com.fantechlabs.lailaa.R;
-import com.fantechlabs.lailaa.models.response_models.SignUpResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.SignUpResponse;
+import com.fantechlabs.lailaa.network.NetworkUtils;
 import com.fantechlabs.lailaa.network.ServiceGenerator;
 import com.fantechlabs.lailaa.network.services.OnboardingService;
 import com.fantechlabs.lailaa.request_models.UserRequest;
@@ -40,9 +41,8 @@ public class SignUpViewModel
     //***********************************************************
     {
         val service = ServiceGenerator.createService(OnboardingService.class, true,
-                                                     Constants.BASE_URL);
-        if (service == null)
-        {
+                Constants.BASE_URL_U);
+        if (service == null) {
             mUserLoginListener.onSignUpFailed(
                     AndroidUtil.getString(R.string.internet_not_vailable));
             return;
@@ -51,28 +51,26 @@ public class SignUpViewModel
         HashMap<String, String> signuplist = new HashMap<String, String>();
         signuplist.put("email", userRequest.getEmail());
         signuplist.put("password", userRequest.getPassword());
+        signuplist.put("user_type", "laila");
 
         val loginService = service.signUp(signuplist);
 
-        loginService.enqueue(new Callback<SignUpResponse>()
-        {
+        loginService.enqueue(new Callback<SignUpResponse>() {
             //***********************************************************
             @Override
             public void onResponse(Call<SignUpResponse> call, Response<SignUpResponse> response)
             //***********************************************************
             {
-                if (response.isSuccessful())
-                {
-                   if(response.body().getSuccess() == null)
-                   {
-                       mUserLoginListener.onSignUpFailed((TextUtils.isEmpty(response.body().getError()) ? AndroidUtil.getString(R.string.server_error) : response.body().getError()));
-                       return;
-                   }
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus() != 200) {
+                        mUserLoginListener.onSignUpFailed((TextUtils.isEmpty(response.body().getData().getMessage()) ? AndroidUtil.getString(R.string.server_error) : response.body().getData().getMessage()));
+                        return;
+                    }
                     mUserLoginListener.onSignUpSuccessfully(response.body());
                     return;
                 }
-
-                mUserLoginListener.onSignUpFailed(AndroidUtil.getString(R.string.server_error));
+                val error = NetworkUtils.errorResponse(response.errorBody());
+                mUserLoginListener.onSignUpFailed(error);
             }
 
             //***********************************************************
@@ -88,7 +86,7 @@ public class SignUpViewModel
 
     //***********************************************************
     public interface UserSignUpListener
-    //***********************************************************
+            //***********************************************************
     {
         void onSignUpSuccessfully(@Nullable SignUpResponse userResponse);
 

@@ -38,7 +38,7 @@ public class ResetPasswordViewModel
 
         val service = ServiceGenerator.createService(OnboardingService.class,
                                                      true,
-                                                     Constants.BASE_URL);
+                                                     Constants.BASE_URL_U);
         if (service == null)
         {
             mResetPasswordViewModelListener.onFailed(AndroidUtil.getString(R.string.internet_not_vailable));
@@ -46,7 +46,7 @@ public class ResetPasswordViewModel
         }
 
         HashMap<String, String> reset = new HashMap<String, String>();
-        reset.put("email", email);
+        reset.put(Constants.EMAIL, email);
 
 
 

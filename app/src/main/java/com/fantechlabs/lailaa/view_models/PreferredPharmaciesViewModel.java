@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.models.PreferredPharmacies;
+import com.fantechlabs.lailaa.models.updates.response_models.PrefferedPharmacyResponse;
 import com.fantechlabs.lailaa.network.ServiceGenerator;
 import com.fantechlabs.lailaa.network.services.MedicationService;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
@@ -32,49 +33,43 @@ public class PreferredPharmaciesViewModel
     }
 
     //*******************************************************************
-    public void getPreferredPharmacies(String placeIds)
+    public void getPreferredPharmacies(String userToken)
     //*******************************************************************
     {
 
         val service = ServiceGenerator.createService(MedicationService.class,
                                                      true,
-                                                     Constants.HEALTH_CARE_URL);
+                                                     Constants.BASE_URL_U);
         if (service == null)
         {
             mPreferredPharmaciesViewModelListener.onFailed(AndroidUtil.getString(R.string.internet_not_vailable));
             return;
         }
 
-        HashMap<String, String> ids = new HashMap<>();
-        ids.put("ids", placeIds);
+        HashMap<String, String> token = new HashMap<>();
+        token.put(Constants.USER_TOKEN, userToken);
 
-        val placeServices = service.getPreferredPharmacies(ids);
+        val placeServices = service.getPreferredPharmacies(token);
 
         //*******************************************************************
-        placeServices.enqueue(new Callback<PreferredPharmacies>()
+        placeServices.enqueue(new Callback<PrefferedPharmacyResponse>()
         //*******************************************************************
         {
 
             //*******************************************************************
             @Override
-            public void onResponse(Call<PreferredPharmacies> call, Response<PreferredPharmacies> response)
+            public void onResponse(Call<PrefferedPharmacyResponse> call, Response<PrefferedPharmacyResponse> response)
             //*******************************************************************
             {
-                if (response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
                     mPreferredPharmaciesViewModelListener.onSuccessFullyGetPreferredPharmacies(response.body());
 
-                }
-                else
-                {
+                } else {
                     String errorMessage = "API error";
-                    try
-                    {
+                    try {
                         errorMessage = new String(response.errorBody()
-                                                          .bytes());
-                    }
-                    catch (IOException e)
-                    {
+                                .bytes());
+                    } catch (IOException e) {
                         e.printStackTrace();
                     }
                     if (mPreferredPharmaciesViewModelListener != null)
@@ -85,7 +80,7 @@ public class PreferredPharmaciesViewModel
 
             //*******************************************************************
             @Override
-            public void onFailure(Call<PreferredPharmacies> call, Throwable t)
+            public void onFailure(Call<PrefferedPharmacyResponse> call, Throwable t)
             //*******************************************************************
             {
                 if (mPreferredPharmaciesViewModelListener != null)
@@ -100,7 +95,7 @@ public class PreferredPharmaciesViewModel
     public interface PreferredPharmaciesViewModelListener
     //******************************************************
     {
-        void onSuccessFullyGetPreferredPharmacies(@NonNull PreferredPharmacies response);
+        void onSuccessFullyGetPreferredPharmacies(@NonNull PrefferedPharmacyResponse response);
 
         void onFailed(@NonNull String message);
     }

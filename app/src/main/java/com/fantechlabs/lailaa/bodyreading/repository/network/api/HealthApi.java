@@ -1,9 +1,9 @@
 package com.fantechlabs.lailaa.bodyreading.repository.network.api;
 
-import com.fantechlabs.lailaa.bodyreading.repository.storge.requestmodel.AddHealthDataRequest;
-import com.fantechlabs.lailaa.bodyreading.repository.storge.requestmodel.ReadHealthDataRequest;
-import com.fantechlabs.lailaa.bodyreading.repository.storge.responsemodel.AddDataHealthResponse;
-import com.fantechlabs.lailaa.bodyreading.repository.storge.responsemodel.HealthDataReadingResponse;
+import com.fantechlabs.lailaa.models.updates.request_models.AddHealthDataRequest;
+import com.fantechlabs.lailaa.models.updates.request_models.ReadHealthDataRequest;
+import com.fantechlabs.lailaa.models.updates.response_models.AddHealthDataResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.ReadHealthDataResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -14,8 +14,8 @@ public interface HealthApi {
 
     //**************************************************************
     @Headers("Accept: application/json")
-    @POST("body_readings/add")
-    Call<AddDataHealthResponse>
+    @POST("bodyvital/add_bodyvital")
+    Call<AddHealthDataResponse>
     addData(
             @Body AddHealthDataRequest addHealthDataRequest
     );
@@ -23,8 +23,8 @@ public interface HealthApi {
 
     //**************************************************************
     @Headers("Accept: application/json")
-    @POST("body_readings/read")
-    Call<HealthDataReadingResponse>
+    @POST("bodyvital/read_bodyvital")
+    Call<ReadHealthDataResponse>
     readData(
             @Body ReadHealthDataRequest readHealthDataRequest
     );

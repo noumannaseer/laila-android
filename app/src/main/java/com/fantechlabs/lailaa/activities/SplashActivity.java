@@ -1,6 +1,7 @@
 package com.fantechlabs.lailaa.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
@@ -8,25 +9,29 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
-import com.fantechlabs.lailaa.models.response_models.UserResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.ProfileResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.UserResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.utils.SharedPreferencesUtils;
 import com.fantechlabs.lailaa.utils.permissions.Permission;
 
+import com.fantechlabs.lailaa.view_models.UpdateProfileViewModel;
+
 import lombok.val;
 
 //**********************************************************
 public class SplashActivity extends AppCompatActivity
-        implements Permission.OnResult, Permission.OnDenied
+        implements Permission.OnResult, Permission.OnDenied,
+        UpdateProfileViewModel.UpdateProfileListener
 //**********************************************************
 {
     private Permission mPermission;
+    private UpdateProfileViewModel mUpdateProfileViewModel;
 
     //**********************************************************
     @Override
@@ -55,10 +60,25 @@ public class SplashActivity extends AppCompatActivity
             mPermission.request(this);
     }
 
+    //*******************************************************************
+    private void initViewModels()
+    //*******************************************************************
+    {
+        mUpdateProfileViewModel = new UpdateProfileViewModel(this);
+    }
+
+    //*******************************************************************
+    private void getProfile()
+    //*******************************************************************
+    {
+        mUpdateProfileViewModel.getProfile();
+    }
+
     //***************************************************************
     private void initControls()
     //***************************************************************
     {
+        initViewModels();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -74,13 +94,17 @@ public class SplashActivity extends AppCompatActivity
     private void goToDashboard()
     //*********************************************
     {
+
         UserResponse userResponse = SharedPreferencesUtils.getModel(UserResponse.class, Constants.USER_DATA);
 
         if (userResponse != null) {
-            Laila.instance().setMUser(userResponse);
-            val userPrivateCode = Laila.instance().getMUser().getProfile().getUserPrivateCode();
+            Laila.instance().setMUser_U(userResponse);
+            getProfile();
+            if (Laila.instance().getMUser_U().getData().getUser() == null)
+                return;
+            val user_id = Laila.instance().getMUser_U().getData().getUser().getId();
 
-            if (userPrivateCode != null) {
+            if (user_id != null) {
                 Intent afterSplash = new Intent(SplashActivity.this, HomeActivity.class);
                 startActivity(afterSplash);
                 afterSplash.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -132,5 +156,22 @@ public class SplashActivity extends AppCompatActivity
     //*************************************************************
     {
         AndroidUtil.toast(false, "" + permission);
+    }
+
+    //**********************************************************
+    @Override
+    public void onUpdateSuccessfully(@Nullable ProfileResponse response)
+    //**********************************************************
+    {
+        Laila.instance().getMUser_U().getData().setProfile(response.getData().getProfile());
+        SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser_U());
+    }
+
+    //**********************************************************
+    @Override
+    public void onUpdateFailed(@NonNull String errorMessage)
+    //**********************************************************
+    {
+
     }
 }

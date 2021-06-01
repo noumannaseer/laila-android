@@ -12,9 +12,25 @@ public class Meta implements Parcelable
     @SerializedName("status")
     @Expose
     private String status;
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
+    }
+
     @SerializedName("msg")
     @Expose
     private String msg;
+
+    @SerializedName("error")
+    @Expose
+    private String error;
+
+
+
     public final static Creator<Meta> CREATOR = new Creator<Meta>() {
 
 

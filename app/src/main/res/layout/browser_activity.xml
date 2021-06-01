@@ -41,8 +41,7 @@
         android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignWithParentIfMissing="true"
-        android:background="#FFF" />
+         android:background="#FFF" />
 
     <ImageView
         android:id="@+id/no_internet"

@@ -6,13 +6,13 @@ import androidx.databinding.DataBindingUtil;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.TextUtils;
 
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.ActivitySignUpBinding;
-import com.fantechlabs.lailaa.databinding.ActivitySigninBinding;
-import com.fantechlabs.lailaa.models.response_models.SignUpResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.SignUpResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.utils.UIUtils;
@@ -133,6 +133,7 @@ public class SignUpActivity extends BaseActivity
     //****************************************************
     {
         hideLoadingDialog();
-        AndroidUtil.displayAlertDialog(errorMessage, AndroidUtil.getString(R.string.error), this);
+        val error = Html.fromHtml((String) errorMessage).toString();
+        AndroidUtil.displayAlertDialog(error, AndroidUtil.getString(R.string.error), this);
     }
 }

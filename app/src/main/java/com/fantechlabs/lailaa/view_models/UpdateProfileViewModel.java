@@ -6,11 +6,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModel;
 
+import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.models.response_models.UpdateProfileResponse;
+import com.fantechlabs.lailaa.models.updates.request_models.ProfileRequest;
+import com.fantechlabs.lailaa.models.updates.response_models.ProfileResponse;
+import com.fantechlabs.lailaa.network.NetworkUtils;
 import com.fantechlabs.lailaa.network.ServiceGenerator;
 import com.fantechlabs.lailaa.network.services.OnboardingService;
-import com.fantechlabs.lailaa.request_models.ProfileRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 
@@ -40,7 +43,7 @@ public class UpdateProfileViewModel
     //***********************************************************
     {
         val service = ServiceGenerator.createService(OnboardingService.class, true,
-                Constants.BASE_URL);
+                Constants.BASE_URL_U);
         if (service == null) {
             mUpdateProfileListener.onUpdateFailed(
                     AndroidUtil.getString(R.string.internet_not_vailable));
@@ -50,29 +53,86 @@ public class UpdateProfileViewModel
         val profileService = service.updateProfile(request);
 
         //***********************************************************
-        profileService.enqueue(new Callback<UpdateProfileResponse>()
+        profileService.enqueue(new Callback<ProfileResponse>()
                 //***********************************************************
         {
 
             //***********************************************************
             @Override
-            public void onResponse(Call<UpdateProfileResponse> call, Response<UpdateProfileResponse> response)
+            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response)
             //***********************************************************
             {
                 if (response.isSuccessful()) {
-                    if (response.body().getSuccess() == null) {
-                        mUpdateProfileListener.onUpdateFailed((TextUtils.isEmpty(response.body().getError()) ? AndroidUtil.getString(R.string.server_error) : response.body().getError()));
+                    if (response.body().getStatus() != 200) {
+                        mUpdateProfileListener.onUpdateFailed((TextUtils.isEmpty(response.body().getData().getMessage()) ? AndroidUtil.getString(R.string.server_error) : response.body().getData().getMessage()));
                         return;
                     }
                     mUpdateProfileListener.onUpdateSuccessfully(response.body());
                     return;
                 }
-                mUpdateProfileListener.onUpdateFailed(AndroidUtil.getString(R.string.server_error));
+                val error = NetworkUtils.errorResponse(response.errorBody());
+                mUpdateProfileListener.onUpdateFailed(error);
             }
 
             //***********************************************************
             @Override
-            public void onFailure(Call<UpdateProfileResponse> call, Throwable t)
+            public void onFailure(Call<ProfileResponse> call, Throwable t)
+            //***********************************************************
+            {
+                val msg = t.getLocalizedMessage();
+                mUpdateProfileListener.onUpdateFailed(t.getLocalizedMessage());
+            }
+        });
+
+    }
+
+    //***********************************************************
+    public void getProfile()
+    //***********************************************************
+    {
+        val service = ServiceGenerator.createService(OnboardingService.class, true,
+                Constants.BASE_URL_U);
+        if (service == null) {
+            mUpdateProfileListener.onUpdateFailed(
+                    AndroidUtil.getString(R.string.internet_not_vailable));
+            return;
+        }
+        if (Laila.instance().getMUser_U().getData().getUser() == null)
+            return;
+        val user_id = Laila.instance().getMUser_U().getData().getUser().getId().toString();
+        val token = Laila.instance().getMUser_U().getData().getUser().getToken();
+
+        HashMap<String, String> profile = new HashMap<>();
+        profile.put(Constants.USER_ID, user_id);
+        profile.put(Constants.USER_TOKEN, token);
+
+        val profileService = service.getProfile(profile);
+
+        //***********************************************************
+        profileService.enqueue(new Callback<ProfileResponse>()
+                //***********************************************************
+        {
+
+            //***********************************************************
+            @Override
+            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response)
+            //***********************************************************
+            {
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus() != 200) {
+                        mUpdateProfileListener.onUpdateFailed((TextUtils.isEmpty(response.body().getData().getMessage()) ? AndroidUtil.getString(R.string.server_error) : response.body().getData().getMessage()));
+                        return;
+                    }
+                    mUpdateProfileListener.onUpdateSuccessfully(response.body());
+                    return;
+                }
+                val error = NetworkUtils.errorResponse(response.errorBody());
+                mUpdateProfileListener.onUpdateFailed(error);
+            }
+
+            //***********************************************************
+            @Override
+            public void onFailure(Call<ProfileResponse> call, Throwable t)
             //***********************************************************
             {
                 val msg = t.getLocalizedMessage();
@@ -86,7 +146,7 @@ public class UpdateProfileViewModel
     public interface UpdateProfileListener
             //***********************************************************
     {
-        void onUpdateSuccessfully(@Nullable UpdateProfileResponse response);
+        void onUpdateSuccessfully(@Nullable ProfileResponse response);
 
         void onUpdateFailed(@NonNull String errorMessage);
     }

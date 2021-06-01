@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 
+import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.ArrayList;
@@ -44,4 +45,8 @@ public final class LoadAlarmsService extends IntentService {
         context.startService(launchLoadAlarmsServiceIntent);
     }
 
+    @Override
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
 }

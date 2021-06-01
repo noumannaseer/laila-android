@@ -6,7 +6,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:backgroundTint="#ececec"
         android:foreground="?selectableItemBackground"
         android:visibility="visible"
         app:cardElevation="0dp">
@@ -23,32 +22,39 @@
                 android:paddingHorizontal="14dp"
                 android:paddingVertical="6dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sfpro_display_regular"
-                    android:letterSpacing="0.02"
-                    android:lineSpacingExtra="3sp"
-                    android:text="@string/name"
-                    android:textColor="@color/darkBlue"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/sfpro_display_regular"
-                    android:letterSpacing="0.02"
-                    android:lineSpacingExtra="3sp"
-                    android:textColor="@color/black"
-                    android:textSize="18sp"
-                    tools:text="ER6 Medical" />
-
-                <View
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@color/gray" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:text="@string/name"
+                        android:textColor="@color/darkBlue"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/sfpro_display_regular"
+                        android:letterSpacing="0.02"
+                        android:lineSpacingExtra="3sp"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        tools:text="ER6 Medical" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="4dp"
+                        android:background="@color/gray" />
+                </LinearLayout>
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -69,7 +75,7 @@
                     android:letterSpacing="0.02"
                     android:lineSpacingExtra="3sp"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:text="ER6 Medical" />
 
                 <View
@@ -87,7 +93,7 @@
                     android:lineSpacingExtra="3sp"
                     android:text="@string/strength_unit"
                     android:textColor="@color/darkBlue"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/strength_unit"
@@ -96,7 +102,7 @@
                     android:letterSpacing="0.02"
                     android:lineSpacingExtra="3sp"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:text="ER6 Medical" />
 
                 <View
@@ -121,7 +127,7 @@
                         android:lineSpacingExtra="3sp"
                         android:text="@string/dosage_unit"
                         android:textColor="@color/darkBlue"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                     <TextView
                         android:id="@+id/dosage_unit"
@@ -131,7 +137,7 @@
                         android:letterSpacing="0.02"
                         android:lineSpacingExtra="3sp"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         tools:text="ER6 Medical" />
 
                 </LinearLayout>

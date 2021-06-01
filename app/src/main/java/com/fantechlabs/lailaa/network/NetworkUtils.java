@@ -57,8 +57,8 @@ public class NetworkUtils
         val file = new File(url.getPath());
         RequestBody requestBody = RequestBody.create(MediaType.parse("*/*"), file);
         MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData(fileName,
-                                                                            file.getName(),
-                                                                            requestBody);
+                file.getName(),
+                requestBody);
         return fileToUpload;
     }
 
@@ -68,8 +68,7 @@ public class NetworkUtils
     {
 
         List<MultipartBody.Part> data = new ArrayList<>();
-        for (val url : urls)
-        {
+        for (val url : urls) {
             if (url == null)
                 return null;
             // val file = new File(url.getPath());
@@ -100,18 +99,13 @@ public class NetworkUtils
     public static MultipartBody.Part getFileMultiPartForm(@NonNull Uri url, String fileName, Activity activity)
     //****************************************************************
     {
-        if (url == null)
-            return null;
         File file = new File(url.getPath());
         File imageZipperFile = null;
-        try
-        {
+        try {
             imageZipperFile = new ImageZipper(activity)
                     .setQuality(Constants.COMPRESS_RATE)
                     .compressToFile(file);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         file = imageZipperFile == null ? file : imageZipperFile;
@@ -130,13 +124,10 @@ public class NetworkUtils
             return null;
         String lastPathSegment = url.getLastPathSegment();
         InputStream inputStream = null;
-        try
-        {
+        try {
             inputStream = activity.getContentResolver()
                     .openInputStream(url);
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
             return null;
         }
@@ -159,36 +150,26 @@ public class NetworkUtils
     {
         OutputStream out = null;
 
-        try
-        {
+        try {
             out = new FileOutputStream(file);
             byte[] buf = new byte[1024];
             int len;
-            while ((len = in.read(buf)) > 0)
-            {
+            while ((len = in.read(buf)) > 0) {
                 out.write(buf, 0, len);
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally
-        {
+        } finally {
             // Ensure that the InputStreams are closed even if there's an exception.
-            try
-            {
-                if (out != null)
-                {
+            try {
+                if (out != null) {
                     out.close();
                 }
 
                 // If you want to close the "in" InputStream yourself then remove this
                 // from here but ensure that you close it yourself eventually.
                 in.close();
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -196,23 +177,19 @@ public class NetworkUtils
 
     //*****************************************************************
     public static @NonNull
-    String getPasswordChangeErrorResponse(ResponseBody responseBody)
+    String errorResponse(ResponseBody responseBody)
     //*****************************************************************
     {
         Meta errorResponse;
         val gson = new Gson();
-        Type type = new TypeToken<Meta>()
-        {
+        Type type = new TypeToken<Meta>() {
         }.getType();
-        try
-        {
+        try {
             errorResponse = gson.fromJson(responseBody.charStream(), type);
-        }
-        catch (JsonParseException e)
-        {
+        } catch (JsonParseException e) {
             return AndroidUtil.getString(R.string.api_error);
         }
-        return errorResponse.getMsg();
+        return errorResponse.getError();
     }
 
 }

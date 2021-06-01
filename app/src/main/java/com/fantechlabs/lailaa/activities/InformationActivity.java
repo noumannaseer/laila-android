@@ -9,13 +9,13 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.fantechlabs.lailaa.IngredientsActivity;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.adapter.IngredientListAdapter;
 import com.fantechlabs.lailaa.adapter.MedicineInformationListAdapter;
 import com.fantechlabs.lailaa.databinding.ActivityInformationBinding;
-import com.fantechlabs.lailaa.models.Ingredient;
 import com.fantechlabs.lailaa.models.response_models.MedicineInformationResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.ActiveIngredientsResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.MedicineInfoResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.view_models.IngredientsViewModel;
 import com.fantechlabs.lailaa.view_models.MedicineInformationViewModel;
@@ -28,7 +28,8 @@ import static com.fantechlabs.lailaa.utils.AndroidUtil.getContext;
 
 //******************************************************************
 public class InformationActivity extends BaseActivity
-        implements MedicineInformationViewModel.MedicineInformationListener
+        implements MedicineInformationViewModel.MedicineInformationListener,
+        IngredientsViewModel.MedicineIngredientsListener
 //******************************************************************
 {
     private ActivityInformationBinding mBinding;
@@ -38,6 +39,8 @@ public class InformationActivity extends BaseActivity
     private MedicineInformationViewModel mMedicineInformationViewModel;
     private MedicineInformationListAdapter mMedicineInformationListAdapter;
     private int mDrugCode;
+    private IngredientsViewModel mIngredientsViewModel;
+    private IngredientListAdapter mIngredientListAdapter;
 
     //******************************************************************
     @Override
@@ -65,6 +68,7 @@ public class InformationActivity extends BaseActivity
     //******************************************************************
     {
         getParcelable();
+        mIngredientsViewModel = new IngredientsViewModel(this);
         mMedicineInformationViewModel = new MedicineInformationViewModel(this);
         showLoadingDialog();
         if (mRxDinNumber.length() == 0 || mRxDinNumber == null)
@@ -88,35 +92,52 @@ public class InformationActivity extends BaseActivity
 
     //******************************************************************
     @Override
-    public void onSuccessfully(@Nullable List<MedicineInformationResponse> response)
+    public void onSuccessfully(@Nullable MedicineInfoResponse response)
     //******************************************************************
     {
-        hideLoadingDialog();
         if (response == null)
             return;
         mBinding.medicineInformation.setVisibility(View.VISIBLE);
         showMedicineInfoRecyclerView(response);
-        gotoIngredientsScreen();
     }
 
     //**************************************************************
-    private void showMedicineInfoRecyclerView(List<MedicineInformationResponse> response)
+    private void showMedicineInfoRecyclerView(MedicineInfoResponse response)
     //**************************************************************
     {
-        if (response == null || response.size() == 0) {
-            mBinding.noDataFound.setVisibility(View.VISIBLE);
-            mBinding.main.setVisibility(View.GONE);
+        if (response == null || response.getData().getMedicationInfo() == null) {
+            hideLoadingDialog();
+            val responseMessage = response.getData().getMessage();
+            if (responseMessage != null)
+                AndroidUtil.displayAlertDialog(responseMessage,
+                        AndroidUtil.getString(R.string.alert),
+                        this, "Ok", (dialogInterface, i) -> {
+                            mBinding.noDataFound.setVisibility(View.VISIBLE);
+                            mBinding.main.setVisibility(View.GONE);
+                        });
             return;
         }
+        val medicineInfoList = response.getData().getMedicationInfo();
         mBinding.main.setVisibility(View.VISIBLE);
         mBinding.noDataFound.setVisibility(View.GONE);
-        mMedicineInformationListAdapter = new MedicineInformationListAdapter(response, this);
+        mMedicineInformationListAdapter = new MedicineInformationListAdapter(medicineInfoList, this);
         mBinding.medicineInfoRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mBinding.medicineInfoRecyclerview.setAdapter(mMedicineInformationListAdapter);
 
-        mDrugCode = response.get(0).getDrugCode();
+        val drugIdentification = response.getData().getMedicationInfo().get(0).getDrugIdentificationNumber();
+        getIngredients(drugIdentification);
     }
 
+    //**************************************************************
+    private void getIngredients(String drugIdentification)
+    //**************************************************************
+    {
+        if (drugIdentification == null) {
+            hideLoadingDialog();
+            return;
+        }
+        mIngredientsViewModel.getIngredients(drugIdentification);
+    }
 
     //******************************************************************
     @Override
@@ -129,6 +150,31 @@ public class InformationActivity extends BaseActivity
         mBinding.noDataFound.setVisibility(View.VISIBLE);
         AndroidUtil.displayAlertDialog(errorMessage, AndroidUtil.getString(R.string.alert), this);
     }
+
+    //******************************************************************
+    @Override
+    public void onSuccessfullyGetIngredients(@Nullable ActiveIngredientsResponse response)
+    //******************************************************************
+    {
+        hideLoadingDialog();
+        if (response == null || response.getData().getActiveIngredient().size() == 0)
+            return;
+        showIngredientsRecyclerView(response);
+    }
+
+    //******************************************************************
+    private void showIngredientsRecyclerView(ActiveIngredientsResponse response)
+    //******************************************************************
+    {
+        mBinding.medicineIngredients.setVisibility(View.VISIBLE);
+        if (response == null || response.getData().getActiveIngredient() == null)
+            return;
+        val ingredientsList = response.getData().getActiveIngredient();
+        mIngredientListAdapter = new IngredientListAdapter(ingredientsList, this);
+        mBinding.ingredientRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
+        mBinding.ingredientRecyclerview.setAdapter(mIngredientListAdapter);
+    }
+
 
     //******************************************************************
     private void getParcelable()

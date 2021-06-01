@@ -10,9 +10,9 @@
         tools:context=".activities.AddMedicationThree">
 
         <LinearLayout
+            android:id="@+id/add_medication_three_main_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/add_medication_three_main_view"
             android:orientation="vertical">
 
             <androidx.core.widget.NestedScrollView
@@ -209,7 +209,6 @@
                                 android:text="Delivery" />
 
                         </RadioGroup>
-
 
                         <View
                             android:layout_width="match_parent"

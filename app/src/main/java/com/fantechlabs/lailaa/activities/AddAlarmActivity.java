@@ -13,29 +13,35 @@ import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.ActivityAddAlarmBinding;
 import com.fantechlabs.lailaa.models.Events;
+import com.fantechlabs.lailaa.models.updates.models.Event;
+import com.fantechlabs.lailaa.models.updates.models.ResponseEvent;
+import com.fantechlabs.lailaa.models.updates.response_models.AddEventResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.GetEventsResponse;
 import com.fantechlabs.lailaa.request_models.EventRequest;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.utils.DateUtils;
 import com.fantechlabs.lailaa.utils.SharedPreferencesUtils;
 import com.fantechlabs.lailaa.view_models.EventViewModel;
+import com.fantechlabs.lailaa.view_models.MedicineEventViewModel;
 import com.github.florent37.singledateandtimepicker.dialog.SingleDateAndTimePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import lombok.val;
 
 //********************************************************
 public class AddAlarmActivity extends BaseActivity
-        implements EventViewModel.EventListener
+        implements MedicineEventViewModel.MedicineEventCompleteListener
 //********************************************************
 {
     private ActivityAddAlarmBinding mBinding;
     private Date mStartData;
     private Date mEndData;
     private Date mTime;
-    private EventViewModel mEventViewModel;
+    private MedicineEventViewModel mEventViewModel;
 
     //********************************************************
     @Override
@@ -55,7 +61,7 @@ public class AddAlarmActivity extends BaseActivity
     private void initControl()
     //***********************************************************
     {
-        mEventViewModel = new EventViewModel(this);
+        mEventViewModel = new MedicineEventViewModel(this);
         mBinding.startDate.setOnClickListener(v ->
         {
             datePicker(mBinding.setStartDate);
@@ -138,24 +144,31 @@ public class AddAlarmActivity extends BaseActivity
             return;
         }
 
-        Events event = new Events();
-        if (event == null)
-            event = new Events();
+        val eventRequest = Laila.instance().getMAddEventRequest().Builder();
 
-        event.setUserPrivateCode(Laila.instance().getMUser().getProfile().getUserPrivateCode());
+        List<Event> eventsList = new ArrayList<>();
+        Event event = new Event();
+        event = new Event();
+
+        event.setType("Local Alarm");
         event.setEventTitle(reminderTitle);
+        event.setMedicationId("");
+        event.setContactId("1");
+        event.setDeliveryType("1");
         event.setStartDate(startDate + " 8:00AM");
         event.setEndDate(endDate + " 11:59PM");
+        event.setFrequency(1);
         event.setTimeSchedule(time);
-        event.setType("Alarm");
-        event.setAlarmType("alarm");
-        event.setFrequency("1");
+        eventsList.add(event);
 
-        EventRequest request = new EventRequest();
-        request.setEvent(event);
+        val userId = Laila.instance().getMUser_U().getData().getUser().getId().toString();
+        val token = Laila.instance().getMUser_U().getData().getUser().getToken();
+        eventRequest.setUserId(Integer.parseInt(userId));
+        eventRequest.setToken(token);
+        eventRequest.setEvents(eventsList);
 
         showLoadingDialog();
-        mEventViewModel.addEvent(request);
+        mEventViewModel.medicineEvent(eventRequest);
     }
 
     //*******************************************
@@ -223,21 +236,19 @@ public class AddAlarmActivity extends BaseActivity
                 .display();
     }
 
-    //************************************************************
-    @Override
-    public void onSuccessfullyAddEvent(@Nullable EventRequest response)
-    //************************************************************
-    {
-        hideLoadingDialog();
 
-        if (response != null) {
-            ArrayList<Events> event = new ArrayList<>();
-            event.add(response.getEvent());
-            Laila.instance().addMedicineAlarm(event, 0);
-            if (Laila.instance().getMUser().getEvents() == null)
-                Laila.instance().getMUser().setEvents(new ArrayList<>());
-            Laila.instance().getMUser().getEvents().add(response.getEvent());
-            SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser());
+    @Override
+    public void onSuccessfullyAddEvent(@Nullable AddEventResponse response) {
+
+        if (response.getData().getResponseEvents() != null) {
+            Laila.instance().addMedicineAlarm(response.getData().getResponseEvents(), 0);
+            if (Laila.instance().getMUser_U().getData().getResponseEvents() == null)
+                Laila.instance().getMUser_U().getData().setResponseEvents(new ArrayList<>());
+
+            val responseEvents = response.getData().getResponseEvents();
+            for (ResponseEvent event : responseEvents)
+                Laila.instance().getMUser_U().getData().getResponseEvents().add(event);
+            SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser_U());
         }
         hideLoadingDialog();
 
@@ -254,11 +265,13 @@ public class AddAlarmActivity extends BaseActivity
                 });
     }
 
-    //************************************************************
     @Override
-    public void onFailedToAddEvent(@NonNull String errorMessage)
-    //************************************************************
-    {
+    public void onSuccessfullyGetEvents(@Nullable GetEventsResponse response) {
+
+    }
+
+    @Override
+    public void onFailedEvents(@NonNull String errorMessage) {
         hideLoadingDialog();
         AndroidUtil.displayAlertDialog(errorMessage, AndroidUtil.getString(R.string.error), this);
     }

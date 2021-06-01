@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 //**************************************
 public class PasswordResponse
-    implements Parcelable
+        implements Parcelable
 //**************************************
 {
 
@@ -19,8 +19,7 @@ public class PasswordResponse
     @Expose
     private String error;
 
-    protected PasswordResponse(Parcel in)
-    {
+    protected PasswordResponse(Parcel in) {
         result = in.readString();
         error = in.readString();
     }
@@ -37,13 +36,21 @@ public class PasswordResponse
         }
     };
 
-    public String getResult() { return result; }
+    public String getResult() {
+        return result;
+    }
 
-    public void setResult(String result) { this.result = result; }
+    public void setResult(String result) {
+        this.result = result;
+    }
 
-    public String getError() { return error; }
+    public String getError() {
+        return error;
+    }
 
-    public void setError(String error) { this.error = error; }
+    public void setError(String error) {
+        this.error = error;
+    }
 
     @Override
     public int describeContents() {

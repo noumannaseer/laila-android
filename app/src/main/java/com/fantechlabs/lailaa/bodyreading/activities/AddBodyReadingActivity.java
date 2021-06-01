@@ -15,9 +15,9 @@ import android.view.inputmethod.InputMethodManager;
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.activities.BaseActivity;
-import com.fantechlabs.lailaa.bodyreading.repository.storge.responsemodel.AddDataHealthResponse;
-import com.fantechlabs.lailaa.bodyreading.viewmodels.AddHealthDataViewModel;
+ import com.fantechlabs.lailaa.bodyreading.viewmodels.AddHealthDataViewModel;
 import com.fantechlabs.lailaa.databinding.ActivityAddBodyReadingBinding;
+import com.fantechlabs.lailaa.models.updates.response_models.AddHealthDataResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.utils.DateUtils;
@@ -188,20 +188,21 @@ public class AddBodyReadingActivity extends BaseActivity
     private void addRecord()
     //*******************************************
     {
-        val user = Laila.instance().getMUser();
-        val userProfile = Laila.instance().getMUser().getProfile();
+        val user = Laila.instance().getMUser_U();
+        val userProfile = Laila.instance().getMUser_U().getData().getUser();
+        val user_token = userProfile.getToken();
+        val user_id = userProfile.getId().toString();
         if (user == null || userProfile == null)
             return;
 
         val addHealthDataRequest = Laila.instance()
-                .getMAddHealthDataRequest().Builder();
-        addHealthDataRequest.setUserPrivateCode(userProfile.getUserPrivateCode());
-        addHealthDataRequest.setDeviceType(Constants.DEVICE_TYPE);
-        addHealthDataRequest.setAppType(Constants.APP_TYPE);
-        addHealthDataRequest.setHeartRate(TextUtils.isEmpty(mHeartRate) ? -1 : Integer.valueOf(mHeartRate));
-        addHealthDataRequest.setBpSystolic(TextUtils.isEmpty(mSystolic) || TextUtils.isEmpty(mDiastolic) ? -1 : Integer.valueOf(mSystolic));
-        addHealthDataRequest.setBpDiastolic(TextUtils.isEmpty(mSystolic) || TextUtils.isEmpty(mDiastolic) ? -1 : Integer.valueOf(mDiastolic));
-        addHealthDataRequest.setBloodSugar(TextUtils.isEmpty(mGlucoseLevel) ? -1 : Integer.valueOf(mGlucoseLevel));
+                .getMAddHealthDataRequest_U().Builder();
+        addHealthDataRequest.setUserId(user_id);
+        addHealthDataRequest.setToken(user_token);
+        addHealthDataRequest.setHeartRate(TextUtils.isEmpty(mHeartRate) ? "-1" : mHeartRate);
+        addHealthDataRequest.setBpSystolic(TextUtils.isEmpty(mSystolic) || TextUtils.isEmpty(mDiastolic) ? "-1" : mSystolic);
+        addHealthDataRequest.setBpDiastolic(TextUtils.isEmpty(mSystolic) || TextUtils.isEmpty(mDiastolic) ? "-1" : mDiastolic);
+        addHealthDataRequest.setBloodSugar(TextUtils.isEmpty(mGlucoseLevel) ? "-1" : mGlucoseLevel);
 
         showLoadingDialog();
         mAddHealthDataViewModel.addHealthData(addHealthDataRequest);
@@ -209,7 +210,7 @@ public class AddBodyReadingActivity extends BaseActivity
 
     //**************************************************
     @Override
-    public void onAddHealthDataSuccessfully(@Nullable AddDataHealthResponse response)
+    public void onAddHealthDataSuccessfully(@Nullable AddHealthDataResponse response)
     //**************************************************
     {
         hideLoadingDialog();

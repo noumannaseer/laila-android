@@ -4,11 +4,13 @@ package com.fantechlabs.lailaa.network.services;
 import com.fantechlabs.lailaa.models.Profile;
 import com.fantechlabs.lailaa.models.onboarding.Meta;
 import com.fantechlabs.lailaa.models.response_models.PasswordResponse;
-import com.fantechlabs.lailaa.models.response_models.SignUpResponse;
 import com.fantechlabs.lailaa.models.response_models.UpdateProfileResponse;
-import com.fantechlabs.lailaa.models.response_models.UserResponse;
-import com.fantechlabs.lailaa.request_models.ProfileRequest;
+import com.fantechlabs.lailaa.models.updates.request_models.ProfileRequest;
+import com.fantechlabs.lailaa.models.updates.response_models.ProfileResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.SignUpResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.UserResponse;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import okhttp3.RequestBody;
@@ -23,7 +25,7 @@ public interface OnboardingService {
 
     //**************************************************************
     @Headers("Accept: application/json")
-    @POST("login/1")
+    @POST("users/login")
     Call<UserResponse>
     login(
             @Body Map<String, String> login
@@ -32,11 +34,12 @@ public interface OnboardingService {
 
     //**************************************************************
     @Headers("Accept: application/json")
-    @POST("signup/1")
+    @POST("users/signup")
     Call<SignUpResponse>
     signUp(
             @Body Map<String, String> signup
     );
+    //**************************************************************
 
     //**************************************************************
     @Headers("Accept: application/json")
@@ -62,14 +65,23 @@ public interface OnboardingService {
 
     //**************************************************************
     @Headers("Accept: application/json")
-    @POST("updateprofile/1")
-    Call<UpdateProfileResponse>
+    @POST("users/update_profile")
+    Call<ProfileResponse>
     updateProfile(@Body ProfileRequest profileRequest);
     //**************************************************************
 
     //**************************************************************
     @Headers("Accept: application/json")
-    @POST("social_login/1")
+    @POST("users/Get_profile")
+    Call<ProfileResponse>
+    getProfile(
+            @Body HashMap<String, String> profileRequest
+    );
+    //**************************************************************
+
+    //**************************************************************
+    @Headers("Accept: application/json")
+    @POST("users/social_login")
     Call<UserResponse>
     socialLogin(
             @Body Map<String, String> socialLogin
@@ -78,7 +90,7 @@ public interface OnboardingService {
 
     //**************************************************************
     @Headers("Accept: application/json")
-    @POST("resetpassword/1")
+    @POST("users/forgot_password")
     Call<PasswordResponse>
     resetPassword(
             @Body Map<String, String> resetPassword
@@ -87,8 +99,8 @@ public interface OnboardingService {
 
     //**************************************************************
     @Headers("Accept: application/json")
-    @POST("changepassword/1")
-    Call<PasswordResponse>
+    @POST("users/reset_password")
+    Call<UserResponse>
     updatePassword(
             @Body Map<String, String> updatePassword
     );

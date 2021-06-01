@@ -2,6 +2,7 @@ package com.fantechlabs.lailaa.bodyreading.repository.network.utils;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.text.Html;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
@@ -15,6 +16,9 @@ import com.fantechlabs.lailaa.utils.Constants;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,6 +36,7 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.Response;
 
 import static com.fantechlabs.lailaa.utils.UIUtils.getMimeType;
 
@@ -194,6 +199,32 @@ public class NetworkUtils
             return AndroidUtil.getString(R.string.api_error);
         }
         return errorResponse.getMsg();
+    }
+
+    //*****************************************************************
+    public static @NonNull
+    String responseError(Response response)
+    //*****************************************************************
+    {
+        String errorBody = null;
+        try {
+            errorBody = response.errorBody().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+
+        JSONObject jsonObject = null;
+        String error = "";
+        try {
+            jsonObject = new JSONObject(errorBody.trim());
+            error = jsonObject.getString("error");
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return e.getMessage();
+        }
+        String plainText = Html.fromHtml(error).toString();
+        return plainText;
     }
 
 }
