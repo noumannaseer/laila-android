@@ -44,8 +44,8 @@
                         android:background="@color/profile_background"
                         android:maxLines="1"
                         android:minLines="1"
-                        android:padding="2dp"
                         android:singleLine="true"
+                        android:padding="2dp"
                         android:textSize="16sp" />
 
                     <View

@@ -83,7 +83,6 @@ public class AddMedicationTwoFragment
         infoClickListener();
         setData();
         timePickerListener();
-        intakeTimes();
         navigateToScreens();
         datePickerListener();
     }
@@ -129,15 +128,24 @@ public class AddMedicationTwoFragment
     //***********************************************************
     {
         mBinding.intake1.setOnClickListener(V -> {
+            getActivity().getWindow()
+                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             timePicker(mBinding.intakeTime1);
         });
         mBinding.intake2.setOnClickListener(V -> {
+            getActivity().getWindow()
+                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             timePicker(mBinding.intakeTime2);
         });
         mBinding.intake3.setOnClickListener(V -> {
+            getActivity().getWindow()
+                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
             timePicker(mBinding.intakeTime3);
         });
         mBinding.intake4.setOnClickListener(V -> {
+            getActivity().getWindow()
+                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             timePicker(mBinding.intakeTime4);
         });
         mBinding.intake1.setVisibility(View.VISIBLE);
@@ -633,6 +641,8 @@ public class AddMedicationTwoFragment
 
             @Override
             public void afterTextChanged(Editable s) {
+                if (TextUtils.isEmpty(s.toString()))
+                    return;
                 mAddMedicationRequestCopy.setDosage(Integer.valueOf(s.toString()));
                 Laila.instance().setMAddMedicationRequestCopy(mAddMedicationRequestCopy);
             }
@@ -642,6 +652,7 @@ public class AddMedicationTwoFragment
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mAddMedicationRequestCopy.setFrequency(parent.getSelectedItem().toString());
                 Laila.instance().setMAddMedicationRequestCopy(mAddMedicationRequestCopy);
+                intakeTimes();
             }
 
             @Override

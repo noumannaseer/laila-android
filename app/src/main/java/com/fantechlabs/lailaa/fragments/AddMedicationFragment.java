@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
@@ -39,7 +40,7 @@ public class AddMedicationFragment
     private View mRootView;
     private SearchMedicationViewModel mSearchMedicationViewModel;
     private ArrayList<String> mSearchResult;
-    private List<SearchMedication> mSearchMedication;
+    private List<SearchMedication> mSearchMedication, mFilteredSearchMedication;
     private Runnable mSearchRunnable;
 
     //***********************************************************
@@ -68,6 +69,7 @@ public class AddMedicationFragment
     //**********************************************************
     {
         mSearchMedication = new ArrayList<>();
+        mFilteredSearchMedication = new ArrayList<>();
         searchMedicine();
         addMedication();
     }
@@ -77,14 +79,30 @@ public class AddMedicationFragment
     //***************************************************************
     {
         Laila.instance().mAutoCompleteLoadingBar.setLoadingIndicator(mBinding.loadingIndicator);
+
+
         mBinding.searchMedication.setOnItemClickListener((parent, view, position, id) ->
         {
+
+            val selectedItem = parent.getItemAtPosition(position).toString();
+
             Laila.instance()
                     .setMSearchMedicine_U(null);
-            Laila.instance().setMSearchMedicine_U(mSearchMedication.get(position));
-            goToAddMedication();
 
+
+            String[] selectedItemParts = selectedItem.split("\\r?\\n");
+
+            val medicineName = selectedItemParts[0];
+            val dinRxNo = selectedItemParts[1].replaceAll("\\D+", "");
+
+            SearchMedication searchMedication = new SearchMedication();
+            searchMedication.setBrandName(medicineName);
+            searchMedication.setDrugIdentificationNumber(dinRxNo);
+
+            Laila.instance().setMSearchMedicine_U(searchMedication);
+            goToAddMedication();
         });
+
         mBinding.addManuallyButton.setOnClickListener(v ->
         {
             Laila.instance()
@@ -168,15 +186,17 @@ public class AddMedicationFragment
         mSearchResult = new ArrayList<>();
         mSearchMedication = searchMedicationResponse.getData().getSearchMedications();
         for (SearchMedication item : mSearchMedication) {
-            if (item.getClassName().equals(HUMAN))
+            if (item.getClassName().equals(HUMAN)) {
                 mSearchResult.add(item.getBrandName() + "\n"
                         + AndroidUtil.getString(R.string.din_rx) + item.getDrugIdentificationNumber()
                         + "\n"
                         + AndroidUtil.getString(R.string.medicine_class) + item.getClassName());
+                mFilteredSearchMedication.add(item);
+            }
         }
-
         startAutoCompleteView(mSearchResult.toArray(new String[0]));
     }
+
 
     //*****************************************************************************
     @Override
@@ -201,6 +221,7 @@ public class AddMedicationFragment
         mBinding.searchMedication.setAdapter(adapter);
         mBinding.searchMedication.showDropDown();
         mSearchResult.clear();
+        mFilteredSearchMedication.clear();
     }
 
     //**************************************************************
@@ -212,11 +233,13 @@ public class AddMedicationFragment
         getContext().startActivity(addMedicationIntent);
     }
 
-    //**************************************************************
+    //**************************************************
     @Override
-    public void onDestroy()
-    //**************************************************************
+    public void onStop()
+    //**************************************************
     {
-        super.onDestroy();
+        super.onStop();
+        mBinding.searchMedication.setText("");
+        Laila.instance().mAutoCompleteLoadingBar.removeIndicator();
     }
 }

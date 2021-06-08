@@ -86,6 +86,7 @@ public final class AlarmReceiver
         builder.setVibrate(new long[]{1000, 500, 1000, 500, 1000, 500});
         builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
         builder.setAutoCancel(true);
+        builder.setOngoing(true);
         builder.setPriority(Notification.PRIORITY_HIGH);
 
         manager.notify(id, builder.build());

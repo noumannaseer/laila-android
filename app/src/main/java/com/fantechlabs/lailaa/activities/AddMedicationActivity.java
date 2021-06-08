@@ -105,6 +105,7 @@ public class AddMedicationActivity extends BaseActivity
         super.onBackPressed();
         Laila.instance().on_update_medicine = false;
         Laila.instance().setMAddMedicationRequest(null);
+        Laila.instance().setMAddMedicationRequestCopy(null);
         Laila.instance().setMUpdateMedication(null);
     }
 }

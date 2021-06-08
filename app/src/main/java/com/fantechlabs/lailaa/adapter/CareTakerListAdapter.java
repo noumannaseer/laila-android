@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.ContactTypeListBinding;
-import com.fantechlabs.lailaa.models.Contact;
+import com.fantechlabs.lailaa.models.updates.models.Contact;
 
 import java.util.List;
 

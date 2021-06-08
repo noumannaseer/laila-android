@@ -202,8 +202,24 @@ public class AddMedicationThreeFragment
     //***************************************************************
     {
         if (isVisibleToUser) {
-            getPharmacies();
-            refillDate();
+//            getPharmacies();
+//
+//            getActivity().getWindow()
+//                    .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//
+//            refillDate();
+//            if (Laila.instance().is_pharmacy_added)
+//                Laila.instance().is_pharmacy_added = false;
+//
+//            if (Laila.instance().from_pharmacy_added) {
+//                setUpdatedPharmacy();
+//                Laila.instance().from_pharmacy_added = false;
+//            }
+//            val onUpdateMedicine = Laila.instance().on_update_medicine;
+//            if (onUpdateMedicine)
+//                onUpdate();
+
+
         }
 
         super.setUserVisibleHint(isVisibleToUser);
@@ -408,6 +424,24 @@ public class AddMedicationThreeFragment
     //*************************************************************
     {
         super.onResume();
+//        getActivity().getWindow()
+//                .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+//
+//        refillDate();
+//        if (Laila.instance().is_pharmacy_added)
+//            Laila.instance().is_pharmacy_added = false;
+//
+//        if (Laila.instance().from_pharmacy_added) {
+//            setUpdatedPharmacy();
+//            Laila.instance().from_pharmacy_added = false;
+//        }
+//        val onUpdateMedicine = Laila.instance().on_update_medicine;
+//        if (onUpdateMedicine)
+//            onUpdate();
+
+
+        getPharmacies();
+
         getActivity().getWindow()
                 .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -422,6 +456,7 @@ public class AddMedicationThreeFragment
         val onUpdateMedicine = Laila.instance().on_update_medicine;
         if (onUpdateMedicine)
             onUpdate();
+
     }
 
     //*************************************************************
@@ -527,6 +562,7 @@ public class AddMedicationThreeFragment
     public void onSuccessfully(@Nullable MedicationResponse response)
     //*************************************************************
     {
+//        Laila.instance().setMAddMedicationRequest(null);
         if (response.getData() == null)
             return;
         mMedicationResponses = response;
@@ -538,7 +574,6 @@ public class AddMedicationThreeFragment
                     .getData()
                     .setMedicationList(new ArrayList<>());
         if (mUpdateMedicine) {
-            addMedicineEvents();
             Laila.instance().from_update_events = true;
             addMedicineEvents();
             return;
@@ -635,6 +670,7 @@ public class AddMedicationThreeFragment
         eventRequest.setEvents(eventsList);
 
         Laila.instance().setMUpdateMedication(null);
+        Laila.instance().setMAddMedicationRequest(null);
 
         mMedicineEventViewModel.medicineEvent(eventRequest);
 

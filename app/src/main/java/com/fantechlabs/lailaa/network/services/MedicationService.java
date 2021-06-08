@@ -10,6 +10,7 @@ import com.fantechlabs.lailaa.models.response_models.MedicineInformationResponse
 import com.fantechlabs.lailaa.models.response_models.RefillRemindersResponse;
 import com.fantechlabs.lailaa.models.response_models.UpcResponse;
 import com.fantechlabs.lailaa.models.updates.response_models.ActiveIngredientsResponse;
+import com.fantechlabs.lailaa.models.updates.response_models.EmergencyContactResponse;
 import com.fantechlabs.lailaa.models.updates.response_models.MedicationResponse;
 import com.fantechlabs.lailaa.models.updates.response_models.MedicineInfoResponse;
 import com.fantechlabs.lailaa.models.updates.response_models.MedicineInteractionResponse;
@@ -183,7 +184,30 @@ public interface MedicationService {
     getRefillReminders(
             @Body HashMap<String, String> getRefillReminders
     );
-
     //***************************************************************
 
+    //**************************************************************
+    @Headers("Accept: application/json")
+    @POST("users/add_emergency_contact")
+    Call<EmergencyContactResponse>
+    createEmergencyContact(@Body Map<String, Object> createEmergencyContact);
+
+    //**************************************************************
+
+    //**************************************************************
+    @Headers("Accept: application/json")
+    @POST("users/update_emergency_contact")
+    Call<EmergencyContactResponse>
+    updateEmergencyContact(@Body Map<String, Object> updateEmergencyContact);
+
+    //**************************************************************
+    //**************************************************************
+    @Headers("Accept: application/json")
+    @POST("users/get_emergency_contact")
+    Call<EmergencyContactResponse>
+    getEmergencyContacts(
+            @Body HashMap<String, String> getEmergencyContacts
+    );
+
+    //**************************************************************
 }

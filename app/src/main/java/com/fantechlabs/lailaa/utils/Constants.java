@@ -104,10 +104,12 @@ public class Constants
                     "application/pdf",
                     "image/jpeg",
                     "image/png"};
-    public static final String CONTACT_TYPE = "CONTACT_TYPE";
+    public static final String CONTACT_TYPE = "contact_type";
     public static final String CONTACT_LIST = "CONTACT_LIST";
-
-
+    public static final String FIRST_NAME = "first_name";
+    public static final String LAST_NAME = "last_name";
+    public static final String PHONE = "phone";
+    public static final String CONTACT = "Caregiver";
     // for body readings
     public static final int ONE = 1;
     public static final int ZERO = 0;

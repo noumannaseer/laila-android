@@ -72,7 +72,7 @@ public class Profile implements Parcelable
     private String heightUnit;
     @SerializedName("weight")
     @Expose
-    private Integer weight;
+    private Double weight;
     @SerializedName("weight_unit")
     @Expose
     private String weightUnit;
@@ -149,7 +149,7 @@ public class Profile implements Parcelable
         if (in.readByte() == 0) {
             weight = null;
         } else {
-            weight = in.readInt();
+            weight = in.readDouble();
         }
         weightUnit = in.readString();
         healthCardNumber = in.readString();
@@ -230,7 +230,7 @@ public class Profile implements Parcelable
             dest.writeByte((byte) 0);
         } else {
             dest.writeByte((byte) 1);
-            dest.writeInt(weight);
+            dest.writeDouble(weight);
         }
         dest.writeString(weightUnit);
         dest.writeString(healthCardNumber);
