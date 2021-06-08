@@ -117,7 +117,6 @@ public class ContactTypesHomeActivity extends BaseActivity
     {
         val emergencyContact = mBinding.emergencyContactName.getText().toString();
 
-
         mBinding.emergencyContacts.setOnClickListener(view -> {
             Laila.instance().setMContactType(emergencyContact);
             Intent intent = new Intent(ContactTypesHomeActivity.this, ContactsActivity.class);

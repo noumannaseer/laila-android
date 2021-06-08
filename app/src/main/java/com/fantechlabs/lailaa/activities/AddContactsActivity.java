@@ -13,25 +13,29 @@ import android.text.TextUtils;
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.databinding.ActivityAddContactsBinding;
-import com.fantechlabs.lailaa.models.Contact;
-import com.fantechlabs.lailaa.models.updates.response_models.PharmacyResponse;
+import com.fantechlabs.lailaa.models.updates.models.Contact;
+import com.fantechlabs.lailaa.models.updates.request_models.EmergencyContactRequest;
+import com.fantechlabs.lailaa.models.updates.response_models.EmergencyContactResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.utils.SharedPreferencesUtils;
-import com.fantechlabs.lailaa.view_models.AddPharmacyViewModel;
+import com.fantechlabs.lailaa.view_models.EmergencyContactViewModel;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 import lombok.Setter;
 import lombok.val;
 
+import static com.fantechlabs.lailaa.utils.Constants.CONTACT;
+
 //*********************************************************
 public class AddContactsActivity extends BaseActivity
-        implements AddPharmacyViewModel.AddPharmacyListener
+        implements EmergencyContactViewModel.EmergencyContactListener
 //*********************************************************
 {
     private ActivityAddContactsBinding mBinding;
-    private AddPharmacyViewModel mAddPharmacyViewModel;
     @Setter
     Contact mContact;
     private String mPhone, mName;
@@ -39,6 +43,8 @@ public class AddContactsActivity extends BaseActivity
     private int mUpdateContactId, mContactId, mItemPosition;
     private int id;
     private ArrayList<Contact> mFilterContactList;
+    private EmergencyContactViewModel mEmergencyContactViewModel;
+    private EmergencyContactRequest mEmergencyContactRequest;
 
     //*********************************************************
     @Override
@@ -58,10 +64,23 @@ public class AddContactsActivity extends BaseActivity
     private void intiControls()
     //***********************************************************
     {
-        mAddPharmacyViewModel = new AddPharmacyViewModel(this);
-        mFilterContactList = new ArrayList<>();
+        initViews();
+        saveContacts();
+    }
 
+    //*************************************************************
+    private void initViews()
+    //*************************************************************
+    {
+        mFilterContactList = new ArrayList<>();
+        mEmergencyContactViewModel = new EmergencyContactViewModel(this);
         mBinding.toolbarText.setText(Laila.instance().getMContactType());
+    }
+
+    //*************************************************************
+    private void saveContacts()
+    //*************************************************************
+    {
         mBinding.save.setOnClickListener(v ->
         {
             mName = mBinding.contactName.getText().toString();
@@ -87,10 +106,9 @@ public class AddContactsActivity extends BaseActivity
                 mBinding.contactNo.requestFocus();
                 return;
             }
-            mPhone = "1" + mPhone;
+//            mPhone = "1" + mPhone;
             saveCareTaker();
         });
-
     }
 
     //*************************************************************
@@ -119,10 +137,12 @@ public class AddContactsActivity extends BaseActivity
                 .getMContactPosition();
 
         if (Laila.instance()
-                .getMUser()
-                .getContacts() == null || Laila.instance()
-                .getMUser()
-                .getContacts()
+                .getMUser_U()
+                .getData()
+                .getContactList() == null || Laila.instance()
+                .getMUser_U()
+                .getData()
+                .getContactList()
                 .size() == 0)
             return;
 
@@ -155,75 +175,28 @@ public class AddContactsActivity extends BaseActivity
     private void saveCareTaker()
     //*************************************************************
     {
+        val user_token = Laila.instance().getMUser_U().getData().getUser().getToken();
+        val user_id = Laila.instance().getMUser_U().getData().getUser().getId().toString();
 
-        val addPharmacyRequest = Laila.instance()
-                .getMAddPharmacyRequest()
+        mEmergencyContactRequest = Laila.instance()
+                .getMEmergencyContactRequest()
                 .Builder();
 
-        val contactType = Laila.instance().getMContactType();
-        addPharmacyRequest.setName(mName);
-        addPharmacyRequest.setContactNo(mPhone);
-//        addPharmacyRequest.setContact_type(contactType);
-        addPharmacyRequest.setToken(Laila.instance().getMUser().getProfile()
-                .getUserPrivateCode());
+        mEmergencyContactRequest.setFirstName(mName);
+        mEmergencyContactRequest.setPhone(mPhone);
+        mEmergencyContactRequest.setContactType(CONTACT);
+        mEmergencyContactRequest.setUserId(user_id);
+        mEmergencyContactRequest.setToken(user_token);
 
-        if (mUpdateContact) {
-            if (Laila.instance()
-                    .getMUser()
-                    .getContacts() == null || Laila.instance()
-                    .getMUser()
-                    .getContacts()
-                    .size() == 0)
-                return;
-
-            val contacts = Laila.instance().getMUser().getContacts();
-            int pos = 0;
-            for (Contact contact : contacts) {
-                pos = pos + 1;
-                if (contact.getId() == mContactId) {
-                    val contactId = Laila.instance()
-                            .getMUser()
-                            .getContacts()
-                            .get(pos - 1);
-                    mUpdateContactId = contactId.getId();
-//                    addPharmacyRequest.setId(mUpdateContactId);
-                    break;
-                }
-            }
-        }
-        Laila.instance().setMAddPharmacyRequest(addPharmacyRequest);
         showLoadingDialog();
-        mAddPharmacyViewModel.addPharmacy(addPharmacyRequest);
+        if (id != 0) {
+            Laila.instance().on_update_contact = true;
+            mEmergencyContactRequest.setContactId(String.valueOf(id));
+            mEmergencyContactViewModel.updateEmergencyContact(mEmergencyContactRequest, id);
+            return;
+        }
+        mEmergencyContactViewModel.createEmergencyContact(mEmergencyContactRequest);
     }
-//
-//    //*************************************************************
-//    @Override
-//    public void onPharmacySuccessfullyAdded(@Nullable PharmacyResponse response)
-//    //*************************************************************
-//    {
-//        if (response.getContact() == null) {
-//            hideLoadingDialog();
-//            return;
-//        }
-//        setData(response.getContact());
-//        AndroidUtil.displayAlertDialog(
-//                AndroidUtil.getString(R.string.contact_added),
-//                AndroidUtil.getString(
-//                        R.string.contacts),
-//                this,
-//                AndroidUtil.getString(
-//                        R.string.ok),
-//                AndroidUtil.getString(
-//                        R.string.cancel),
-//                (dialog, which) -> {
-//                    if (which == -1) {
-//                        hideLoadingDialog();
-//                        gotoContactScreen();
-//                        return;
-//                    }
-//                    hideLoadingDialog();
-//                });
-//    }
 
     //**********************************************♪
     private void gotoContactScreen()
@@ -239,46 +212,16 @@ public class AddContactsActivity extends BaseActivity
     private void setData(@Nullable Contact contact)
     //**********************************************
     {
-        val userDetails = Laila.instance().getMUser();
+        val userDetails = Laila.instance().getMUser_U();
         if (userDetails == null)
             return;
+        val contactList = userDetails.getData().getContactList();
 
-        if (userDetails.getContacts() != null && userDetails.getContacts().size() != 0)
-            for (int i = 0; i < userDetails.getContacts().size(); i++) {
-                if (contact.getId().equals(userDetails.getContacts().get(i).getId())) {
-                    userDetails.getContacts().set(i, contact);
-                    return;
-                }
-            }
-        if (userDetails.getContacts() == null)
-            Laila.instance().getMUser().setContacts(new ArrayList<>());
-        Laila.instance().getMUser().getContacts().add(0, contact);
+        if (contactList == null)
+            userDetails.getData().setContactList(new ArrayList<>());
+        userDetails.getData().getContactList().add(contact);
         SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance()
-                .getMUser());
-    }
-
-    @Override
-    public void onPharmacySuccessfullyAdded(@Nullable PharmacyResponse Response) {
-
-    }
-
-    //*************************************************************
-    @Override
-    public void onPharmacyFailedToAdded(@NonNull String errorMessage)
-    //*************************************************************
-    {
-        hideLoadingDialog();
-        AndroidUtil.displayAlertDialog(errorMessage, AndroidUtil.getString(R.string.error), this);
-    }
-
-    @Override
-    public void onSuccessfullyGet(@Nullable PharmacyResponse userResponse) {
-
-    }
-
-    @Override
-    public void onFailedGet(@NonNull String errorMessage) {
-
+                .getMUser_U());
     }
 
     //*********************************************************************
@@ -307,5 +250,50 @@ public class AddContactsActivity extends BaseActivity
     //*********************************************************d
     {
         return false;
+    }
+
+    //*********************************************************d
+    @Override
+    public void onSuccessfullyCreateContact(@Nullable @org.jetbrains.annotations.Nullable EmergencyContactResponse response)
+    //*********************************************************d
+    {
+        hideLoadingDialog();
+        if (response.getData().getContact() == null)
+            return;
+
+        setData(response.getData().getContact());
+
+        AndroidUtil.displayAlertDialog(
+                AndroidUtil.getString(R.string.emergency_contact_added),
+                AndroidUtil.getString(
+                        R.string.emergency_contact),
+                this,
+                AndroidUtil.getString(
+                        R.string.ok),
+                (dialog, which) -> {
+                    if (which == -1) {
+                        hideLoadingDialog();
+                        gotoContactScreen();
+                        return;
+                    }
+                    hideLoadingDialog();
+                });
+    }
+
+    //*********************************************************d
+    @Override
+    public void onSuccessfullyGetContacts(@Nullable @org.jetbrains.annotations.Nullable EmergencyContactResponse response)
+    //*********************************************************d
+    {
+
+    }
+
+    //*********************************************************d
+    @Override
+    public void onFailed(@NonNull @NotNull String errorMessage)
+    //*********************************************************d
+    {
+        hideLoadingDialog();
+        AndroidUtil.displayAlertDialog(errorMessage, AndroidUtil.getString(R.string.alert), this);
     }
 }

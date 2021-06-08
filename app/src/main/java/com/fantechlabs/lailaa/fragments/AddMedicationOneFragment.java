@@ -19,12 +19,14 @@ import com.fantechlabs.lailaa.activities.MedicationActivity;
 import com.fantechlabs.lailaa.R;
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.databinding.FragmentAddMedicationOneBinding;
+import com.fantechlabs.lailaa.models.updates.models.Medication;
 import com.fantechlabs.lailaa.models.updates.request_models.AddMedicationRequest;
 import com.fantechlabs.lailaa.models.updates.response_models.MedicationResponse;
 import com.fantechlabs.lailaa.utils.AndroidUtil;
 import com.fantechlabs.lailaa.utils.Constants;
 import com.fantechlabs.lailaa.utils.SharedPreferencesUtils;
 import com.fantechlabs.lailaa.view_models.AddMedicationViewModel;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +82,6 @@ public class AddMedicationOneFragment extends BaseFragment
         medicationType();
         navigateToNextScreen();
     }
-
 
 
     //***********************************************************
@@ -193,13 +194,13 @@ public class AddMedicationOneFragment extends BaseFragment
         val medication = Laila.instance().getMSearchMedicine_U();
         if (medication == null)
             return;
-        val medicineName = Laila.instance().getMSearchMedicine_U().getBrandName();
-        val title = Laila.instance().getMSearchMedicine_U().getBrandName();
+        val medicineName = medication.getBrandName();
+        val title = medication.getBrandName();
 
 
-        val din = Laila.instance().getMSearchMedicine_U().getDrugIdentificationNumber();
-        if (!TextUtils.isEmpty(din.toString()))
-            mBinding.rxDinNumber.setText(din.toString());
+        val din = medication.getDrugIdentificationNumber();
+        if (!TextUtils.isEmpty(din))
+            mBinding.rxDinNumber.setText(din);
         if (TextUtils.isEmpty(medicineName)) {
             mBinding.mediName.setText(title);
             return;
@@ -318,7 +319,11 @@ public class AddMedicationOneFragment extends BaseFragment
             return;
         val updateMedication = Laila.instance().getMUser_U().getData().getMedicationList().get(position);
 
-        Laila.instance().setMUpdateMedication(updateMedication);
+        Gson gson = new Gson();
+        String json = gson.toJson(updateMedication);
+        Medication medicationClone = gson.fromJson(json, Medication.class);
+
+        Laila.instance().setMUpdateMedication(medicationClone);
 
         val medication = Laila.instance().getMUpdateMedication();
 
@@ -328,7 +333,7 @@ public class AddMedicationOneFragment extends BaseFragment
             val name = medication.getMedicationName();
             val din = medication.getDinRxNumber();
             val from = medication.getMedecineForm();
-            val strength = medication.getStrength();
+            Integer strength = medication.getStrength();
             val strengthUnit = medication.getStrengthUom();
             val prescribed = medication.getPrescribed();
             val overTheCounter = medication.getPrescribed();
@@ -348,14 +353,17 @@ public class AddMedicationOneFragment extends BaseFragment
             if (din == null)
                 return;
             if (!TextUtils.isEmpty(from))
-                settingFormDropDown(from);
-            mBinding.rxDinNumber.setText(din.toString());
+                setDropDownItems(mBinding.formSpin, mFormUnits, from);
+
+            mBinding.rxDinNumber.setText(din);
             if (strength == null)
                 return;
+            if (strength.toString().matches("^[a-zA-Z]*$"))
+                strength = 0;
             mBinding.mediStrength.setText(strength.toString());
             if (strengthUnit == null)
                 return;
-            settingDropDownItems(strengthUnit);
+            setDropDownItems(mBinding.strengthUnit, mStrengthUnits, strengthUnit);
             if (prescribed == 0)
                 mBinding.overTheCounter.setChecked(true);
             if (prescribed == 1)

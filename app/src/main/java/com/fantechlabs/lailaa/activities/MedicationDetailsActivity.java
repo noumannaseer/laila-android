@@ -115,5 +115,6 @@ public class MedicationDetailsActivity extends BaseActivity
     {
         super.onBackPressed();
         Laila.instance().on_update_medicine = false;
+        Laila.instance().setMSearchMedicine_U(null);
     }
 }

@@ -10,18 +10,18 @@ import com.fantechlabs.lailaa.alarms.DatabaseHelper;
 import com.fantechlabs.lailaa.alarms.LoadAlarmsService;
 import com.fantechlabs.lailaa.bodyreading.repository.storge.requestmodel.AddHealthDataRequest;
 import com.fantechlabs.lailaa.bodyreading.repository.storge.requestmodel.ReadHealthDataRequest;
-import com.fantechlabs.lailaa.models.Contact;
-import com.fantechlabs.lailaa.models.Events;
 import com.fantechlabs.lailaa.models.Profile;
 import com.fantechlabs.lailaa.models.SearchMedicine;
 import com.fantechlabs.lailaa.models.allergie_models.DocumentList;
 import com.fantechlabs.lailaa.models.response_models.UserResponse;
+import com.fantechlabs.lailaa.models.updates.models.Contact;
 import com.fantechlabs.lailaa.models.updates.models.Medication;
 import com.fantechlabs.lailaa.models.updates.models.ResponseEvent;
 import com.fantechlabs.lailaa.models.updates.models.SearchMedication;
 import com.fantechlabs.lailaa.models.updates.request_models.AddEventRequest;
 import com.fantechlabs.lailaa.models.updates.request_models.AddMedicationRequest;
 import com.fantechlabs.lailaa.models.updates.request_models.AddPharmacyRequest;
+import com.fantechlabs.lailaa.models.updates.request_models.EmergencyContactRequest;
 import com.fantechlabs.lailaa.models.updates.request_models.ProfileRequest;
 import com.fantechlabs.lailaa.request_models.FollowUpRequest;
 import com.fantechlabs.lailaa.request_models.FollowUpUpdateRequest;
@@ -84,6 +84,13 @@ public class Laila extends Application
     private SearchMedication mSearchMedicine_U;
     @Getter
     @Setter
+    private String mSearchMedicineString;
+    @Getter
+    @Setter
+    private List<SearchMedication> mFilteredSearchMedications;
+
+    @Getter
+    @Setter
     private AddMedicationRequest mAddMedicationRequest;
     @Getter
     @Setter
@@ -106,9 +113,9 @@ public class Laila extends Application
     @Getter
     @Setter
     public String mContactType;
-    public boolean is_edit_profile_fields = false;
     public boolean IS_Documents = false;
     //    public boolean Edit_Profile = false;
+    public boolean is_edit_profile_fields = false;
     public boolean on_update_medicine = false;
     public boolean on_update_contact = false;
     public boolean is_medicine_added = false;
@@ -155,6 +162,9 @@ public class Laila extends Application
     @Getter
     @Setter
     public Medication mUpdateMedicationClone;
+    @Getter
+    @Setter
+    private EmergencyContactRequest mEmergencyContactRequest;
 
     //****************************************************************
     @Override

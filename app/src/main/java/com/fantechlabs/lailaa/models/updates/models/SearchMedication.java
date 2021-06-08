@@ -43,6 +43,9 @@ public class SearchMedication implements Parcelable
     @Expose
     private long lastUpdateDate;
 
+    public SearchMedication() {
+    }
+
     protected SearchMedication(Parcel in) {
         if (in.readByte() == 0) {
             drugCode = null;

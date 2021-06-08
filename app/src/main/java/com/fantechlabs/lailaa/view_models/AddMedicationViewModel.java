@@ -59,7 +59,7 @@ public class AddMedicationViewModel
         medicationList.put(Constants.STRENGTH_UOM, addMedicationRequest.getStrengthUom());
         medicationList.put(Constants.DISPENSED_AMOUNT, addMedicationRequest.getDispensedAmount());
         medicationList.put(Constants.DISPENSED_DATE, addMedicationRequest.getDispensedDate());
-        medicationList.put(Constants.DELIVERY_TYPE, addMedicationRequest.getPrescribed());
+        medicationList.put(Constants.PRESCRIBED, addMedicationRequest.getPrescribed());
         medicationList.put(Constants.FREQUENCY, addMedicationRequest.getFrequency());
         medicationList.put(Constants.MEDECINE_FORM, addMedicationRequest.getMedecineForm());
         medicationList.put(Constants.NUM_REFILLS, addMedicationRequest.getNumRefills());
@@ -123,7 +123,7 @@ public class AddMedicationViewModel
         medicationList.put(Constants.STRENGTH_UOM, addMedicationRequest.getStrengthUom());
         medicationList.put(Constants.DISPENSED_AMOUNT, addMedicationRequest.getDispensedAmount());
         medicationList.put(Constants.DISPENSED_DATE, addMedicationRequest.getDispensedDate());
-        medicationList.put(Constants.DELIVERY_TYPE, addMedicationRequest.getPrescribed());
+        medicationList.put(Constants.PRESCRIBED, addMedicationRequest.getPrescribed());
         medicationList.put(Constants.FREQUENCY, addMedicationRequest.getFrequency());
         medicationList.put(Constants.MEDECINE_FORM, addMedicationRequest.getMedecineForm());
         medicationList.put(Constants.NUM_REFILLS, addMedicationRequest.getNumRefills());
