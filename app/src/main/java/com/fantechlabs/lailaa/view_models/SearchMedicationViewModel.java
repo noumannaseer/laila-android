@@ -44,6 +44,10 @@ public class SearchMedicationViewModel
                     AndroidUtil.getString(R.string.internet_not_vailable));
             return;
         }
+        if (Laila.instance().getMUser_U() == null)
+            return;
+        if (Laila.instance().getMUser_U().getData() == null)
+            return;
         val token = Laila.instance().getMUser_U().getData().getUser().getToken();
         HashMap<String, String> searchMedicine = new HashMap<>();
         searchMedicine.put(Constants.USER_TOKEN, token);

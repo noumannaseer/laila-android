@@ -429,6 +429,7 @@ public class ProfileActivity extends BaseActivity
     //******************************************************************************
     {
         hideLoadingDialog();
+        Laila.instance().setMProfileRequest(null);
         if (!Laila.instance().is_get_profile) {
             if (mImageUrl != null)
                 uploadAvatar();
@@ -483,6 +484,7 @@ public class ProfileActivity extends BaseActivity
     //*************************************************
     {
         hideLoadingDialog();
+        Laila.instance().setMProfileRequest(null);
         AndroidUtil.displayAlertDialog(errorMessage, AndroidUtil.getString(R.string.error), this);
     }
 
@@ -524,6 +526,7 @@ public class ProfileActivity extends BaseActivity
     //*********************************************************
     {
         hideLoadingDialog();
+        Laila.instance().setMProfileRequest(null);
         Laila.instance().getMUser_U().getData().setAvatar(avatarResponse.getData().getAvatar());
         Laila.instance().getMUser_U().getData().getProfile().setAvatar(avatarResponse.getData().getAvatar().getAvatarUrl());
         SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser_U());
@@ -535,6 +538,7 @@ public class ProfileActivity extends BaseActivity
     //*********************************************************
     {
         hideLoadingDialog();
+        Laila.instance().setMProfileRequest(null);
         AndroidUtil.displayAlertDialog(errorMessage, AndroidUtil.getString(R.string.error), this);
     }
 

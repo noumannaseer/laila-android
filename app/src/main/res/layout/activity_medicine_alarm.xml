@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:orientation="vertical"
-        tools:context=".activities.AddMedicationActivity">
+        tools:context=".activities.MedicineAlarmActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
@@ -20,7 +22,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/white"
-                app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
                 app:theme="@style/ToolbarTheme">
 
                 <TextView
@@ -30,7 +31,7 @@
                     android:layout_gravity="center"
                     android:fontFamily="@font/sfpro_display_regular"
                     android:gravity="center_horizontal"
-                    android:text="@string/add_medication"
+                    android:text="@string/notifications"
                     android:textAlignment="center"
                     android:textColor="@color/darkBlue"
                     android:textSize="18sp"
@@ -39,9 +40,14 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <FrameLayout
-            android:id="@+id/fragment_container"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/notification_list">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
 </layout>

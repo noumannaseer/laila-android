@@ -123,6 +123,7 @@ public class Laila extends Application
     public boolean from_update_events = false;
     public boolean text_recognizer = false;
     public boolean Bar_code = false;
+    public boolean is_update_over_the_counter = false;
     public boolean is_manually_add_medicine = false;
     public boolean from_update_medication = false;
     public boolean is_get_profile = false;

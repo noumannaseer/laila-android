@@ -1,5 +1,6 @@
 package com.fantechlabs.lailaa.fragments;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 
 import com.fantechlabs.lailaa.Laila;
 import com.fantechlabs.lailaa.R;
@@ -147,6 +149,7 @@ public class AddMedicationThreeFragment
             if (AndroidUtil.mTooltip != null)
                 AndroidUtil.mTooltip.dismiss();
             Laila.instance().from_third_screen = true;
+
             ((AddMedicationActivity) getActivity()).navigateToScreen(1);
         });
     }
@@ -329,10 +332,10 @@ public class AddMedicationThreeFragment
                 name = pharmacy.getName();
             pharmacyNameList.add(pharmacy.getName());
         }
-        if (TextUtils.isEmpty(name) && id == 0) {
-            setPharmacySpinner();
-            return;
-        }
+//        if (TextUtils.isEmpty(name) && id == 0) {
+//            setPharmacySpinner();
+//            return;
+//        }
         pharmacyDropDownItems(pharmacyNameList, name);
     }
 
@@ -373,7 +376,8 @@ public class AddMedicationThreeFragment
                     .getId()
                     .toString();
         }
-
+        if (TextUtils.isEmpty(pharmacyId))
+            pharmacyId = "0";
         addMedicationRequest.setPharmacyId(Integer.parseInt(pharmacyId));
         addMedicationRequest.setRefillDate(refillDate);
 
@@ -601,6 +605,19 @@ public class AddMedicationThreeFragment
             Laila.instance().on_update_medicine = false;
             Laila.instance().from_update_medication = true;
             medication = Laila.instance().getMUpdateMedication();
+
+            val medicationId = medication.getId();
+
+            val events = Laila.instance().getMUser_U().getData().getEventsList();
+            List<ResponseEvent> responseEventList = new ArrayList<>();
+            for (val event : events) {
+                if (event.getMedicationId() != null)
+                    if (!event.getMedicationId().equals(Integer.toString(medicationId)))
+                        responseEventList.add(event);
+            }
+            Laila.instance().getMUser_U().getData().setEventsList(responseEventList);
+            SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser_U());
+
         } else
             medication = mMedicationResponses.getData().getMedication();
 
@@ -682,9 +699,14 @@ public class AddMedicationThreeFragment
     //*************************************************************
     {
         hideLoadingDialog();
-//        Log.d("SessionToken", "onFailed: " + errorMessage);
-//        AndroidUtil.displayAlertDialog(errorMessage, "Error", getActivity());
-//        goToHome();
+        AndroidUtil.displayAlertDialog(errorMessage, "Error", getActivity(), "Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == -1)
+                    goToHome();
+            }
+        });
+
     }
 
     @Override
@@ -704,14 +726,18 @@ public class AddMedicationThreeFragment
     {
         if (response.getData().getResponseEvents() != null) {
             Laila.instance().addMedicineAlarm(response.getData().getResponseEvents(), 0);
+
             if (Laila.instance().getMUser_U().getData().getResponseEvents() == null)
                 Laila.instance().getMUser_U().getData().setResponseEvents(new ArrayList<>());
+            if (Laila.instance().getMUser_U().getData().getEventsList() == null)
+                Laila.instance().getMUser_U().getData().setEventsList(new ArrayList<>());
 
             val responseEvents = response.getData().getResponseEvents();
-            for (ResponseEvent event : responseEvents)
+            for (ResponseEvent event : responseEvents) {
                 Laila.instance().getMUser_U().getData().getResponseEvents().add(event);
-
-            Laila.instance().getMUser_U().getData().setEventsList(response.getData().getResponseEvents());
+                Laila.instance().getMUser_U().getData().getEventsList().add(event);
+            }
+//            Laila.instance().getMUser_U().getData().setEventsList(response.getData().getResponseEvents());
             SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser_U());
         }
         goToHome();

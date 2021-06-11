@@ -69,6 +69,7 @@
         <activity android:name=".activities.MedicineInteractionActivity" />
         <activity android:name=".activities.DocumentDetailsActivity" />
         <activity android:name=".activities.AddPharmacyActivity" />
+        <activity android:name=".activities.MedicineAlarmActivity" />
         <activity android:name=".activities.AddMedicationActivity" />
         <activity android:name=".activities.ForgotActivity" />
         <activity android:name=".bodyreading.activities.BodyReadingActivity" />

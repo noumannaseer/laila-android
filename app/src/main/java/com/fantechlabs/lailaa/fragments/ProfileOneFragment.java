@@ -247,7 +247,16 @@ public class ProfileOneFragment extends BaseFragment
             mProfile = new Profile();
 
         mProfileRequest = Laila.instance().getMProfileRequest();
+
         if (mProfileRequest.getHeight() != null || mProfileRequest.getWeight() != null) {
+            requestProfile();
+            return;
+        }
+        if (mProfileRequest.getAddressLine1() != null || mProfileRequest.getAddressLine2() != null) {
+            requestProfile();
+            return;
+        }
+        if (mProfileRequest.getFirstName() != null || mProfileRequest.getLastName() != null) {
             requestProfile();
             return;
         }
@@ -271,6 +280,8 @@ public class ProfileOneFragment extends BaseFragment
     //*****************************************
     {
         val user_email = Laila.instance().getMUser_U().getData().getUser().getEmail();
+        if (mProfile == null)
+            return;
         mBinding.firstName.setText(mProfile.getFirstName());
         mBinding.lastName.setText(mProfile.getLastName());
         mBinding.email.setText(user_email);
@@ -281,20 +292,8 @@ public class ProfileOneFragment extends BaseFragment
             mBinding.dob.setText(dob);
         }
         setDropDownItemsWithProfile(mProfile);
-        getOrganDonars();
-    }
 
-    //*****************************************
-    private void getOrganDonars()
-    //*****************************************
-    {
-        if (mProfile.getOrganDonor().equals("Y")) {
-//            organYes();
-            return;
-        }
-//        organNo();
     }
-
 
     //*****************************************
     private void setUserLanguage()
@@ -302,16 +301,6 @@ public class ProfileOneFragment extends BaseFragment
     {
         mLocalLanguages = AndroidUtil.getLanguagesList();
         setLanguages(mBinding.language, mLocalLanguages);
-    }
-
-    //*****************************************
-    private void setDropDownItems(Profile profile)
-    //*****************************************
-    {
-        dropDownItems(mBinding.gender, R.array.gender, profile.getGender());
-        setLanguagesDropDownItems(mBinding.language, mLocalLanguages, profile.getPrefLang());
-        dropDownItems(mBinding.bloodGroup, R.array.blood, profile.getBloodType());
-        dropDownItems(mBinding.organDonar, R.array.organ_donar, profile.getOrganDonor());
     }
 
     //*****************************************
@@ -350,6 +339,7 @@ public class ProfileOneFragment extends BaseFragment
     //*****************************************
     {
         dropDownItems(mBinding.gender, R.array.gender, profile.getGender());
+        dropDownItems(mBinding.organDonar, R.array.organ_donar, profile.getOrganDonor());
         if (profile.getFirstName() == null)
             return;
         if (profile.getFirstName().isEmpty())

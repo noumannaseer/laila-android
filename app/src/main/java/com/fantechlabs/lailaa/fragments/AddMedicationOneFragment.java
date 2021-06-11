@@ -501,6 +501,7 @@ public class AddMedicationOneFragment extends BaseFragment
             user.setMedicationList(new ArrayList<>());
         if (response.getData().getMedication() == null) {
             Laila.instance().on_update_medicine = false;
+            Laila.instance().from_update_medication = true;
             goToHome();
             return;
         }

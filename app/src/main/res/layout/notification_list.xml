@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:foreground="?selectableItemBackground"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="8dp">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/sfpro_text_bold"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:layout_marginLeft="4dp"
+                tools:text="Get Up" />
+
+            <TextView
+                android:id="@+id/amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:layout_marginTop="4dp"
+                android:layout_marginLeft="4dp"
+                android:fontFamily="@font/sfpro_display_regular"
+                android:textSize="14sp"
+                tools:text="7:00" />
+
+                <TextView
+                    android:id="@+id/refill_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginLeft="4dp"
+                    android:fontFamily="@font/sfpro_display_regular"
+                    android:textSize="14sp"
+                    tools:text="7:00" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:background="@color/secondary_text_color" />
+
+        </LinearLayout>
+
+</layout>
