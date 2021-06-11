@@ -55,12 +55,13 @@ public class SettingActivity extends BaseActivity
         mBinding.privacyPolicy.setOnClickListener(
                 v -> moveToBrowserActivity(getString(R.string.settings_privacy_policy),
                         getString(R.string.privacy_policy_url)));
-        mBinding.faq.setOnClickListener(view -> {
-        });
+//        mBinding.faq.setOnClickListener(view -> {
+//        });
         mBinding.notifications.setOnClickListener(view -> {
+            startActivity(new Intent(SettingActivity.this, MedicineAlarmActivity.class));
         });
-        mBinding.aboutUs.setOnClickListener(view -> {
-        });
+//        mBinding.aboutUs.setOnClickListener(view -> {
+//        });
         mBinding.contacts.setOnClickListener(view -> {
             startActivity(new Intent(SettingActivity.this, ContactTypesHomeActivity.class));
         });
@@ -69,15 +70,15 @@ public class SettingActivity extends BaseActivity
         mBinding.changePassword.setOnClickListener(view -> startActivity(new Intent(SettingActivity.this, UpdatePasswordActivity.class)));
     }
 
-    //********************************************
-    private void moveToBrowserActivity(String title, String url)
-    //********************************************
-    {
-        Intent browserIntent = new Intent(SettingActivity.this, BrowserActivity.class);
-        browserIntent.putExtra(BrowserActivity.SCREEN_URL, url);
-        browserIntent.putExtra(BrowserActivity.INFO_TITLE, title);
-        startActivity(browserIntent);
-    }
+        //********************************************
+        private void moveToBrowserActivity(String title, String url)
+        //********************************************
+        {
+            Intent browserIntent = new Intent(SettingActivity.this, BrowserActivity.class);
+            browserIntent.putExtra(BrowserActivity.SCREEN_URL, url);
+            browserIntent.putExtra(BrowserActivity.INFO_TITLE, title);
+            startActivity(browserIntent);
+        }
 
     //******************************************************************
     private void editProfile()

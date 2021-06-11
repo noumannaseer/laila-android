@@ -32,6 +32,13 @@ public class AddMedicationActivity extends BaseActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setTitle("");
+//        mBinding.toolbar.setNavigationOnClickListener(v -> {
+//
+//            for (int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); ++i) {
+//                getSupportFragmentManager().popBackStack();
+//            }
+//            onBackPressed();
+//        });
         initControls(savedInstanceState);
 
     }

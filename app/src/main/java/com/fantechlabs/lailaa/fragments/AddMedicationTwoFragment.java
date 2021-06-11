@@ -1,6 +1,7 @@
 package com.fantechlabs.lailaa.fragments;
 
 import android.annotation.SuppressLint;
+import android.hardware.camera2.params.OisSample;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -49,9 +50,10 @@ public class AddMedicationTwoFragment
     private View mRootView;
     private Date mSelectedDate;
     private String mMedicineType;
-    private List<ResponseEvent> mEventsList;
+    private List<ResponseEvent> mEventsList, mCopyEventsList;
     private AddMedicationRequest mAddMedicationRequestCopy;
     private boolean checkCurrentStateData = true;
+    private boolean from_update_medication = false;
 
     //***********************************************************
     public AddMedicationTwoFragment()
@@ -78,13 +80,40 @@ public class AddMedicationTwoFragment
     //***********************************************************
     {
         mAddMedicationRequestCopy = new AddMedicationRequest();
-        if (!checkCurrentStateData)
-            editTextWatcher();
+        mCopyEventsList = new ArrayList<>();
+        editTextWatcher();
         infoClickListener();
         setData();
         timePickerListener();
         navigateToScreens();
         datePickerListener();
+
+        val onUpdateMedicine = Laila.instance().on_update_medicine;
+        if (onUpdateMedicine) {
+            onUpdate();
+            return;
+        }
+        setRequestedData();
+
+    }
+
+    //***********************************************************
+    private void setRequestedData()
+    //***********************************************************
+    {
+        val medication = Laila.instance().getMAddMedicationRequest();
+        if (medication == null)
+            return;
+
+        if (medication.getDispensedDate() != null)
+            mBinding.disDate.setText(medication.getDispensedDate());
+        mBinding.disAmount.setText(medication.getDispensedAmount());
+        if (medication.getDosage() != null)
+            mBinding.dosage.setText(medication.getDosage().toString());
+        if (medication.getNumRefills() != null)
+            mBinding.noOfRefills.setText(medication.getNumRefills().toString());
+        if (!TextUtils.isEmpty(medication.getFrequency()))
+            setFrequencyData(Integer.parseInt(medication.getFrequency()), medication.getIntakeTimeList());
     }
 
     //***********************************************************
@@ -322,19 +351,6 @@ public class AddMedicationTwoFragment
         }
     }
 
-    //***************************************************************
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser)
-    //***************************************************************
-    {
-        if (isVisibleToUser) {
-            val onUpdateMedicine = Laila.instance().on_update_medicine;
-            if (onUpdateMedicine)
-                onUpdate();
-        }
-        super.setUserVisibleHint(isVisibleToUser);
-    }
-
     //*************************************************************
     private void onUpdate()
     //*************************************************************
@@ -356,7 +372,6 @@ public class AddMedicationTwoFragment
 
             if (Laila.instance().from_third_screen) {
                 disDate = DateUtils.getUpdateDateFromTimeStamp(dispensedDate, "dd-MMM-yyyy");
-                Laila.instance().from_third_screen = false;
             } else
                 disDate = DateUtils.getDateFromTimeStamp(dispensedDate, "dd-MMM-yyyy");
 
@@ -371,9 +386,12 @@ public class AddMedicationTwoFragment
             if (!TextUtils.isEmpty(refillNo))
                 mBinding.noOfRefills.setText(refillNo);
 
-            if (Laila.instance().getMUser_U() == null || Laila.instance().getMUser_U().getData().getEventsList() == null)
+            if (Laila.instance().getMUser_U() == null || Laila.instance().getMUser_U().getData().getEventsList() == null) {
+                Laila.instance().from_third_screen = false;
                 return;
+            }
             val events = Laila.instance().getMUser_U().getData().getEventsList();
+
             mEventsList = new ArrayList<>();
 
             for (val event : events) {
@@ -381,29 +399,118 @@ public class AddMedicationTwoFragment
                     if (event.getMedicationId().equals(Integer.toString(medicationId)))
                         mEventsList.add(event);
             }
-            if (mEventsList == null || mEventsList.size() == 0)
+
+            if (!Laila.instance().from_third_screen) {
+                Laila.instance().from_third_screen = false;
+                if (Laila.instance().getMAddMedicationRequest().getIntakeTimeList() == null) {
+                    setUpdatedIntakeTimes();
+                    return;
+                }
+                setRequestedIntakeTimes();
                 return;
-            val size = mEventsList.size();
-            switch (size) {
-                case 1:
-                    mBinding.intakeTime1.setText(mEventsList.get(0).getTimeSchedule());
-                    break;
-                case 2:
-                    mBinding.intakeTime1.setText(mEventsList.get(0).getTimeSchedule());
-                    mBinding.intakeTime2.setText(mEventsList.get(1).getTimeSchedule());
-                    break;
-                case 3:
-                    mBinding.intakeTime1.setText(mEventsList.get(0).getTimeSchedule());
-                    mBinding.intakeTime2.setText(mEventsList.get(1).getTimeSchedule());
-                    mBinding.intakeTime3.setText(mEventsList.get(2).getTimeSchedule());
-                    break;
-                case 4:
-                    mBinding.intakeTime1.setText(mEventsList.get(0).getTimeSchedule());
-                    mBinding.intakeTime2.setText(mEventsList.get(1).getTimeSchedule());
-                    mBinding.intakeTime3.setText(mEventsList.get(2).getTimeSchedule());
-                    mBinding.intakeTime4.setText(mEventsList.get(3).getTimeSchedule());
-                    break;
             }
+            Laila.instance().from_third_screen = false;
+            setRequestedIntakeTimes();
+
+        }
+    }
+
+    //*************************************************************
+    private void setUpdatedIntakeTimes()
+    //*************************************************************
+    {
+        if (mEventsList == null || mEventsList.size() == 0)
+            return;
+        val size = mEventsList.size();
+
+        switch (size) {
+            case 1:
+                mBinding.intake1.setVisibility(View.VISIBLE);
+                mBinding.intake2.setVisibility(View.GONE);
+                mBinding.intake3.setVisibility(View.GONE);
+                mBinding.intake4.setVisibility(View.GONE);
+                mBinding.intakeTime1.setText(mEventsList.get(0).getTimeSchedule());
+                break;
+            case 2:
+                mBinding.intake1.setVisibility(View.VISIBLE);
+                mBinding.intake2.setVisibility(View.VISIBLE);
+                mBinding.intake3.setVisibility(View.GONE);
+                mBinding.intake4.setVisibility(View.GONE);
+                mBinding.intakeTime1.setText(mEventsList.get(0).getTimeSchedule());
+                mBinding.intakeTime2.setText(mEventsList.get(1).getTimeSchedule());
+                break;
+            case 3:
+                mBinding.intake1.setVisibility(View.VISIBLE);
+                mBinding.intake2.setVisibility(View.VISIBLE);
+                mBinding.intake3.setVisibility(View.VISIBLE);
+                mBinding.intake4.setVisibility(View.GONE);
+                mBinding.intakeTime1.setText(mEventsList.get(0).getTimeSchedule());
+                mBinding.intakeTime2.setText(mEventsList.get(1).getTimeSchedule());
+                mBinding.intakeTime3.setText(mEventsList.get(2).getTimeSchedule());
+                break;
+            case 4:
+                mBinding.intake1.setVisibility(View.VISIBLE);
+                mBinding.intake2.setVisibility(View.VISIBLE);
+                mBinding.intake3.setVisibility(View.VISIBLE);
+                mBinding.intake4.setVisibility(View.VISIBLE);
+                mBinding.intakeTime1.setText(mEventsList.get(0).getTimeSchedule());
+                mBinding.intakeTime2.setText(mEventsList.get(1).getTimeSchedule());
+                mBinding.intakeTime3.setText(mEventsList.get(2).getTimeSchedule());
+                mBinding.intakeTime4.setText(mEventsList.get(3).getTimeSchedule());
+                break;
+        }
+    }
+
+    //*************************************************************
+    private void setRequestedIntakeTimes()
+    //*************************************************************
+    {
+        if (Laila.instance().getMAddMedicationRequest().getIntakeTimeList() == null)
+            return;
+        val frequency1 = Laila.instance().getMAddMedicationRequest().getFrequency();
+        mBinding.frequency.setSelection(Integer.parseInt(frequency1) - 1);
+        val intakeTimeList = Laila.instance().getMAddMedicationRequest().getIntakeTimeList();
+        switch (frequency1) {
+            case "1":
+                mBinding.intakeTime1.setText(intakeTimeList.get(0));
+                mBinding.intake1.setVisibility(View.VISIBLE);
+                mBinding.intake2.setVisibility(View.GONE);
+                mBinding.intake3.setVisibility(View.GONE);
+                mBinding.intake4.setVisibility(View.GONE);
+                break;
+            case "2":
+                mBinding.intakeTime1.setText(intakeTimeList.get(0));
+                mBinding.intakeTime2.setText(intakeTimeList.get(1));
+                mBinding.intake1.setVisibility(View.VISIBLE);
+                mBinding.intake2.setVisibility(View.VISIBLE);
+                mBinding.intake3.setVisibility(View.GONE);
+                mBinding.intake4.setVisibility(View.GONE);
+                break;
+            case "3":
+                mBinding.intakeTime1.setText(intakeTimeList.get(0));
+                mBinding.intakeTime2.setText(intakeTimeList.get(1));
+                mBinding.intakeTime3.setText(intakeTimeList.get(2));
+                mBinding.intake1.setVisibility(View.VISIBLE);
+                mBinding.intake2.setVisibility(View.VISIBLE);
+                mBinding.intake3.setVisibility(View.VISIBLE);
+                mBinding.intake4.setVisibility(View.GONE);
+                break;
+            case "4":
+                mBinding.intakeTime1.setText(intakeTimeList.get(0));
+                mBinding.intakeTime2.setText(intakeTimeList.get(1));
+                mBinding.intakeTime3.setText(intakeTimeList.get(2));
+                mBinding.intakeTime4.setText(intakeTimeList.get(3));
+                mBinding.intake1.setVisibility(View.VISIBLE);
+                mBinding.intake2.setVisibility(View.VISIBLE);
+                mBinding.intake3.setVisibility(View.VISIBLE);
+                mBinding.intake4.setVisibility(View.VISIBLE);
+                break;
+            default:
+                mBinding.intake1.setVisibility(View.GONE);
+                mBinding.intake2.setVisibility(View.GONE);
+                mBinding.intake3.setVisibility(View.GONE);
+                mBinding.intake4.setVisibility(View.GONE);
+                break;
         }
     }
 
@@ -560,34 +667,43 @@ public class AddMedicationTwoFragment
     }
 
     //*************************************************************
-    @SuppressLint("SetTextI18n")
-    @Override
-    public void onResume()
+    private void setFrequencyData(int frequency, List<String> intakeTimeList)
     //*************************************************************
     {
-        super.onResume();
-        if (!checkCurrentStateData)
-            return;
-        checkCurrentStateData = false;
-        editTextWatcher();
-        val medication = Laila.instance().getMAddMedicationRequestCopy();
-        if (medication == null)
-            return;
-        if (Laila.instance().on_update_medicine) {
-            val updateMedication = Laila.instance().getMUpdateMedication();
-            mBinding.disAmount.setText(updateMedication.getDispensedAmount());
-            mBinding.dosage.setText(updateMedication.getDosage().toString());
-            mBinding.noOfRefills.setText(updateMedication.getNumRefills().toString());
-            return;
+        switch (frequency) {
+            case 1:
+                mBinding.frequency.setSelection(0);
+                mBinding.intake1.setVisibility(View.VISIBLE);
+                mBinding.intakeTime1.setText(intakeTimeList.get(0));
+                break;
+            case 2:
+                mBinding.frequency.setSelection(1);
+                mBinding.intake1.setVisibility(View.VISIBLE);
+                mBinding.intake2.setVisibility(View.VISIBLE);
+                mBinding.intakeTime1.setText(intakeTimeList.get(0));
+                mBinding.intakeTime2.setText(intakeTimeList.get(1));
+                break;
+            case 3:
+                mBinding.frequency.setSelection(2);
+                mBinding.intake1.setVisibility(View.VISIBLE);
+                mBinding.intake2.setVisibility(View.VISIBLE);
+                mBinding.intake3.setVisibility(View.VISIBLE);
+                mBinding.intakeTime1.setText(intakeTimeList.get(0));
+                mBinding.intakeTime2.setText(intakeTimeList.get(1));
+                mBinding.intakeTime3.setText(intakeTimeList.get(2));
+                break;
+            case 4:
+                mBinding.frequency.setSelection(3);
+                mBinding.intake1.setVisibility(View.VISIBLE);
+                mBinding.intake2.setVisibility(View.VISIBLE);
+                mBinding.intake3.setVisibility(View.VISIBLE);
+                mBinding.intake4.setVisibility(View.VISIBLE);
+                mBinding.intakeTime1.setText(intakeTimeList.get(0));
+                mBinding.intakeTime2.setText(intakeTimeList.get(1));
+                mBinding.intakeTime3.setText(intakeTimeList.get(2));
+                mBinding.intakeTime4.setText(intakeTimeList.get(3));
+                break;
         }
-        if (medication.getDispensedDate() != null)
-            mBinding.disDate.setText(medication.getDispensedDate());
-        mBinding.disAmount.setText(medication.getDispensedAmount());
-        if (medication.getDosage() != null)
-            mBinding.dosage.setText(medication.getDosage().toString());
-        if (medication.getNumRefills() != null)
-            mBinding.noOfRefills.setText(medication.getNumRefills().toString());
-
     }
 
     //***********************************************************
@@ -673,7 +789,8 @@ public class AddMedicationTwoFragment
 
             @Override
             public void afterTextChanged(Editable s) {
-                mAddMedicationRequestCopy.setNumRefills(Integer.valueOf(s.toString()));
+                if (!TextUtils.isEmpty(s.toString()))
+                    mAddMedicationRequestCopy.setNumRefills(Integer.valueOf(s.toString()));
                 Laila.instance().setMAddMedicationRequestCopy(mAddMedicationRequestCopy);
             }
         });

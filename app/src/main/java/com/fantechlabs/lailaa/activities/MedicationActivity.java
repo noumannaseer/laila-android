@@ -93,7 +93,15 @@ public class MedicationActivity extends BaseActivity
     private void getMedications()
     //**********************************************************
     {
+        if (Laila.instance().from_update_medication) {
+            Laila.instance().from_update_medication = false;
+            showLoadingDialog();
+            mAddMedicationViewModel.getMedications();
+            return;
+        }
         mMedicationList = new ArrayList<>();
+        if (Laila.instance().getMUser_U() == null)
+            return;
         if (Laila.instance().getMUser_U().getData() == null)
             return;
         mMedicationList = Laila.instance().getMUser_U().getData().getMedicationList();
@@ -150,7 +158,6 @@ public class MedicationActivity extends BaseActivity
 //        }
 //        mBinding.noRecord.setVisibility(View.GONE);
 //        mBinding.medicineRecyclerview.setVisibility(View.VISIBLE);
-
     }
 
     //*******************************************************************
@@ -255,24 +262,6 @@ public class MedicationActivity extends BaseActivity
 
     }
 
-    //**************************************************
-    private void getMedicationEvent()
-    //**************************************************
-    {
-        if (Laila.instance().getMUser().getEvents() == null || Laila.instance().getMUser().getEvents().size() == 0)
-            return;
-        val events = Laila.instance().getMUser().getEvents();
-
-        for (int i = 0; i < events.size(); i++) {
-            if (events.get(i).getMedicationId().toString().equals(mMedicineId)) {
-                val eventId = events.get(i).getId();
-                mEventPosition = i;
-                mDeleteEventViewModel.deleteEvent(eventId);
-            }
-        }
-
-    }
-
     //******************************************************************
     @Override
     public void onSuccessfullyDeleteEvent(@Nullable String result)
@@ -339,6 +328,7 @@ public class MedicationActivity extends BaseActivity
         mMedicationList = new ArrayList<>();
         mMedicationList = responseMedicationList;
         Laila.instance().getMUser_U().getData().setMedicationList(mMedicationList);
+        SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser_U());
         startRecyclerView();
 
     }
