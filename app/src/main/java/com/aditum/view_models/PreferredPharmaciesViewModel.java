@@ -1,0 +1,102 @@
+package com.aditum.view_models;
+
+import androidx.lifecycle.ViewModel;
+
+import com.aditum.R;
+import com.aditum.models.updates.response_models.PrefferedPharmacyResponse;
+import com.aditum.network.ServiceGenerator;
+import com.aditum.network.services.MedicationService;
+import com.aditum.utils.AndroidUtil;
+import com.aditum.utils.Constants;
+
+import java.io.IOException;
+import java.util.HashMap;
+
+import lombok.NonNull;
+import lombok.val;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+//***********************************************
+public class PreferredPharmaciesViewModel
+        extends ViewModel
+//***********************************************
+{
+
+    private PreferredPharmaciesViewModelListener mPreferredPharmaciesViewModelListener;
+
+    public PreferredPharmaciesViewModel(PreferredPharmaciesViewModelListener mViewModelListener)
+    {
+        this.mPreferredPharmaciesViewModelListener = mViewModelListener;
+    }
+
+    //*******************************************************************
+    public void getPreferredPharmacies(String userToken)
+    //*******************************************************************
+    {
+
+        val service = ServiceGenerator.createService(MedicationService.class,
+                                                     true,
+                                                     Constants.BASE_URL_U);
+        if (service == null)
+        {
+            mPreferredPharmaciesViewModelListener.onFailed(AndroidUtil.getString(R.string.internet_not_vailable));
+            return;
+        }
+
+        HashMap<String, String> token = new HashMap<>();
+        token.put(Constants.USER_TOKEN, userToken);
+
+        val placeServices = service.getPreferredPharmacies(token);
+
+        //*******************************************************************
+        placeServices.enqueue(new Callback<PrefferedPharmacyResponse>()
+        //*******************************************************************
+        {
+
+            //*******************************************************************
+            @Override
+            public void onResponse(Call<PrefferedPharmacyResponse> call, Response<PrefferedPharmacyResponse> response)
+            //*******************************************************************
+            {
+                if (response.isSuccessful()) {
+                    mPreferredPharmaciesViewModelListener.onSuccessFullyGetPreferredPharmacies(response.body());
+
+                } else {
+                    String errorMessage = "API error";
+                    try {
+                        errorMessage = new String(response.errorBody()
+                                .bytes());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if (mPreferredPharmaciesViewModelListener != null)
+                        mPreferredPharmaciesViewModelListener.onFailed(errorMessage);
+
+                }
+            }
+
+            //*******************************************************************
+            @Override
+            public void onFailure(Call<PrefferedPharmacyResponse> call, Throwable t)
+            //*******************************************************************
+            {
+                if (mPreferredPharmaciesViewModelListener != null)
+                    mPreferredPharmaciesViewModelListener.onFailed(t.getLocalizedMessage());
+
+            }
+        });
+
+    }
+
+    //******************************************************
+    public interface PreferredPharmaciesViewModelListener
+    //******************************************************
+    {
+        void onSuccessFullyGetPreferredPharmacies(@NonNull PrefferedPharmacyResponse response);
+
+        void onFailed(@NonNull String message);
+    }
+
+}

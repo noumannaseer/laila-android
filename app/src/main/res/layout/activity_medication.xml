@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:background="#FAFAFA"
         android:orientation="vertical"
-        tools:context=".activities.MedicationActivity">
+        tools:context="com.aditum.activities.MedicationActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"

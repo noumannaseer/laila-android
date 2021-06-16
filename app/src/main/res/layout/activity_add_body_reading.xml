@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".bodyreading.activities.AddBodyReadingActivity">
+        tools:context="com.aditum.bodyreading.activities.AddBodyReadingActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"

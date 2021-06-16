@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:background="@color/profile_background"
         android:orientation="vertical"
-        tools:context=".fragments.HandoutsFragment">
+        tools:context="com.aditum.fragments.HandoutsFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/condition_recycleView"

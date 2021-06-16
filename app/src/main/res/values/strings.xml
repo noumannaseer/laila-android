@@ -482,7 +482,7 @@
     <string name="contacts">Contacts</string>
     <string name="family_doctor">Family Doctor</string>
     <string name="add_your_doctor_name">Add your doctor name</string>
-    <string name="specialist">Specialist</string>
+    <string name="specialist">Specialist Contacts</string>
     <string name="pharmacies">Pharmacies</string>
     <string name="add_your_pharmacy_name">Add your pharmcy name</string>
     <string name="family">Family</string>
@@ -669,6 +669,7 @@
     <string name="strength_should_be_only_digits">Strength should be only digits</string>
     <string name="there_is_not_any_rx_din">There\'s not any Rx/din number match. Try Another code</string>
     <string name="emergency_contact_updated">Emergency contact updated successfully</string>
+    <string name="pharmacy_contact">Pharmacy Contacts</string>
 
 </resources>
 

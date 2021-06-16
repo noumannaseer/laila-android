@@ -7,6 +7,43 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:419008832950:android:e459d948368b16d974cd17",
+        "android_client_info": {
+          "package_name": "com.aditum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "419008832950-c29rb101evhidingsa2752a9bi73mskm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.aditum",
+            "certificate_hash": "5beb4fe01ff5bf8cfa055b9b3aff41d65f45e883"
+          }
+        },
+        {
+          "client_id": "419008832950-p1rob5b61a280lc790lb54d1nv7d66kq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD41pF3FqBNQnwuv-_uIz6z89uN4bnhLNM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "419008832950-p1rob5b61a280lc790lb54d1nv7d66kq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:419008832950:android:3b0bc4ad64d11f9674cd17",
         "android_client_info": {
           "package_name": "com.fantechlabs.lailaa"
