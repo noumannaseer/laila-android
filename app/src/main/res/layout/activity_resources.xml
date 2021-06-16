@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:background="@color/profile_background"
         android:orientation="vertical"
-        tools:context=".activities.ResourcesActivity">
+        tools:context="com.aditum.activities.ResourcesActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"

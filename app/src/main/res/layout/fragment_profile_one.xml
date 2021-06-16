@@ -8,7 +8,7 @@
         android:layout_height="match_parent"
         android:background="@color/profile_background"
         android:orientation="vertical"
-        tools:context=".fragments.ProfileOneFragment">
+        tools:context="com.aditum.fragments.ProfileOneFragment">
 
         <ScrollView
             android:layout_width="match_parent"

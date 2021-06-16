@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fantechlabs.lailaa">
+    package="com.aditum">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -28,7 +28,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name=".Laila"
+        android:name="com.aditum.Laila"
         android:allowBackup="true"
         android:icon="@mipmap/logo"
         android:label="@string/app_name"
@@ -39,13 +39,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         android:windowSoftInputMode="stateHidden">
-        <activity android:name=".activities.AlergieResourceDetails"></activity>
-        <activity android:name=".activities.ResourcesActivity" />
-        <activity android:name=".activities.ResourcesActivity1" />
-        <activity android:name=".activities.AllergiesDetailActivity" />
+        <activity android:name="com.aditum.activities.AlergieResourceDetails"></activity>
+        <activity android:name="com.aditum.activities.ResourcesActivity" />
+        <activity android:name="com.aditum.activities.ResourcesActivity1" />
+        <activity android:name="com.aditum.activities.AllergiesDetailActivity" />
 
         <receiver
-            android:name=".geofence.GeofenceBroadcastReceiver"
+            android:name="com.aditum.geofence.GeofenceBroadcastReceiver"
             android:enabled="true"
             android:exported="true" />
 
@@ -54,48 +54,48 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activities.MapsActivity"
+            android:name="com.aditum.activities.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".activities.AddContactsActivity" />
-        <activity android:name=".activities.ContactsActivity" />
-        <activity android:name=".activities.ContactTypesHomeActivity" />
-        <activity android:name=".activities.IngredientsActivity" />
-        <activity android:name=".bodyreading.activities.AddBodyReadingActivity" />
-        <activity android:name=".activities.AddAlarmActivity" />
-        <activity android:name=".activities.MedicationDetailsActivity" />
-        <activity android:name=".activities.BarCodeScannerActivity" />
-        <activity android:name=".activities.TextRecognizerActivity" />
-        <activity android:name=".activities.InformationActivity" />
-        <activity android:name=".activities.MedicineInteractionActivity" />
-        <activity android:name=".activities.DocumentDetailsActivity" />
-        <activity android:name=".activities.AddPharmacyActivity" />
-        <activity android:name=".activities.MedicineAlarmActivity" />
-        <activity android:name=".activities.AddMedicationActivity" />
-        <activity android:name=".activities.ForgotActivity" />
-        <activity android:name=".bodyreading.activities.BodyReadingActivity" />
-        <activity android:name=".activities.MedicationFollowUpTwo" />
-        <activity android:name=".activities.MedicationFollowUpOne" />
-        <activity android:name=".activities.ProfileActivity" />
-        <activity android:name=".activities.TelehealthActivity" />
-        <activity android:name=".activities.CalenderActivity" />
-        <activity android:name=".activities.MedicalRecordsActivity" />
-        <activity android:name=".activities.BrowserActivity" />
-        <activity android:name=".activities.SplashActivity">
+        <activity android:name="com.aditum.activities.AddContactsActivity" />
+        <activity android:name="com.aditum.activities.ContactsActivity" />
+        <activity android:name="com.aditum.activities.ContactTypesHomeActivity" />
+        <activity android:name="com.aditum.activities.IngredientsActivity" />
+        <activity android:name="com.aditum.bodyreading.activities.AddBodyReadingActivity" />
+        <activity android:name="com.aditum.activities.AddAlarmActivity" />
+        <activity android:name="com.aditum.activities.MedicationDetailsActivity" />
+        <activity android:name="com.aditum.activities.BarCodeScannerActivity" />
+        <activity android:name="com.aditum.activities.TextRecognizerActivity" />
+        <activity android:name="com.aditum.activities.InformationActivity" />
+        <activity android:name="com.aditum.activities.MedicineInteractionActivity" />
+        <activity android:name="com.aditum.activities.DocumentDetailsActivity" />
+        <activity android:name="com.aditum.activities.AddPharmacyActivity" />
+        <activity android:name="com.aditum.activities.MedicineAlarmActivity" />
+        <activity android:name="com.aditum.activities.AddMedicationActivity" />
+        <activity android:name="com.aditum.activities.ForgotActivity" />
+        <activity android:name="com.aditum.bodyreading.activities.BodyReadingActivity" />
+        <activity android:name="com.aditum.activities.MedicationFollowUpTwo" />
+        <activity android:name="com.aditum.activities.MedicationFollowUpOne" />
+        <activity android:name="com.aditum.activities.ProfileActivity" />
+        <activity android:name="com.aditum.activities.TelehealthActivity" />
+        <activity android:name="com.aditum.activities.CalenderActivity" />
+        <activity android:name="com.aditum.activities.MedicalRecordsActivity" />
+        <activity android:name="com.aditum.activities.BrowserActivity" />
+        <activity android:name="com.aditum.activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.SignUpActivity" />
-        <activity android:name=".activities.HomeActivity" />
-        <activity android:name=".activities.SignInActivity" />
-        <activity android:name=".activities.SettingActivity" />
-        <activity android:name=".activities.MedicationActivity" />
-        <activity android:name=".activities.UpdatePasswordActivity" />
+        <activity android:name="com.aditum.activities.SignUpActivity" />
+        <activity android:name="com.aditum.activities.HomeActivity" />
+        <activity android:name="com.aditum.activities.SignInActivity" />
+        <activity android:name="com.aditum.activities.SettingActivity" />
+        <activity android:name="com.aditum.activities.MedicationActivity" />
+        <activity android:name="com.aditum.activities.UpdatePasswordActivity" />
 
         <service
-            android:name=".network.firebaseNotification.GetDeviceTokenService"
+            android:name="com.aditum.network.firebaseNotification.GetDeviceTokenService"
             android:enabled="false"
             android:exported="false" />
 
@@ -112,12 +112,12 @@
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="ocr" />
 
-        <service android:name=".alarms.LoadAlarmsService" />
+        <service android:name="com.aditum.alarms.LoadAlarmsService" />
 
-        <receiver android:name=".alarms.LoadAlarmsReceiver" />
-        <receiver android:name=".alarms.AlarmReceiver" />
+        <receiver android:name="com.aditum.alarms.LoadAlarmsReceiver" />
+        <receiver android:name="com.aditum.alarms.AlarmReceiver" />
         <receiver
-            android:name=".alarms.BootReceiver"
+            android:name="com.aditum.alarms.BootReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter android:priority="${bootPriority}">
