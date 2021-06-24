@@ -45,6 +45,7 @@ public class AddContactsActivity extends BaseActivity
     private ArrayList<Contact> mFilterContactList;
     private EmergencyContactViewModel mEmergencyContactViewModel;
     private EmergencyContactRequest mEmergencyContactRequest;
+    private String mContactTitle;
 
     //*********************************************************
     @Override
@@ -74,7 +75,6 @@ public class AddContactsActivity extends BaseActivity
     {
         mFilterContactList = new ArrayList<>();
         mEmergencyContactViewModel = new EmergencyContactViewModel(this);
-        mBinding.toolbarText.setText(Laila.instance().getMContactType());
     }
 
     //*************************************************************
@@ -119,13 +119,14 @@ public class AddContactsActivity extends BaseActivity
     {
         super.onResume();
         getParcelable();
+        mBinding.toolbarText.setText(mContactTitle);
         val onUpdateContact = Laila.instance().on_update_contact;
         if (onUpdateContact) {
-            mBinding.contactTypeTitle.setText(AndroidUtil.getString(R.string.update) + " " + Laila.instance().getMContactType());
+            mBinding.contactTypeTitle.setText(AndroidUtil.getString(R.string.update) + " " + mContactTitle);
             onUpdate();
             return;
         }
-        mBinding.contactTypeTitle.setText(AndroidUtil.getString(R.string.add) + " " + Laila.instance().getMContactType());
+        mBinding.contactTypeTitle.setText(AndroidUtil.getString(R.string.add) + " " + mContactTitle);
     }
 
     //*************************************************************
@@ -184,7 +185,7 @@ public class AddContactsActivity extends BaseActivity
 
         mEmergencyContactRequest.setFirstName(mName);
         mEmergencyContactRequest.setPhone(mPhone);
-        mEmergencyContactRequest.setContactType(CONTACT);
+        mEmergencyContactRequest.setContactType(Laila.instance().getMContactType());
         mEmergencyContactRequest.setUserId(user_id);
         mEmergencyContactRequest.setToken(user_token);
 
@@ -231,6 +232,7 @@ public class AddContactsActivity extends BaseActivity
         Bundle args = getIntent().getExtras();
         if (args != null) {
             mFilterContactList = args.getParcelableArrayList(Constants.CONTACT_LIST);
+            mContactTitle = args.getString(Constants.CONTACT_TITLE);
         }
     }
 
@@ -285,6 +287,11 @@ public class AddContactsActivity extends BaseActivity
     public void onSuccessfullyGetContacts(@Nullable @org.jetbrains.annotations.Nullable EmergencyContactResponse response)
     //*********************************************************d
     {
+
+    }
+
+    @Override
+    public void onSuccessfullyDeleteContacts(@Nullable @org.jetbrains.annotations.Nullable EmergencyContactResponse response) {
 
     }
 

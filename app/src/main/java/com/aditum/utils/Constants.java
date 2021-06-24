@@ -29,7 +29,7 @@ public class Constants
     public static final String FACEBOOK_ACCESS_TOKEN = "facebookAccessToken";
     public static final int PASSWORD_LENGTH = 8;
     public static final String PROFILE = "profile";
-
+    public static final String CONTACT_TITLE = "CONTACT_TITLE";
     public static final String DISEASE_NAME = "DISEASE_NAME";
     public static final String INTRO_SCREEN_SHOWN = "IntroScreenShown";
     public static final String EMAIL = "email";
@@ -139,4 +139,11 @@ public class Constants
     public static final String DATE_FORMAT = "dd-MMM-yyyy";
     public static final String OLD_PASSWORD = "old_password";
     public static final String NEW_PASSWORD = "new_password";
+    public static final String Family = "Family";
+    public static final String Family_Doctor_Contacts = "Family_Doctor_Contacts";
+    public static final String Special = "Special";
+    public static final String Emergency = "Emergency";
+    public static final String Caregiver = "Caregiver";
+    public static final String Friends = "Friends";
+    public static final String Pharmacy_Contacts = "Pharmacy_Contacts";
 }

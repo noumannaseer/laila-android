@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.aditum.Laila;
 import com.aditum.R;
@@ -14,12 +15,16 @@ import com.aditum.adapter.CareTakerListAdapter;
 import com.aditum.databinding.ActivityContactsBinding;
 import com.aditum.models.updates.models.Contact;
 import com.aditum.models.updates.response_models.EmergencyContactResponse;
+import com.aditum.utils.AndroidUtil;
 import com.aditum.utils.Constants;
+import com.aditum.utils.SharedPreferencesUtils;
 import com.aditum.view_models.EmergencyContactViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+
+import lombok.val;
 
 import static com.aditum.utils.Constants.PHARMACY;
 
@@ -30,7 +35,11 @@ public class ContactsActivity extends BaseActivity implements EmergencyContactVi
     private ActivityContactsBinding mBinding;
     private CareTakerListAdapter mCareTakerListAdapter;
     private ArrayList<Contact> mCareTakerList;
+    private ArrayList<Contact> mFilterContactList;
     private EmergencyContactViewModel mEmergencyContactViewModel;
+    private String mContactTitle;
+    private int mPosition;
+    private String mContactId;
 
     //*************************************************************
     @Override
@@ -49,15 +58,8 @@ public class ContactsActivity extends BaseActivity implements EmergencyContactVi
     private void intiControls()
     //***********************************************************
     {
+        getParcelable();
         initViews();
-        getEmergencyContacts();
-//        if (mCareTakerList == null || mCareTakerList.size() == 0) {
-//            mBinding.noRecord.setVisibility(View.VISIBLE);
-//            mBinding.recyclerview.setVisibility(View.GONE);
-//            return;
-//        }
-//        mBinding.noRecord.setVisibility(View.GONE);
-//        mBinding.recyclerview.setVisibility(View.VISIBLE);
         addContact();
     }
 
@@ -65,7 +67,7 @@ public class ContactsActivity extends BaseActivity implements EmergencyContactVi
     private void initViews()
     //**********************************************************
     {
-        mBinding.toolbarText.setText(Laila.instance().getMContactType());
+        mBinding.toolbarText.setText(mContactTitle);
         mEmergencyContactViewModel = new EmergencyContactViewModel(this);
     }
 
@@ -75,7 +77,9 @@ public class ContactsActivity extends BaseActivity implements EmergencyContactVi
     {
         mBinding.addContact.setOnClickListener(view -> {
             if (!Laila.instance().getMContactType().equals(PHARMACY)) {
-                startActivity(new Intent(getApplicationContext(), AddContactsActivity.class));
+                Intent intent = new Intent(getApplicationContext(), AddContactsActivity.class);
+                intent.putExtra(Constants.CONTACT_TITLE, mContactTitle);
+                startActivity(intent);
                 return;
             }
             Intent intent = new Intent(ContactsActivity.this, AddPharmacyActivity.class);
@@ -84,10 +88,20 @@ public class ContactsActivity extends BaseActivity implements EmergencyContactVi
     }
 
     //**********************************************************
-    private void getEmergencyContacts()
+    @Override
+    protected void onResume()
+    //**********************************************************
+    {
+        super.onResume();
+        getContacts();
+    }
+
+    //**********************************************************
+    private void getContacts()
     //**********************************************************
     {
         mCareTakerList = new ArrayList<>();
+        mFilterContactList = new ArrayList<>();
         if (Laila.instance().getMUser_U().getData() == null)
             return;
         mCareTakerList = (ArrayList<Contact>) Laila.instance().getMUser_U().getData().getContactList();
@@ -100,44 +114,69 @@ public class ContactsActivity extends BaseActivity implements EmergencyContactVi
         startRecyclerView();
     }
 
-    //*********************************************************************,
-    private void getCareTakerList()
-    //*********************************************************************
-    {
-//        if (Laila.instance().getMUser() == null ||
-//                Laila.instance().getMUser().getContacts() == null)
-//            return;
-//        val userDetails = Laila.instance().getMUser().getContacts();
-//
-//        val contactTypes = Laila.instance().getMContactType();
-//
-//        mCareTakerList = new ArrayList<>();
-//        for (Contact contact : userDetails) {
-//            val userPrivateCode = contact.getUserPrivateCode();
-//            val contactType = contact.getContactType();
-//            if (userPrivateCode
-//                    .equals(Laila.instance().getMUser().getProfile().getUserPrivateCode()) &&
-//                    contactType.equals(contactTypes)) {
-//                mCareTakerList.add(contact);
-//            }
-//        }
-//        startRecyclerView();
-    }
-
     //**************************************************************
     private void startRecyclerView()
     //**************************************************************
     {
-        if (mCareTakerList == null || mCareTakerList.size() == 0)
+        if (mCareTakerList == null || mCareTakerList.size() == 0) {
+            mBinding.noRecord.setVisibility(View.VISIBLE);
+            mBinding.recyclerview.setVisibility(View.GONE);
             return;
+        }
+        val contactType = Laila.instance().getMContactType();
+        for (val contact : mCareTakerList)
+            if (contact.getContactType().equals(contactType))
+                mFilterContactList.add(contact);
 
-        mCareTakerListAdapter = new CareTakerListAdapter(mCareTakerList, position -> {
-            Laila.instance().setMContactPosition(position);
-            Laila.instance().on_update_contact = true;
-            Intent intent = new Intent(ContactsActivity.this, AddContactsActivity.class);
-            intent.putParcelableArrayListExtra(Constants.CONTACT_LIST, mCareTakerList);
-            startActivity(intent);
+        if (mFilterContactList == null || mFilterContactList.size() == 0) {
+            mBinding.noRecord.setVisibility(View.VISIBLE);
+            mBinding.recyclerview.setVisibility(View.GONE);
+            return;
+        }
+
+        mBinding.noRecord.setVisibility(View.GONE);
+        mBinding.recyclerview.setVisibility(View.VISIBLE);
+
+        mCareTakerListAdapter = new CareTakerListAdapter(mFilterContactList, new CareTakerListAdapter.ListClickListener() {
+            //**************************************************
+            @Override
+            public void onUpdate(int position)
+            //**************************************************
+            {
+                Laila.instance().setMContactPosition(position);
+                Laila.instance().on_update_contact = true;
+                Intent intent = new Intent(ContactsActivity.this, AddContactsActivity.class);
+                intent.putExtra(Constants.CONTACT_TITLE, mContactTitle);
+                intent.putParcelableArrayListExtra(Constants.CONTACT_LIST, mFilterContactList);
+                startActivity(intent);
+            }
+
+            //**************************************************
+            @Override
+            public void onDelete(int position, int id)
+            //**************************************************
+            {
+                mPosition = position;
+                mContactId = String.valueOf(id);
+                AndroidUtil.displayAlertDialog(
+                        AndroidUtil.getString(
+                                R.string.delete_item),
+                        AndroidUtil.getString(
+                                R.string.alert),
+                        ContactsActivity.this,
+                        AndroidUtil.getString(
+                                R.string.ok),
+                        AndroidUtil.getString(
+                                R.string.cancel),
+                        (dialog, which) -> {
+                            if (which == -1) {
+                                showLoadingDialog();
+                                mEmergencyContactViewModel.deleteContact(mContactId);
+                            }
+                        });
+            }
         }, this);
+
         mBinding.recyclerview.setLayoutManager(new LinearLayoutManager(this));
         mBinding.recyclerview.setAdapter(mCareTakerListAdapter);
     }
@@ -174,11 +213,37 @@ public class ContactsActivity extends BaseActivity implements EmergencyContactVi
         startRecyclerView();
     }
 
+    //*********************************************************************************************
+    @Override
+    public void onSuccessfullyDeleteContacts(@Nullable @org.jetbrains.annotations.Nullable EmergencyContactResponse response)
+    //*********************************************************************************************
+    {
+        mFilterContactList = new ArrayList<>();
+        mCareTakerList = new ArrayList<>();
+
+        Laila.instance().getMUser_U().getData().getContactList().remove(mPosition);
+        SharedPreferencesUtils.setValue(Constants.USER_DATA, Laila.instance().getMUser_U());
+
+        mCareTakerList = (ArrayList<Contact>) Laila.instance().getMUser_U().getData().getContactList();
+        startRecyclerView();
+        hideLoadingDialog();
+    }
+
     //***************************************************************
     @Override
     public void onFailed(@NonNull @NotNull String errorMessage)
     //***************************************************************
     {
         hideLoadingDialog();
+    }
+
+    //*********************************************************************
+    private void getParcelable()
+    //*********************************************************************
+    {
+        Bundle args = getIntent().getExtras();
+        if (args != null) {
+            mContactTitle = args.getString(Constants.CONTACT_TITLE);
+        }
     }
 }

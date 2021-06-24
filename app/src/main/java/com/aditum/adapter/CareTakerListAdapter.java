@@ -92,6 +92,10 @@ public class CareTakerListAdapter
                     if (mListClickListener != null)
                         mListClickListener.onUpdate(mPosition);
                     break;
+                case "Delete":
+                    if (mListClickListener != null)
+                        mListClickListener.onDelete(mPosition, item.getId());
+                    break;
             }
             return true;
         });
@@ -128,6 +132,8 @@ public class CareTakerListAdapter
             //*******************************************************************
     {
         void onUpdate(int position);
+
+        void onDelete(int position, int id);
     }
 
 }

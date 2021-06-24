@@ -9,6 +9,7 @@ import android.os.Bundle;
 import com.aditum.Laila;
 import com.aditum.R;
 import com.aditum.databinding.ActivityContactTypesHomeBinding;
+import com.aditum.utils.Constants;
 
 import lombok.val;
 
@@ -48,11 +49,12 @@ public class ContactTypesHomeActivity extends BaseActivity
     private void gotoFamilyDoctorContact()
     //***********************************************************
     {
-        val familyDoctorContact = mBinding.familyDoctor.getText().toString();
+        val contactTitle = mBinding.familyDoctor.getText().toString();
 
         mBinding.addFamilyDoctor.setOnClickListener(view -> {
-            Laila.instance().setMContactType(familyDoctorContact);
+            Laila.instance().setMContactType(Constants.Family_Doctor_Contacts);
             Intent intent = new Intent(ContactTypesHomeActivity.this, ContactsActivity.class);
+            intent.putExtra(Constants.CONTACT_TITLE, contactTitle);
             startActivity(intent);
         });
     }
@@ -61,11 +63,12 @@ public class ContactTypesHomeActivity extends BaseActivity
     private void gotoSpecialistContact()
     //***********************************************************
     {
-        val specialistContact = mBinding.specialistText.getText().toString();
+        val contactTitle = mBinding.specialistText.getText().toString();
 
         mBinding.specialistDoctor.setOnClickListener(view -> {
-            Laila.instance().setMContactType(specialistContact);
+            Laila.instance().setMContactType(Constants.Special);
             Intent intent = new Intent(ContactTypesHomeActivity.this, ContactsActivity.class);
+            intent.putExtra(Constants.CONTACT_TITLE, contactTitle);
             startActivity(intent);
         });
     }
@@ -74,11 +77,12 @@ public class ContactTypesHomeActivity extends BaseActivity
     private void gotoFamilyContact()
     //***********************************************************
     {
-        val familyContact = mBinding.familyContactText.getText().toString();
+        val contactTitle = mBinding.familyContactText.getText().toString();
 
         mBinding.familyContacts.setOnClickListener(view -> {
-            Laila.instance().setMContactType(familyContact);
+            Laila.instance().setMContactType(Constants.Family);
             Intent intent = new Intent(ContactTypesHomeActivity.this, ContactsActivity.class);
+            intent.putExtra(Constants.CONTACT_TITLE, contactTitle);
             startActivity(intent);
         });
     }
@@ -87,11 +91,12 @@ public class ContactTypesHomeActivity extends BaseActivity
     private void gotoFriendsContact()
     //***********************************************************
     {
-        val friendsContact = mBinding.friendsContactText.getText().toString();
+        val contactTitle = mBinding.friendsContactText.getText().toString();
 
         mBinding.friendsContacts.setOnClickListener(view -> {
-            Laila.instance().setMContactType(friendsContact);
+            Laila.instance().setMContactType(Constants.Friends);
             Intent intent = new Intent(ContactTypesHomeActivity.this, ContactsActivity.class);
+            intent.putExtra(Constants.CONTACT_TITLE, contactTitle);
             startActivity(intent);
         });
     }
@@ -100,11 +105,12 @@ public class ContactTypesHomeActivity extends BaseActivity
     private void gotoCareGiverContacts()
     //***********************************************************
     {
-        val caregiver = mBinding.careGiverText.getText().toString();
+        val contactTitle = mBinding.careGiverText.getText().toString();
 
         mBinding.careGiver.setOnClickListener(view -> {
-            Laila.instance().setMContactType(caregiver);
+            Laila.instance().setMContactType(Constants.Caregiver);
             Intent intent = new Intent(ContactTypesHomeActivity.this, ContactsActivity.class);
+            intent.putExtra(Constants.CONTACT_TITLE, contactTitle);
             startActivity(intent);
         });
     }
@@ -113,11 +119,12 @@ public class ContactTypesHomeActivity extends BaseActivity
     private void gotoEmergencyContacts()
     //***********************************************************
     {
-        val emergencyContact = mBinding.emergencyContactName.getText().toString();
+        val contactTitle = mBinding.emergencyContactName.getText().toString();
 
         mBinding.emergencyContacts.setOnClickListener(view -> {
-            Laila.instance().setMContactType(emergencyContact);
+            Laila.instance().setMContactType(Constants.Emergency);
             Intent intent = new Intent(ContactTypesHomeActivity.this, ContactsActivity.class);
+            intent.putExtra(Constants.CONTACT_TITLE, contactTitle);
             startActivity(intent);
         });
     }
@@ -126,11 +133,12 @@ public class ContactTypesHomeActivity extends BaseActivity
     private void gotoPharmacyActivity()
     //***********************************************************
     {
-        val pharmacy = mBinding.pharmacyText.getText().toString();
+        val contactTitle = mBinding.pharmacyText.getText().toString();
 
         mBinding.pharmacy.setOnClickListener(view -> {
-            Laila.instance().setMContactType(pharmacy);
+            Laila.instance().setMContactType(Constants.Pharmacy_Contacts);
             Intent intent = new Intent(ContactTypesHomeActivity.this, ContactsActivity.class);
+            intent.putExtra(Constants.CONTACT_TITLE, contactTitle);
             startActivity(intent);
         });
     }
