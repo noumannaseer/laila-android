@@ -10,6 +10,7 @@ import com.aditum.bodyreading.repository.network.ServiceGenerator;
 import com.aditum.bodyreading.repository.network.utils.NetworkUtils;
 import com.aditum.models.updates.request_models.EmergencyContactRequest;
 import com.aditum.models.updates.response_models.EmergencyContactResponse;
+import com.aditum.models.updates.response_models.MedicationResponse;
 import com.aditum.network.services.MedicationService;
 import com.aditum.utils.AndroidUtil;
 import com.aditum.utils.Constants;
@@ -195,12 +196,64 @@ public class EmergencyContactViewModel
     }
 
     //***********************************************************
+    public void deleteContact(@NonNull String id)
+    //***********************************************************
+    {
+        val service = ServiceGenerator.createService(MedicationService.class, true,
+                Constants.BASE_URL_U);
+        if (service == null) {
+            mEmergencyContactListener.onFailed(
+                    AndroidUtil.getString(R.string.internet_not_vailable));
+            return;
+        }
+        val userToken = Laila.instance().getMUser_U().getData().getUser().getToken();
+        val userId = Laila.instance().getMUser_U().getData().getUser().getId().toString();
+        HashMap<String, String> deleteContact = new HashMap<String, String>();
+        deleteContact.put(Constants.USER_ID, userId);
+        deleteContact.put(Constants.USER_TOKEN, userToken);
+        deleteContact.put("id", id);
+
+        val deleteContactService = service.deleteContact(deleteContact);
+
+        deleteContactService.enqueue(new Callback<EmergencyContactResponse>() {
+
+            //***********************************************************
+            @Override
+            public void onResponse(Call<EmergencyContactResponse> call, Response<EmergencyContactResponse> response)
+            //***********************************************************
+            {
+                if (response.isSuccessful()) {
+                    if (response.body().getStatus() != 200) {
+                        mEmergencyContactListener.onFailed(response.body().getData().getMessage());
+                        return;
+                    }
+                    mEmergencyContactListener.onSuccessfullyDeleteContacts(response.body());
+                    return;
+                }
+                mEmergencyContactListener.onFailed(AndroidUtil.getString(R.string.server_error));
+
+            }
+
+            //***********************************************************
+            @Override
+            public void onFailure(Call<EmergencyContactResponse> call, Throwable t)
+            //***********************************************************
+            {
+                mEmergencyContactListener.onFailed(t.getLocalizedMessage());
+            }
+        });
+
+    }
+
+    //***********************************************************
     public interface EmergencyContactListener
             //***********************************************************
     {
         void onSuccessfullyCreateContact(@Nullable EmergencyContactResponse response);
 
         void onSuccessfullyGetContacts(@Nullable EmergencyContactResponse response);
+
+        void onSuccessfullyDeleteContacts(@Nullable EmergencyContactResponse response);
 
         void onFailed(@NonNull String errorMessage);
     }

@@ -201,6 +201,14 @@ public interface MedicationService {
     getEmergencyContacts(
             @Body HashMap<String, String> getEmergencyContacts
     );
+    //**************************************************************
 
     //**************************************************************
+    @Headers("Accept: application/json")
+    @POST("users/delete_emergency_contact")
+    Call<EmergencyContactResponse>
+    deleteContact(@Body Map<String, String> deleteContact);
+    //**************************************************************
+
+
 }

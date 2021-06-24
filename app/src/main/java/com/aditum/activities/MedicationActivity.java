@@ -297,7 +297,6 @@ public class MedicationActivity extends BaseActivity
 
     }
 
-
     //*******************************************************************
     @Override
     public void onFailed(@NonNull String errorMessage)
