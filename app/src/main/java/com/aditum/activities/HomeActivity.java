@@ -278,7 +278,7 @@ public class HomeActivity extends BaseActivity
         mBinding.profile.setOnClickListener(view -> startActivity(new Intent(this, ProfileActivity.class)));
         mBinding.bodyreading.setOnClickListener(view -> startActivity(new Intent(this, BodyReadingActivity.class)));
         mBinding.recources.setOnClickListener(view -> startActivity(new Intent(this, ResourcesActivity1.class)));
-
+        mBinding.questionries.setOnClickListener(view -> startActivity(new Intent(this, QuestionsActivity.class)));
     }
 
     //******************************************************************************

@@ -3,6 +3,7 @@ package com.aditum.models.updates.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.aditum.models.Questions;
 import com.aditum.models.SpecialImages;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -109,6 +110,11 @@ public class Data implements Parcelable
     @Expose
     private Integer paid;
 
+    @SerializedName("questions")
+    @Expose
+    private List<String> questions = null;
+
+
     protected Data(Parcel in) {
         user = in.readParcelable(User.class.getClassLoader());
         profile = in.readParcelable(Profile.class.getClassLoader());
@@ -141,6 +147,7 @@ public class Data implements Parcelable
         } else {
             paid = in.readInt();
         }
+        questions = in.createStringArrayList();
     }
 
     public static final Creator<Data> CREATOR = new Creator<Data>() {
@@ -194,5 +201,6 @@ public class Data implements Parcelable
             dest.writeByte((byte) 1);
             dest.writeInt(paid);
         }
+        dest.writeStringList(questions);
     }
 }

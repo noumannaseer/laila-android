@@ -97,7 +97,7 @@ public class AvatarViewModel
 
     //***********************************************************
     public interface AvatarListener
-    //***********************************************************
+            //***********************************************************
     {
         void onSuccessfullyUploadAvatar(@Nullable AvatarResponse avatarResponse);
 
