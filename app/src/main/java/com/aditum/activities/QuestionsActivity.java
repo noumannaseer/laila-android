@@ -62,7 +62,7 @@ public class QuestionsActivity extends BaseActivity
         mBinding.skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mQuestionList.add(mCounter, "");
+                mQuestionList.add("");
                 Laila.instance().setMRequestedQuestionsList(mQuestionList);
                 navigateToScreen(mCounter + 1);
             }

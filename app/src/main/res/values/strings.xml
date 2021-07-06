@@ -670,7 +670,7 @@
     <string name="there_is_not_any_rx_din">There\'s not any Rx/din number match. Try Another code</string>
     <string name="emergency_contact_updated">Emergency contact updated successfully</string>
     <string name="pharmacy_contact">Pharmacy Contacts</string>
-    <string name="questionaries">Questionnaires</string>
+    <string name="questionaries">Questionnaire</string>
     <string name="give_answer_to_questions">Give answers to the questions</string>
     <string name="answer">Answer</string>
     <string name="questionnaire_added">Questionaire add successfully</string>
