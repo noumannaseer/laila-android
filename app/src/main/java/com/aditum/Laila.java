@@ -25,6 +25,7 @@ import com.aditum.models.updates.request_models.EmergencyContactRequest;
 import com.aditum.models.updates.request_models.ProfileRequest;
 import com.aditum.request_models.FollowUpRequest;
 import com.aditum.request_models.FollowUpUpdateRequest;
+import com.aditum.request_models.QuestionsRequest;
 import com.aditum.request_models.UserRequest;
 import com.aditum.utils.AndroidUtil;
 import com.aditum.utils.AutoCompleteLoadingBar;
@@ -164,6 +165,12 @@ public class Laila extends Application
     @Getter
     @Setter
     private EmergencyContactRequest mEmergencyContactRequest;
+    @Getter
+    @Setter
+    private QuestionsRequest mQuestionsRequest;
+    @Getter
+    @Setter
+    private List<String> mRequestedQuestionsList;
 
     //****************************************************************
     @Override

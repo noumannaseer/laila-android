@@ -19,6 +19,7 @@
     <color name="ColorSecondary">#eeeff3</color>
     <color name="gray_text">#979797</color>
     <color name="background">#E9E9E9</color>
+    <color name="light_grey">#e3e5e8</color>
     <color name="text_blue">#26225e</color>
     <color name="profile_background">#FAFAFA</color>
     <color name="button_background">#ED4C3C</color>

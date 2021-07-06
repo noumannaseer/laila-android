@@ -3,6 +3,7 @@ package com.aditum.network.services;
 
 import com.aditum.models.Special;
 import com.aditum.models.response_models.FollowUpResponse;
+import com.aditum.models.response_models.QuestionsResponse;
 import com.aditum.models.response_models.UpcResponse;
 import com.aditum.models.updates.response_models.ActiveIngredientsResponse;
 import com.aditum.models.updates.response_models.EmergencyContactResponse;
@@ -208,6 +209,14 @@ public interface MedicationService {
     @POST("users/delete_emergency_contact")
     Call<EmergencyContactResponse>
     deleteContact(@Body Map<String, String> deleteContact);
+    //**************************************************************
+
+    //**************************************************************
+    @Headers("Accept: application/json")
+    @POST("users/add_questionnaires")
+    Call<QuestionsResponse>
+    addQuestions(@Body Map<String, Object> addQuestions);
+
     //**************************************************************
 
 
