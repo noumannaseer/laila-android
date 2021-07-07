@@ -52,6 +52,9 @@ public class QuestionsActivity extends BaseActivity
                     .commit();
         }
         mQuestionList = new ArrayList<>();
+        for (int i = 0; i < 8; i++)
+            mQuestionList.add("");
+        Laila.instance().setMRequestedQuestionsList(mQuestionList);
         skip();
     }
 
@@ -62,8 +65,7 @@ public class QuestionsActivity extends BaseActivity
         mBinding.skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mQuestionList.add("");
-                Laila.instance().setMRequestedQuestionsList(mQuestionList);
+                Laila.instance().getMRequestedQuestionsList().add(mCounter, "");
                 navigateToScreen(mCounter + 1);
             }
         });
